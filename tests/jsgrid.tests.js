@@ -275,7 +275,7 @@ $(function() {
         }, /loadData/, "loadData threw an exception");
     });
 
-    test("onError event should be fired on controller fail", function() {
+    asyncTest("onError event should be fired on controller fail", function() {
         var errorArgs,
             errorFired = 0,
             $element = $("#jsGrid"),
@@ -296,8 +296,14 @@ $(function() {
 
         grid.loadData();
 
-        equal(errorFired, 1, "onError handler fired");
-        deepEqual(errorArgs, { grid: grid, args: [{ value: 1 }, "test"] }, "error has correct params");
+        // jQuery 3+ resolves/rejects Deferreds as a microtask (Promises/A+
+        // compliance), even when already settled - so onError no longer
+        // fires synchronously here. Flush the microtask queue before asserting.
+        setTimeout(function() {
+            equal(errorFired, 1, "onError handler fired");
+            deepEqual(errorArgs, { grid: grid, args: [{ value: 1 }, "test"] }, "error has correct params");
+            start();
+        }, 0);
     });
 
     asyncTest("autoload should call loadData after render", 1, function() {
@@ -398,9 +404,15 @@ $(function() {
                             equal(stage, "started", "loading started");
 
                             deferred.resolve([]);
-                            equal(stage, "finished", "loading finished");
 
-                            start();
+                            // jQuery 3+ resolves Deferreds as a microtask, so
+                            // the .done() handler that hides the load
+                            // indicator hasn't run yet at this point - flush
+                            // the microtask queue before asserting.
+                            setTimeout(function() {
+                                equal(stage, "finished", "loading finished");
+                                start();
+                            }, 0);
                         }, timeout);
 
                         return deferred.promise();
