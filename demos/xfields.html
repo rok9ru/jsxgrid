@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>jsxgrid - Extra Fields Demo</title>
+    <script
+            src="https://code.jquery.com/jquery-3.6.1.min.js"
+            integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+            crossorigin="anonymous"></script>
+    <script src="db-xfields.js"></script>
+    <link href="../dist/jsgrid.css" rel="stylesheet"/>
+    <link href="../dist/jsgrid-theme.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.2/jsoneditor.min.css" rel="stylesheet"/>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 32px 16px;
+            background: #eef1f6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #1f2430;
+        }
+
+        .demo-shell {
+            max-width: 1360px;
+            margin: 0 auto;
+        }
+
+        .demo-header {
+            margin-bottom: 20px;
+        }
+
+        .demo-header h1 {
+            margin: 0 0 6px;
+            font-size: 26px;
+        }
+
+        .demo-header p {
+            margin: 0 0 14px;
+            color: #5b6472;
+            max-width: 720px;
+            line-height: 1.5;
+        }
+
+        .demo-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .demo-tags span {
+            background: #e6ecff;
+            color: #2b4fd6;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
+
+        .demo-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(23, 32, 60, 0.08);
+            padding: 8px;
+            overflow-x: auto;
+        }
+
+        .jsgrid-grid-header {
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+
+        .jsgrid-header-row > .jsgrid-header-cell {
+            background: #f7f8fb;
+            color: #1f2430;
+            font-weight: 600;
+            border-bottom: 1px solid #e6e8ee;
+        }
+
+        .jsgrid-filter-row > .jsgrid-cell {
+            background: #fbfbfd;
+        }
+
+        .jsgrid-row:hover > .jsgrid-cell,
+        .jsgrid-alt-row:hover > .jsgrid-cell {
+            background: #f2f5ff;
+        }
+
+        .jsgrid-selected-row > .jsgrid-cell {
+            background: #e6ecff;
+        }
+
+        .jsgrid-cell {
+            overflow-wrap: anywhere;
+        }
+
+        .jsgrid-img {
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 1px #e0e4ee;
+        }
+
+        .jsgrid-table button:not(.jsgrid-button) {
+            font: inherit;
+            font-size: 13px;
+            padding: 5px 12px;
+            border: 1px solid #d7dbe6;
+            border-radius: 6px;
+            background: #fff;
+            color: #2b4fd6;
+            cursor: pointer;
+        }
+
+        .jsgrid-table button:not(.jsgrid-button):hover {
+            background: #f2f5ff;
+            border-color: #b9c4ff;
+        }
+
+        .jsgrid-header-row button:not(.jsgrid-button) {
+            font: inherit;
+            font-size: 13px;
+            padding: 5px 12px;
+            border: 1px solid #2b4fd6;
+            border-radius: 6px;
+            background: #2b4fd6;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .jsgrid-header-row button:not(.jsgrid-button):hover {
+            background: #24409f;
+        }
+
+        .jsgrid-pager-container {
+            padding: 10px 4px 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="demo-shell">
+    <div class="demo-header">
+        <h1>jsxgrid - extra fields</h1>
+        <p>
+            The fields that came in from xfields, now built into jsxgrid: avatars, a JSON editor, a
+            searchable select, a collapsible textarea, a datetime picker and a row-selection column with
+            a bulk action, plus a computed summary footer.
+        </p>
+        <div class="demo-tags">
+            <span>Xcheckbox</span>
+            <span>XimgField</span>
+            <span>Xselect</span>
+            <span>Xtextarea</span>
+            <span>Xjsoneditor</span>
+            <span>XRowSelectField</span>
+            <span>XDateTimeField</span>
+            <span>jsGridSummaryPlugin</span>
+        </div>
+    </div>
+
+    <div class="demo-card">
+        <div id="jsGrid"></div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.2/jsoneditor.min.js"></script>
+
+<script src="../src/jsgrid.core.js"></script>
+<script src="../src/jsgrid.load-indicator.js"></script>
+<script src="../src/jsgrid.load-strategies.js"></script>
+<script src="../src/jsgrid.sort-strategies.js"></script>
+<script src="../src/jsgrid.validation.js"></script>
+<script src="../src/jsgrid.field.js"></script>
+<script src="../src/fields/jsgrid.field.text.js"></script>
+<script src="../src/fields/jsgrid.field.number.js"></script>
+<script src="../src/fields/jsgrid.field.textarea.js"></script>
+<script src="../src/fields/jsgrid.field.select.js"></script>
+<script src="../src/fields/jsgrid.field.checkbox.js"></script>
+<script src="../src/fields/jsgrid.field.control.js"></script>
+
+<script src="../src/lib/jsgrid.popup.basic.js"></script>
+<script src="../src/lib/jsGridSummaryPlugin.js"></script>
+
+<script src="../src/fields/jsgrid.field.Xcheckbox.js"></script>
+<script src="../src/fields/jsgrid.field.Xselect.js"></script>
+<script src="../src/fields/jsgrid.field.Xtextarea.js"></script>
+<script src="../src/fields/jsgrid.field.Xjsoneditor.js"></script>
+<script src="../src/fields/jsgrid.field.XimgField.js"></script>
+<script src="../src/fields/jsgrid.field.XRowSelectField.js"></script>
+<script src="../src/fields/jsgrid.field.XDateTimeField.js"></script>
+<script>
+    $(function () {
+
+        $("#jsGrid").jsGrid({
+            width: "100%",
+            sorting: true,
+            paging: true,
+            editing: true,
+            filtering: true,
+            autoload: true,
+            controller: db,
+            fields: [
+                {name: "img", type: "XimgField", title: "", width: 60, filtering: false, sorting: false},
+                {name: "Name", type: "text", width: 150},
+                {name: "Age", type: "number", width: 60,
+                    summary: function (data) {
+                        if (!data.length) return "—";
+                        var n = this.name;
+                        var total = data.reduce((s, i) => s + parseFloat(i[n] || 0), 0);
+                        return "Sum: " + total;
+                    }
+                },
+                {name: "Address", type: "Xtextarea", width: 220},
+                {name: "Country", type: "Xselect", items: db.countries, valueField: "Id", textField: "Name", width: 130},
+                {name: "Religion", type: "Xselect", items: db.religion, width: 130},
+
+                {name: "Married", type: "Xcheckbox", title: "Is Married", width: 90},
+                {name: "Json", type: "Xjsoneditor", title: "Json", width: 90},
+                {name: "date", type: "XDateTimeField", title: "DateTime", width: 190},
+
+                {
+                    type: "XRowSelectField", width: 100,
+                    selectedItemsAction: function (selectedItems) {
+                        console.log("Selected:", selectedItems);
+                    },
+                    buttonText: "Some action",
+                },
+
+                {type: "control", width: 90}
+            ]
+        });
+    });
+
+</script>
+</body>
+</html>
