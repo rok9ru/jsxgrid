@@ -30,8 +30,13 @@
     },
     "scripts": {
         "build": "grunt",
-        "test": "grunt test"
+        "test": "grunt test",
+        "prepublishOnly": "npm run build"
     },
+    "files": [
+        "dist",
+        "src"
+    ],
     "peerDependencies": {
         "jquery": ">=3.0.0"
     },
