@@ -1,0 +1,65 @@
+name: Bug Report
+description: Something isn't working as expected
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part is affected?
+      options:
+        - Core engine (grid rendering, paging, sorting, filtering, ...)
+        - Native fields (text, number, select, checkbox, textarea, control)
+        - Extra fields (Xcheckbox, XimgField, Xselect, Xtextarea, Xjsoneditor, XRowSelectField, XDateTimeField)
+        - Build / dist output
+        - Documentation
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: jsxgrid version
+      placeholder: e.g. 2.0.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: A minimal code snippet, or a link to a JSFiddle/CodePen, makes this much faster to fix.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Browser / jQuery version
+      placeholder: e.g. Chrome 128, jQuery 3.7.1
+    validations:
+      required: false

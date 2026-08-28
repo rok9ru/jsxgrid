@@ -1,0 +1,27 @@
+name: Question / Help
+description: Ask a usage question
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: State clearly what you're trying to do and where you're stuck.
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Relevant code
+      render: javascript
+    validations:
+      required: false
+
+  - type: input
+    id: fiddle
+    attributes:
+      label: JSFiddle / CodePen link (if applicable)
+    validations:
+      required: false
