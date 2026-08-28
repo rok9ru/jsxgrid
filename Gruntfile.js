@@ -3,13 +3,17 @@
 
     var banner =
         "/*\n" +
-        " * jsGrid v<%= pkg.version %> (<%= pkg.homepage %>)\n" +
+        " * <%= pkg.name %> v<%= pkg.version %> (<%= pkg.homepage %>)\n" +
         " * (c) <%= grunt.template.today('yyyy') %> <%= pkg.author %>\n" +
         " * Licensed under <%= pkg.license %>\n" +
         " */\n";
 
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
+
+        clean: {
+            dist: ["dist"]
+        },
 
         copy: {
             imgs: {
@@ -72,31 +76,6 @@
             }
         },
 
-        "string-replace": {
-            version: {
-                files: [{
-                    src: "<%= concat.js.dest %>",
-                    dest: "<%= concat.js.dest %>"
-                }],
-                options: {
-                    replacements: [{
-                        pattern: /"@VERSION"/g,
-                        replacement: "'<%= pkg.version %>'"
-                    }]
-                }
-            }
-        },
-
-        imageEmbed: {
-            options: {
-                deleteAfterEncoding : true
-            },
-            theme: {
-                src: "<%= concat.theme.dest %>",
-                dest: "<%= concat.theme.dest %>"
-            }
-        },
-
         uglify: {
             options : {
                 banner: banner + "\n"
@@ -141,15 +120,23 @@
 
     });
 
+    grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-uglify");
-    grunt.loadNpmTasks("grunt-image-embed");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-qunit");
-    grunt.loadNpmTasks('grunt-string-replace');
 
-    grunt.registerTask("default", ["copy", "concat", "string-replace", "imageEmbed", "uglify", "cssmin"]);
+    // Replaces the "@VERSION" placeholder in the built bundle with the real
+    // package version. Used to be grunt-string-replace, dropped since this
+    // is the only thing it did and the package is unmaintained.
+    grunt.registerTask("replaceVersion", function() {
+        var dest = grunt.config("concat.js.dest");
+        var contents = grunt.file.read(dest).replace(/"@VERSION"/g, "'" + grunt.config("pkg.version") + "'");
+        grunt.file.write(dest, contents);
+    });
+
+    grunt.registerTask("default", ["clean", "copy", "concat", "replaceVersion", "uglify", "cssmin"]);
 
     grunt.registerTask("test", "qunit");
 };

@@ -1,6 +1,6 @@
 /*
- * jsGrid v1.5.3 (http://js-grid.com)
- * (c) 2026 Artem Tabalin
+ * jsxgrid v2.0.0 (https://github.com/rok9ru/jsxgrid#readme)
+ * (c) 2026 Mikhail Kremza
  * Licensed under MIT
  */
 
@@ -1655,7 +1655,7 @@
         setDefaults: setDefaults,
         locales: locales,
         locale: locale,
-        version: '1.5.3'
+        version: '2.0.0'
     };
 
 }(window, jQuery));
