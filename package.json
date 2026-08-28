@@ -1,35 +1,52 @@
 {
-    "name": "jsgrid",
-    "version": "1.5.3",
-    "description": "Lightweight data grid jQuery plugin. It supports basic grid operations like inserting, filtering, editing, deleting, paging, sorting, and validation. jsGrid is tunable and allows to customize appearance and components.",
+    "name": "jsxgrid",
+    "version": "2.0.0",
+    "description": "Lightweight data grid jQuery plugin, with a built-in extra field set (avatars, JSON editor, select, collapsible textarea, datetime picker, row selection). A maintained fork of jsGrid.",
     "keywords": [
         "grid",
         "jquery",
-        "plugin"
+        "plugin",
+        "jsgrid"
     ],
-    "homepage": "http://js-grid.com",
-    "author": "Artem Tabalin",
+    "homepage": "https://github.com/rok9ru/jsxgrid#readme",
+    "author": "Mikhail Kremza",
+    "contributors": [
+        {
+            "name": "Artem Tabalin",
+            "url": "https://github.com/tabalinas"
+        }
+    ],
     "license": "MIT",
-    "main": "dist/jsgrid.js",
+    "main": "dist/jsxgrid.js",
     "directories": {
         "test": "tests"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/tabalinas/jsgrid"
+        "url": "git+https://github.com/rok9ru/jsxgrid.git"
     },
     "bugs": {
-        "url": "https://github.com/tabalinas/jsgrid/issues"
+        "url": "https://github.com/rok9ru/jsxgrid/issues"
+    },
+    "scripts": {
+        "build": "grunt",
+        "test": "grunt test"
+    },
+    "peerDependencies": {
+        "jquery": ">=3.0.0"
+    },
+    "optionalDependencies": {
+        "jsoneditor": "^10.0.0",
+        "select2": "4.1.0-rc.0"
     },
     "devDependencies": {
-        "grunt": "^0.4.5",
+        "grunt": "^1.6.2",
         "grunt-cli": "^1.5.0",
-        "grunt-contrib-concat": "~0.3.0",
-        "grunt-contrib-copy": "^0.7.0",
-        "grunt-contrib-cssmin": "^0.10.0",
-        "grunt-contrib-qunit": "^1.2.0",
-        "grunt-contrib-uglify": "^0.4.0",
-        "grunt-image-embed": "^0.3.1",
-        "grunt-string-replace": "^1.2.1"
+        "grunt-contrib-clean": "^2.0.1",
+        "grunt-contrib-concat": "~2.1.0",
+        "grunt-contrib-copy": "^1.0.0",
+        "grunt-contrib-cssmin": "^5.0.0",
+        "grunt-contrib-qunit": "^10.2.0",
+        "grunt-contrib-uglify": "^5.2.2"
     }
 }

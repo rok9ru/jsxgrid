@@ -1,14 +1,18 @@
-# jsGrid Lightweight Grid jQuery Plugin
+# jsxgrid
 
-[![Build Status](https://travis-ci.org/tabalinas/jsgrid.svg?branch=master)](https://travis-ci.org/tabalinas/jsgrid)
+**jsxgrid** is a lightweight client-side data grid control based on jQuery.
+It supports basic grid operations like inserting, filtering, editing, deleting, paging, sorting, and validating,
+and is tunable and allows to customize appearance and components. On top of that base, it ships with a set of
+extra fields built in: avatars, a JSON editor, a collapsible textarea, a datetime picker (with range filtering),
+a row-selection column with a bulk action, and a computed summary footer.
 
-Project site [js-grid.com](http://js-grid.com/)
+## Credits
 
-**jsGrid** is a lightweight client-side data grid control based on jQuery.
-It supports basic grid operations like inserting, filtering, editing, deleting, paging, sorting, and validating.
-jsGrid is tunable and allows to customize appearance and components.
-
-![jsGrid lightweight client-side data grid](http://content.screencast.com/users/tabalinas/folders/Jing/media/beada891-57fc-41f3-ad77-fbacecd01d15/00000002.png)
+jsxgrid is a fork of [jsGrid](https://github.com/tabalinas/jsgrid) by Artem Tabalin, which provided the
+original grid engine and design this project is built on. jsGrid saw no releases after 2016; jsxgrid
+continues it — cherry-picked fixes from PRs that never got merged upstream (memory leak on grid destroy,
+a CSP-unsafe inline style, a couple of correctness fixes), merges in a set of extra fields that used to be
+a separate package (xfields), and is maintained going forward by Mikhail Kremza.
 
 ## Table of contents
 
@@ -31,33 +35,29 @@ jsGrid is tunable and allows to customize appearance and components.
 
 ## Demos
 
-See [Demos](http://js-grid.com/demos/) on project site.
-
-Sample projects showing how to use jsGrid with the most popular backend technologies
-
-* **PHP** - https://github.com/tabalinas/jsgrid-php
-* **ASP.NET WebAPI** - https://github.com/tabalinas/jsgrid-webapi
-* **Express (NodeJS)** - https://github.com/tabalinas/jsgrid-express
-* **Ruby on Rail** - https://github.com/tabalinas/jsgrid-rails
-* **Django (Python)** - https://github.com/tabalinas/jsgrid-django
+See the [demos/](demos/) folder in this repo — `demos/xfields.html` in particular exercises every extra
+field together on one grid.
 
 
 ## Installation
 
-Install jsgrid with bower:
-
 ```bash
-
-$ bower install js-grid --save
-
+npm install jsxgrid
 ```
 
-Find jsGrid cdn links [here](https://cdnjs.com/libraries/jsgrid). 
+or via Composer, as an npm-mirrored asset:
+
+```bash
+composer require npm-asset/jsxgrid
+```
+
+Then include `dist/jsxgrid.js` (or `.min.js`), `dist/jsxgrid-theme.css`, and `dist/jsxgrid.css` on the page.
+Individual extra fields can also be loaded on their own from `dist/fields/` if you don't need all of them.
 
 
 ## Basic Usage
 
-Ensure that jQuery library of version 1.8.3 or later is included.
+Ensure that jQuery (version 3.0 or later) is included.
 
 Include `jsgrid.min.js`, `jsgrid-theme.min.css`, and `jsgrid.min.css` files into the web page.
 
@@ -666,6 +666,125 @@ Custom properties:
 }
 
 ```
+
+### Extra fields
+
+Fields below ship with jsxgrid on top of the base set. Every one of them (except `XRowSelectField`, which
+never filters) supports a shared `defaultSelected` convention: a value used to preset the filter control the
+*first* time its filter row is rendered, then reset to `null` so it doesn't keep overriding what the user
+searches for afterwards.
+
+#### Xcheckbox
+
+Drop-in replacement for `checkbox`. Returns `1`/`0` instead of `true`/`false`, which avoids a lot of backend
+type-coercion headaches (especially with databases).
+
+| Option | Default | Description |
+|---|---|---|
+| `defaultSelected` | `null` | `0`/`1`/`true`/`false` to preset the filter checkbox as unchecked/checked; leave `null` for the default indeterminate ("any") state. |
+
+#### XimgField
+
+Text field that previews its value as an `<img>`.
+
+| Option | Default | Description |
+|---|---|---|
+| `fm_callback` | `null` | `function(control)` — if set, insert/edit renders a button instead of a text input, and clicking it calls this callback with the jQuery-wrapped control so you can wire up your own file manager/picker. |
+| `editButtonText` | `'Open FM'` | Text for that button. |
+| `defaultSelected` | `null` | A string to preset the filter input with. |
+
+#### Xselect
+
+Drop-in replacement for `select`, plus:
+
+| Option | Default | Description |
+|---|---|---|
+| `pseudoElement` | `null` | An extra item unshifted to the start of the filter dropdown (e.g. an "any" option). Shape must match your `items` (object for object-items, or a `{[textField]:'', [valueField]:null}`-like item for array items). |
+| `select2` | `null` | Config object passed to [select2](https://select2.org/) on the filter control (`width` is always forced to `100%`). Applied via `setTimeout(0)` so the control is attached to the DOM first. |
+| `defaultSelected` | `null` | A value to preselect in the filter, matched against `items` by `valueField` (or by array index / object key if there's no `valueField`). |
+
+#### Xtextarea
+
+Long text is collapsed and expandable on click.
+
+| Option | Default | Description |
+|---|---|---|
+| `maxShowSymbols` | `50` | Values longer than this are truncated with `...`; click the cell to expand. |
+| `defaultSelected` | `null` | A string to preset the filter input with. |
+
+#### Xjsoneditor
+
+Edits/views a JSON value through [jsoneditor](https://www.npmjs.com/package/jsoneditor) (**required peer
+dependency** — must be loaded on the page, e.g. via CDN, or `Xjsoneditor` will throw when you try to open
+the editor).
+
+| Option | Default | Description |
+|---|---|---|
+| `templates` | `[]` | Forwarded to jsoneditor's `templates` option. |
+| `editText` | `'Editor'` | Text of the button shown in view mode. |
+| `closeText` | `'Save'` | Close-button text used when opening the editor for insert/edit. |
+| `defaultSelected` | `null` | A string to preset the (text-based) filter input with — the filter matches against the raw JSON string, not parsed values. |
+
+#### XRowSelectField
+
+A checkbox-per-row selection column with an optional header action button. `filtering` is hardcoded to
+`false`, so there's no filter row and no `defaultSelected` support.
+
+| Option | Default | Description |
+|---|---|---|
+| `buttonText` | `''` | Header button text. Header button is hidden entirely if left empty. |
+| `selectedItemsAction` | no-op | `function(selectedItems)` — called when the header button is clicked. Override this to implement your bulk action. |
+
+Field instance also exposes:
+- `selectItem(item)` / `unselectItem(item)` — used internally by the row checkboxes.
+- `unselectAll()` — clears `selectedItems` and unchecks every row checkbox for this field. Call it at the end of your `selectedItemsAction` if you want selection to reset after the action runs.
+
+#### XDateTimeField
+
+Date/datetime field backed by a native `<input type="datetime-local">` (or whatever `datePickerType` you set).
+
+| Option | Default | Description |
+|---|---|---|
+| `datePickerType` | `'datetime-local'` | Any native `<input>` date/time type (`date`, `datetime-local`, `time`, ...). |
+| `dateRange` | `false` | When `true`, the filter renders two date inputs (`from`/`to`) instead of one, and `filterValue()` returns `{from, to}`. |
+| `options` | built-in `Intl.DateTimeFormat` options | Passed to `toLocaleDateString()` when rendering the item view. Empty values render as an empty string. |
+| `defaultSelected` | `null` | A value (matching `datePickerType`'s input format) to preset the filter with. When `dateRange` is `true`, pass `{from, to}` instead. |
+
+#### popup.basic
+
+A minimal, jQuery-only modal used by `Xjsoneditor` (and available for your own use) as `jsGrid.popup` /
+`jsGrid.popupBasic`:
+
+```javascript
+
+jsGrid.popup(formContentOrElement, {
+    heading: "Title",     // optional
+    closeText: "Close",   // optional
+    styles: "...",        // optional, overrides the injected default CSS (injected once per page)
+    onClose: function (popup) { /* ... */ }
+});
+
+```
+
+You can swap in your own modal implementation entirely by overwriting `jsGrid.popup`.
+
+#### jsGridSummaryPlugin
+
+Patches `$.fn.jsGrid` so any field can define a `summary(data)` function; the results are rendered as a
+`<tfoot>` row (`.jsgrid-summary-footer`) after every grid refresh:
+
+```javascript
+
+{
+    name: "Age", type: "number",
+    summary: function (data) {
+        var total = data.reduce(function (s, i) { return s + (parseFloat(i.Age) || 0); }, 0);
+        return "Sum: " + total; // rendered via .html(), so markup is allowed
+    }
+}
+
+```
+
 
 ### Custom Field
 
@@ -2194,21 +2313,11 @@ This example shows how to use [spin.js](http://fgnass.github.io/spin.js/) to ind
 
 ## Requirement
 
-jQuery (1.8.3 or later)
+jQuery (3.0 or later). `Xjsoneditor` additionally requires [jsoneditor](https://www.npmjs.com/package/jsoneditor)
+to be loaded; `Xselect`'s `select2` option requires [select2](https://select2.org/) — both are optional and
+only needed if you actually use that field/option.
 
 
 ## Compatibility
 
-**Desktop**
-
-* Chrome
-* Safari
-* Firefox
-* Opera 15+
-* IE 8+
-
-**Mobile**
-
-* Safari for iOS
-* Chrome for Android
-* IE10 for WP8
+Any current evergreen browser (Chrome, Firefox, Safari, Edge) on desktop and mobile.
