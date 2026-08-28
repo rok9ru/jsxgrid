@@ -1,17 +1,57 @@
 (function(jsGrid, $, undefined) {
 
+    // Standalone: does not extend jsGrid.CheckboxField, only jsGrid.Field.
+    // Same tri-state (checked/unchecked/indeterminate) filter behavior as
+    // CheckboxField, reimplemented here directly instead of inherited.
+
+    var Field = jsGrid.Field;
+
     var Xcheckbox = function (config) {
-        jsGrid.CheckboxField.call(this, config);
+        Field.call(this, config);
     };
 
-    Xcheckbox.prototype = new jsGrid.CheckboxField({
+    Xcheckbox.prototype = new Field({
+        sorter: "number",
+        align: "center",
+        autosearch: true,
         defaultSelected: null,//value (0/1/true/false) to preset the filter checkbox with, applied once on first filter render then reset
 
         filterTemplate: function () {
-            var $result = jsGrid.CheckboxField.prototype.filterTemplate.call(this);
+            if (!this.filtering)
+                return "";
 
-            if (this.filtering && this.defaultSelected !== null) {
-                this.filterControl.prop({
+            var grid = this._grid,
+                $result = this.filterControl = this._createCheckbox();
+
+            $result.prop({
+                readOnly: true,
+                indeterminate: true
+            });
+
+            $result.on("click", function () {
+                var $cb = $(this);
+
+                if ($cb.prop("readOnly")) {
+                    $cb.prop({
+                        checked: false,
+                        readOnly: false
+                    });
+                } else if (!$cb.prop("checked")) {
+                    $cb.prop({
+                        readOnly: true,
+                        indeterminate: true
+                    });
+                }
+            });
+
+            if (this.autosearch) {
+                $result.on("click", function () {
+                    grid.search();
+                });
+            }
+
+            if (this.defaultSelected !== null) {
+                $result.prop({
                     checked: !!this.defaultSelected,
                     indeterminate: false,
                     readOnly: false
@@ -26,6 +66,13 @@
             return this.filterControl.get(0).indeterminate
                 ? undefined
                 : (this.filterControl.is(":checked") ? 1 : 0);
+        },
+
+        insertTemplate: function () {
+            if (!this.inserting)
+                return "";
+
+            return this.insertControl = this._createCheckbox();
         },
 
         insertValue: function () {
@@ -48,6 +95,10 @@
             var $result = this.editControl = this._createCheckbox();
             $result.prop("checked", +value);
             return $result;
+        },
+
+        _createCheckbox: function () {
+            return $("<input>").attr("type", "checkbox");
         }
 
     });

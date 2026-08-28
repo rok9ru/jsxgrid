@@ -1,24 +1,60 @@
 (function(jsGrid, $, undefined) {
 
+    // Standalone: does not extend jsGrid.TextAreaField, only jsGrid.Field.
+
+    var Field = jsGrid.Field;
+
     var Xjsoneditor = function (config) {
-        jsGrid.TextAreaField.call(this, config);
+        Field.call(this, config);
     };
 
-    Xjsoneditor.prototype = new jsGrid.TextAreaField({
+    Xjsoneditor.prototype = new Field({
+        autosearch: true,
+        readOnly: false,
         templates: [],
         closeText: 'Save',
         editText: "Editor",
         defaultSelected: null,//value to preset the filter input with, applied once on first filter render then reset
 
         filterTemplate: function () {
-            var $result = jsGrid.TextAreaField.prototype.filterTemplate.call(this);
+            if (!this.filtering)
+                return "";
 
-            if (this.filtering && this.defaultSelected !== null) {
-                this.filterControl.val(this.defaultSelected);
+            var grid = this._grid,
+                $result = this.filterControl = this._createTextBox();
+
+            if (this.autosearch) {
+                $result.on("keypress", function (e) {
+                    if (e.which === 13) {
+                        grid.search();
+                        e.preventDefault();
+                    }
+                });
+            }
+
+            if (this.defaultSelected !== null) {
+                $result.val(this.defaultSelected);
                 this.defaultSelected = null;
             }
 
             return $result;
+        },
+
+        filterValue: function () {
+            return this.filterControl.val();
+        },
+
+        insertValue: function () {
+            return this.insertControl.val();
+        },
+
+        editValue: function () {
+            return this.editControl.val();
+        },
+
+        _createTextBox: function () {
+            return $("<input>").attr("type", "text")
+                .prop("readonly", !!this.readOnly);
         },
 
         _doModal: function (formContent, options, resultControl) {

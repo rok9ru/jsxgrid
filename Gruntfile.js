@@ -39,21 +39,40 @@
                 separator: "\n"
             },
             js: {
+                // Engine only - no field types. jsxgrid.field.js defines the
+                // base Field class that every field (native or X-) extends,
+                // but none of the concrete field types live here anymore, so
+                // this loads on its own without pulling in either set.
                 src: [
                     "src/jsgrid.core.js",
                     "src/jsgrid.load-indicator.js",
                     "src/jsgrid.load-strategies.js",
                     "src/jsgrid.sort-strategies.js",
                     "src/jsgrid.validation.js",
-                    "src/jsgrid.field.js",
+                    "src/jsgrid.field.js"
+                ],
+                dest: "dist/<%= pkg.name %>.js"
+            },
+            fields: {
+                // Native field types (text, number, select, checkbox, ...).
+                // Optional: only needed if you actually use one of these
+                // types - the X-fields below don't depend on this bundle.
+                src: [
                     "src/fields/jsgrid.field.text.js",
                     "src/fields/jsgrid.field.number.js",
                     "src/fields/jsgrid.field.textarea.js",
                     "src/fields/jsgrid.field.select.js",
                     "src/fields/jsgrid.field.checkbox.js",
-                    "src/fields/jsgrid.field.control.js",
-
-                    // extra fields, brought in from xfields
+                    "src/fields/jsgrid.field.control.js"
+                ],
+                dest: "dist/<%= pkg.name %>-fields.js"
+            },
+            xfields: {
+                // Extra fields brought in from xfields. Each one extends
+                // jsGrid.Field directly (not the native field types above),
+                // so this bundle only needs concat.js (the engine), never
+                // concat.fields.
+                src: [
                     "src/lib/jsgrid.popup.basic.js",
                     "src/lib/jsGridSummaryPlugin.js",
                     "src/fields/jsgrid.field.Xcheckbox.js",
@@ -64,7 +83,7 @@
                     "src/fields/jsgrid.field.XRowSelectField.js",
                     "src/fields/jsgrid.field.XDateTimeField.js"
                 ],
-                dest: "dist/<%= pkg.name %>.js"
+                dest: "dist/<%= pkg.name %>-xfields.js"
             },
             css: {
                 src: "css/jsgrid.css",
@@ -83,6 +102,14 @@
             js: {
                 src: "<%= concat.js.dest %>",
                 dest: "dist/<%= pkg.name %>.min.js"
+            },
+            nativeFields: {
+                src: "<%= concat.fields.dest %>",
+                dest: "dist/<%= pkg.name %>-fields.min.js"
+            },
+            xfields: {
+                src: "<%= concat.xfields.dest %>",
+                dest: "dist/<%= pkg.name %>-xfields.min.js"
             },
             // extra fields, minified individually too so they can be loaded on their own
             fields: {

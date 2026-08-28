@@ -51,8 +51,14 @@ or via Composer, as an npm-mirrored asset:
 composer require npm-asset/jsxgrid
 ```
 
-Then include `dist/jsxgrid.js` (or `.min.js`), `dist/jsxgrid-theme.css`, and `dist/jsxgrid.css` on the page.
-Individual extra fields can also be loaded on their own from `dist/fields/` if you don't need all of them.
+The build is split into independent pieces - include only what you actually use:
+
+- `dist/jsxgrid.js` (or `.min.js`) - the engine. Always required.
+- `dist/jsxgrid-fields.js` - the native field types (`text`, `number`, `select`, `checkbox`, `textarea`, `control`). Skip this if you only use the extra fields below.
+- `dist/jsxgrid-xfields.js` - the extra fields (`Xcheckbox`, `Xselect`, ...). Does *not* need `jsxgrid-fields.js` - every extra field extends the engine's base `Field` class directly, not the native field types.
+- `dist/jsxgrid.css` and `dist/jsxgrid-theme.css` for styling.
+
+Individual fields (native or extra) can also be loaded one at a time from `dist/fields/` instead of pulling in a whole bundle.
 
 
 ## Basic Usage
