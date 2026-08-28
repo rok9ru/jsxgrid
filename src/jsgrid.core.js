@@ -1464,7 +1464,7 @@
         _updateRow: function($updatingRow, editedItem) {
             var updatingItem = $updatingRow.data(JSGRID_ROW_DATA_KEY),
                 updatingItemIndex = this._itemIndex(updatingItem),
-                updatedItem = $.extend({}, updatingItem, editedItem);
+                updatedItem = $.extend(true, {}, updatingItem, editedItem);
 
             var args = this._callEventHandler(this.onItemUpdating, {
                 row: $updatingRow,
@@ -1475,7 +1475,7 @@
 
             return this._controllerCall("updateItem", updatedItem, args.cancel, function(loadedUpdatedItem) {
                 var previousItem = $.extend(true, {}, updatingItem);
-                updatedItem = loadedUpdatedItem || $.extend(updatingItem, updatedItem);
+                updatedItem = loadedUpdatedItem || $.extend(true, updatingItem, updatedItem);
 
                 var $updatedRow = this._finishUpdate($updatingRow, updatedItem, updatingItemIndex);
 
