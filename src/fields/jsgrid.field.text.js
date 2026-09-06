@@ -1,5 +1,13 @@
 (function(jsGrid, $, undefined) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.text.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     var Field = jsGrid.Field;
 
     function TextField(config) {
@@ -66,4 +74,4 @@
 
     jsGrid.fields.text = jsGrid.TextField = TextField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

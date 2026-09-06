@@ -1,5 +1,13 @@
 (function(jsGrid) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] ru.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     jsGrid.locales.ru = {
         grid: {
             noDataContent: "Данных не найдено",
@@ -61,5 +69,5 @@
         }
     };
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 

@@ -1,5 +1,13 @@
 (function(jsGrid, $, undefined) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.Xjsoneditor.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     // Standalone: does not extend jsGrid.TextAreaField, only jsGrid.Field.
 
     var Field = jsGrid.Field;
@@ -162,4 +170,4 @@
 
     jsGrid.fields.Xjsoneditor = Xjsoneditor;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

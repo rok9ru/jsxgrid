@@ -271,6 +271,13 @@
             var fieldsLocale = self._fieldsLocaleConfig;
             self.fields = $.map(self.fields, function(field) {
                 if($.isPlainObject(field)) {
+                    if(field.type && !jsGrid.fields[field.type] && window.console) {
+                        // falls back to the plain base Field below (no filter/insert/edit
+                        // templates), which otherwise fails completely silently - most
+                        // often caused by the field's script loading before the engine,
+                        // or before the field type it's supposed to register
+                        console.warn("[jsxgrid] unknown field type \"" + field.type + "\" - falling back to the base field (no filtering/inserting/editing UI). Check that its script is loaded, and after jsxgrid.js.");
+                    }
                     var fieldConstructor = (field.type && jsGrid.fields[field.type]) || jsGrid.Field;
                     var fieldLocale = fieldsLocale && field.type && fieldsLocale[field.type];
                     if(fieldLocale) {

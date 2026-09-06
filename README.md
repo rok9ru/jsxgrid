@@ -60,6 +60,13 @@ The build is split into independent pieces - include only what you actually use:
 
 Individual fields (native or extra) can also be loaded one at a time from `dist/fields/` instead of pulling in a whole bundle.
 
+`dist/jsxgrid.js` must load before any field file or locale file (`dist/i18n/jsgrid-*.js`) - they all register
+themselves onto the `jsGrid` global. Getting the order wrong doesn't throw an uncaught error: each of those
+files logs a specific `console.error` naming itself and returns without doing anything, and a grid that ends
+up using an unregistered field type logs a `console.warn` and silently falls back to the plain base field
+(no filter/insert/edit UI for that column) instead of failing to render. Check the console first if a field
+or a locale seems to have no effect.
+
 
 ## Basic Usage
 

@@ -1,5 +1,5 @@
 /*
- * jsxgrid v2.2.0 (https://github.com/rok9ru/jsxgrid#readme)
+ * jsxgrid v2.3.0 (https://github.com/rok9ru/jsxgrid#readme)
  * (c) 2026 Mikhail Kremza
  * Licensed under MIT
  */

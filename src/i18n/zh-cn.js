@@ -1,5 +1,13 @@
 (function(jsGrid) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] zh-cn.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     jsGrid.locales["zh-cn"] = {
         grid: {
             noDataContent: "暂无数据",
@@ -61,4 +69,4 @@
         }
     };
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

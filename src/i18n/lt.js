@@ -1,5 +1,13 @@
 (function(jsGrid) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] lt.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     jsGrid.locales.lt = {
         grid: {
             noDataContent: "Nėra duomenų",
@@ -61,5 +69,5 @@
         }
     };
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 

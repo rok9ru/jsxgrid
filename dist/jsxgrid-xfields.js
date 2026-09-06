@@ -1,5 +1,5 @@
 /*
- * jsxgrid v2.2.0 (https://github.com/rok9ru/jsxgrid#readme)
+ * jsxgrid v2.3.0 (https://github.com/rok9ru/jsxgrid#readme)
  * (c) 2026 Mikhail Kremza
  * Licensed under MIT
  */
@@ -150,6 +150,14 @@
 }(jQuery));
 (function(jsGrid, $, undefined) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.Xtext.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     // Standalone: does not extend jsGrid.TextField, only jsGrid.Field.
 
     var Field = jsGrid.Field;
@@ -223,9 +231,17 @@
 
     jsGrid.fields.Xtext = Xtext;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.Xnumber.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     // Standalone: does not extend jsGrid.NumberField or Xtext, only jsGrid.Field.
 
@@ -308,9 +324,17 @@
 
     jsGrid.fields.Xnumber = Xnumber;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.Xcheckbox.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     // Standalone: does not extend jsGrid.CheckboxField, only jsGrid.Field.
     // Same tri-state (checked/unchecked/indeterminate) filter behavior as
@@ -417,8 +441,16 @@
 
     jsGrid.fields.Xcheckbox = Xcheckbox;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.XimgField.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     // Standalone: does not extend jsGrid.TextField, only jsGrid.Field.
 
@@ -516,8 +548,16 @@
 
     jsGrid.fields.XimgField = XimgField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.Xselect.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     // Standalone: does not extend jsGrid.SelectField, only jsGrid.Field.
 
@@ -692,8 +732,16 @@
 
     jsGrid.fields.Xselect = Xselect;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.Xtextarea.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     // Standalone: does not extend jsGrid.TextAreaField, only jsGrid.Field.
 
@@ -789,8 +837,16 @@
 
     jsGrid.fields.Xtextarea = Xtextarea;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.Xjsoneditor.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     // Standalone: does not extend jsGrid.TextAreaField, only jsGrid.Field.
 
@@ -954,8 +1010,16 @@
 
     jsGrid.fields.Xjsoneditor = Xjsoneditor;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.XRowSelectField.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     var XRowSelectField = function (config) {
         this.selectedItems = [];
@@ -1016,8 +1080,16 @@
 
     jsGrid.fields.XRowSelectField = XRowSelectField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.XDateTimeField.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
     var XDateTimeField = function (config) {
         jsGrid.Field.call(this, config);
     };
@@ -1138,8 +1210,16 @@
 
 
     jsGrid.fields.XDateTimeField = XDateTimeField;
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.Xcontrol.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     // Already standalone - the native control field extends jsGrid.Field
     // directly, same as every X-field. X-branded purely for naming parity,
@@ -1367,4 +1447,4 @@
 
     jsGrid.fields.Xcontrol = Xcontrol;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

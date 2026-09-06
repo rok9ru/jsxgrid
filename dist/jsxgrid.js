@@ -1,5 +1,5 @@
 /*
- * jsxgrid v2.2.0 (https://github.com/rok9ru/jsxgrid#readme)
+ * jsxgrid v2.3.0 (https://github.com/rok9ru/jsxgrid#readme)
  * (c) 2026 Mikhail Kremza
  * Licensed under MIT
  */
@@ -277,6 +277,13 @@
             var fieldsLocale = self._fieldsLocaleConfig;
             self.fields = $.map(self.fields, function(field) {
                 if($.isPlainObject(field)) {
+                    if(field.type && !jsGrid.fields[field.type] && window.console) {
+                        // falls back to the plain base Field below (no filter/insert/edit
+                        // templates), which otherwise fails completely silently - most
+                        // often caused by the field's script loading before the engine,
+                        // or before the field type it's supposed to register
+                        console.warn("[jsxgrid] unknown field type \"" + field.type + "\" - falling back to the base field (no filtering/inserting/editing UI). Check that its script is loaded, and after jsxgrid.js.");
+                    }
                     var fieldConstructor = (field.type && jsGrid.fields[field.type]) || jsGrid.Field;
                     var fieldLocale = fieldsLocale && field.type && fieldsLocale[field.type];
                     if(fieldLocale) {
@@ -1697,7 +1704,7 @@
         setDefaults: setDefaults,
         locales: locales,
         locale: locale,
-        version: '2.2.0'
+        version: '2.3.0'
     };
 
 }(window, jQuery));

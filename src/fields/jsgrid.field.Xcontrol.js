@@ -1,5 +1,13 @@
 (function(jsGrid, $, undefined) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.Xcontrol.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     // Already standalone - the native control field extends jsGrid.Field
     // directly, same as every X-field. X-branded purely for naming parity,
     // so it can be used instead of "control" once the native fields bundle
@@ -226,4 +234,4 @@
 
     jsGrid.fields.Xcontrol = Xcontrol;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

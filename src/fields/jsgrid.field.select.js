@@ -1,5 +1,13 @@
 (function(jsGrid, $, undefined) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.select.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     var NumberField = jsGrid.NumberField;
     var numberValueType = "number";
     var stringValueType = "string";
@@ -127,4 +135,4 @@
 
     jsGrid.fields.select = jsGrid.SelectField = SelectField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

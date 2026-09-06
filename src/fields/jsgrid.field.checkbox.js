@@ -1,5 +1,13 @@
 (function(jsGrid, $, undefined) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.checkbox.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     var Field = jsGrid.Field;
 
     function CheckboxField(config) {
@@ -94,4 +102,4 @@
 
     jsGrid.fields.checkbox = jsGrid.CheckboxField = CheckboxField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

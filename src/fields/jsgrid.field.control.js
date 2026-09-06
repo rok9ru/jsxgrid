@@ -1,5 +1,13 @@
 (function(jsGrid, $, undefined) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.control.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     var Field = jsGrid.Field;
 
     function ControlField(config) {
@@ -221,4 +229,4 @@
 
     jsGrid.fields.control = jsGrid.ControlField = ControlField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

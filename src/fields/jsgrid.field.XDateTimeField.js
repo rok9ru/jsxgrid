@@ -1,4 +1,12 @@
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.XDateTimeField.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
     var XDateTimeField = function (config) {
         jsGrid.Field.call(this, config);
     };
@@ -119,4 +127,4 @@
 
 
     jsGrid.fields.XDateTimeField = XDateTimeField;
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

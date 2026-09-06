@@ -1,5 +1,13 @@
 (function(jsGrid, $, undefined) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.number.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     var TextField = jsGrid.TextField;
 
     function NumberField(config) {
@@ -38,4 +46,4 @@
 
     jsGrid.fields.number = jsGrid.NumberField = NumberField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

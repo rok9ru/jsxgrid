@@ -1,5 +1,13 @@
 (function(jsGrid, $, undefined) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.Xcheckbox.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     // Standalone: does not extend jsGrid.CheckboxField, only jsGrid.Field.
     // Same tri-state (checked/unchecked/indeterminate) filter behavior as
     // CheckboxField, reimplemented here directly instead of inherited.
@@ -105,4 +113,4 @@
 
     jsGrid.fields.Xcheckbox = Xcheckbox;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

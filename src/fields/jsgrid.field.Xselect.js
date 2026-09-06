@@ -1,5 +1,13 @@
 (function(jsGrid, $, undefined) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.Xselect.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     // Standalone: does not extend jsGrid.SelectField, only jsGrid.Field.
 
     var Field = jsGrid.Field;
@@ -173,4 +181,4 @@
 
     jsGrid.fields.Xselect = Xselect;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

@@ -1,10 +1,18 @@
 /*
- * jsxgrid v2.2.0 (https://github.com/rok9ru/jsxgrid#readme)
+ * jsxgrid v2.3.0 (https://github.com/rok9ru/jsxgrid#readme)
  * (c) 2026 Mikhail Kremza
  * Licensed under MIT
  */
 
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.text.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     var Field = jsGrid.Field;
 
@@ -72,9 +80,17 @@
 
     jsGrid.fields.text = jsGrid.TextField = TextField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.number.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     var TextField = jsGrid.TextField;
 
@@ -114,9 +130,17 @@
 
     jsGrid.fields.number = jsGrid.NumberField = NumberField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.textarea.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     var TextField = jsGrid.TextField;
 
@@ -149,9 +173,17 @@
 
     jsGrid.fields.textarea = jsGrid.TextAreaField = TextAreaField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.select.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     var NumberField = jsGrid.NumberField;
     var numberValueType = "number";
@@ -280,9 +312,17 @@
 
     jsGrid.fields.select = jsGrid.SelectField = SelectField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.checkbox.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     var Field = jsGrid.Field;
 
@@ -378,9 +418,17 @@
 
     jsGrid.fields.checkbox = jsGrid.CheckboxField = CheckboxField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
 
 (function(jsGrid, $, undefined) {
+
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.control.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
 
     var Field = jsGrid.Field;
 
@@ -603,4 +651,4 @@
 
     jsGrid.fields.control = jsGrid.ControlField = ControlField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));

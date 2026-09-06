@@ -1,5 +1,13 @@
 (function(jsGrid, $, undefined) {
 
+    if (!jsGrid) {
+        if (window.console) {
+            console.error("[jsxgrid] jsgrid.field.XimgField.js was loaded before the jsxgrid engine (jsxgrid.js) - include the engine first.");
+        }
+        return;
+    }
+
+
     // Standalone: does not extend jsGrid.TextField, only jsGrid.Field.
 
     var Field = jsGrid.Field;
@@ -96,4 +104,4 @@
 
     jsGrid.fields.XimgField = XimgField;
 
-}(jsGrid, jQuery));
+}(window.jsGrid, window.jQuery));
