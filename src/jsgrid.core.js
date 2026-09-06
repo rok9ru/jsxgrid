@@ -136,6 +136,13 @@
         sortAscClass: "jsgrid-header-sort jsgrid-header-sort-asc",
         sortDescClass: "jsgrid-header-sort jsgrid-header-sort-desc",
 
+        // jsxgrid extension: initial sort applied once at construction (field
+        // name/index/reference + "asc"/"desc"), baked into the first render/load
+        // instead of requiring a separate sort() call (and the extra
+        // refresh/reload that would trigger) right after creating the grid.
+        sortField: null,
+        sortOrder: null,
+
         paging: false,
         pagerContainer: null,
         pageIndex: 1,
@@ -209,9 +216,36 @@
             this._initLoadStrategy();
             this._initController();
             this._initFields();
+            this._initSorting();
             this._attachWindowLoadResize();
             this._attachWindowResizeCallback();
             this._callEventHandler(this.onInit)
+        },
+
+        _initSorting: function() {
+            if(!this.sortField) {
+                return;
+            }
+
+            var field = this._normalizeField(this.sortField);
+            if(!field) {
+                return;
+            }
+
+            this._sortField = field;
+            this._sortOrder = this.sortOrder || SORT_ORDER_ASC;
+
+            // Static in-memory data (already present at construction time, not
+            // fetched via a controller) needs an explicit sort here - normal
+            // rendering never sorts on its own, only an actual sort() call does
+            // (see DirectLoadingStrategy.sort()). Controller-backed data follows
+            // the same rule sorting already does elsewhere: pageLoading sends
+            // sortField/sortOrder to the server via loadData()'s filter, while
+            // plain (non-paged) controller data is left as the controller
+            // returns it, same as clicking a sortable header would leave it.
+            if($.isArray(this.data) && this.data.length) {
+                this._sortData();
+            }
         },
 
         _initInstanceLocale: function(locale) {
@@ -533,6 +567,10 @@
                         .on("click", $.proxy(function() {
                             this.sort(index);
                         }, this));
+
+                    if(field === this._sortField) {
+                        $th.addClass(this._sortOrder === SORT_ORDER_ASC ? this.sortAscClass : this.sortDescClass);
+                    }
                 }
             });
 

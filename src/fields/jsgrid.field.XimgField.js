@@ -22,6 +22,7 @@
         fm_callback: null,
         editButtonText: 'Open FM',
         defaultSelected: null,//value to preset the filter input with, applied once on first filter render then reset
+        defaultValue: null,//value to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         filterTemplate: function () {
             if (!this.filtering)
@@ -78,7 +79,7 @@
                 return "";
             var fm = this.fm_callback;
 
-            var insertControl = this.insertControl = $('<input type="text">');
+            var insertControl = this.insertControl = $('<input type="text">').val(this.defaultValue || '');
             if (typeof fm == 'function') {
                 return $('<button class="jsgrid-imgField-button">'+this.editButtonText+'</button>').click(function () {
                     fm(insertControl);

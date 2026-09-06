@@ -23,6 +23,7 @@
         closeText: 'Save',
         editText: "Editor",
         defaultSelected: null,//value to preset the filter input with, applied once on first filter render then reset
+        defaultValue: null,//JSON value (object, or already-stringified) to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         filterTemplate: function () {
             if (!this.filtering)
@@ -114,7 +115,12 @@
 
             var f = this;
 
-            return this.insertControl = $("<textarea>").click(function () {
+            var $textarea = $("<textarea>");
+            if (this.defaultValue !== null) {
+                $textarea.val(typeof this.defaultValue === 'string' ? this.defaultValue : JSON.stringify(this.defaultValue));
+            }
+
+            return this.insertControl = $textarea.click(function () {
                 var editor = f._createJsonEditor({}, 'tree');
                 var ta = $(this);
 

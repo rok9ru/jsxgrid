@@ -21,6 +21,7 @@
         readOnly: false,
         maxShowSymbols: 50,
         defaultSelected: null,//value to preset the filter input with, applied once on first filter render then reset
+        defaultValue: null,//value to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         filterTemplate: function () {
             if (!this.filtering)
@@ -54,7 +55,11 @@
             if (!this.inserting)
                 return "";
 
-            return this.insertControl = this._createTextArea();
+            var $result = this.insertControl = this._createTextArea();
+            if (this.defaultValue !== null) {
+                $result.val(this.defaultValue);
+            }
+            return $result;
         },
 
         editTemplate: function (value) {

@@ -130,6 +130,8 @@ The config object may contain following options (default values are specified be
     editing: false,
     selecting: true,
     sorting: false,
+    sortField: null,     // initial sort, see below
+    sortOrder: null,     // "asc" | "desc", defaults to "asc" when sortField is set
     paging: false,
     pageLoading: false,
 
@@ -306,6 +308,31 @@ A boolean value specifies whether to highlight grid rows on hover.
 
 ### sorting (default: `false`)
 A boolean value specifies whether sorting is allowed.
+
+### sortField / sortOrder (default: `null` / `null`)
+> jsxgrid extension, not in upstream jsGrid
+
+Sets the initial sort, applied once at construction - baked into the first render/load, unlike calling
+`sort()` after creating the grid (which would trigger its own extra refresh/reload). `sortField` accepts
+anything `sort()` does: a field name, a zero-based field index, or a field reference. `sortOrder` is
+`"asc"` or `"desc"`, defaulting to `"asc"` when `sortField` is set. Requires `sorting: true`.
+
+With `pageLoading: true`, the initial `sortField`/`sortOrder` are sent to `controller.loadData` like any
+other sort (same as clicking a sortable header would). For static in-memory `data` (not loaded through a
+controller), the array is sorted immediately, before the first render. For a controller-backed grid without
+`pageLoading`, the data is left in whatever order the controller returns it - same as clicking a header
+does in that setup upstream.
+
+```javascript
+
+$("#grid").jsGrid({
+    sorting: true,
+    sortField: "Name",
+    sortOrder: "desc",
+    ...
+});
+
+```
 
 ### paging (default: `false`)
 A boolean value specifies whether data is displayed by pages.
@@ -696,6 +723,11 @@ never filters) supports a shared `defaultSelected` convention: a value used to p
 *first* time its filter row is rendered, then reset to `null` so it doesn't keep overriding what the user
 searches for afterwards.
 
+Every one of them (except `XRowSelectField` and `Xcontrol`, neither of which has a value to insert) also
+supports `defaultValue`: a value used to prefill the *insert* row's control. Unlike `defaultSelected`, this
+is **not** reset after use — it's applied every time a fresh insert row is built (including after
+`clearInsert()`), so a new row keeps starting from the same default until you change it in code.
+
 As of `Xtext`/`Xnumber`/`Xcontrol`, every native field type (`text`, `number`, `select`, `checkbox`,
 `textarea`, `control`) now has an X-branded equivalent — the native set (`dist/jsxgrid-fields.js`) is kept
 around as legacy/optional, with new work going into the X set going forward.
@@ -708,6 +740,7 @@ Drop-in replacement for `text`.
 |---|---|---|
 | `readOnly` | `false` | Whether the input is readonly. |
 | `defaultSelected` | `null` | A string to preset the filter input with. |
+| `defaultValue` | `null` | A string to prefill the insert row with. |
 
 #### Xnumber
 
@@ -718,6 +751,7 @@ every other X-field.
 |---|---|---|
 | `readOnly` | `false` | Whether the input is readonly. |
 | `defaultSelected` | `null` | A number (or numeric string) to preset the filter input with. |
+| `defaultValue` | `null` | A number (or numeric string) to prefill the insert row with. |
 
 #### Xcheckbox
 
@@ -727,6 +761,7 @@ type-coercion headaches (especially with databases).
 | Option | Default | Description |
 |---|---|---|
 | `defaultSelected` | `null` | `0`/`1`/`true`/`false` to preset the filter checkbox as unchecked/checked; leave `null` for the default indeterminate ("any") state. |
+| `defaultValue` | `null` | `0`/`1`/`true`/`false` to prefill the insert row checkbox as unchecked/checked. |
 
 #### XimgField
 
@@ -737,6 +772,7 @@ Text field that previews its value as an `<img>`.
 | `fm_callback` | `null` | `function(control)` — if set, insert/edit renders a button instead of a text input, and clicking it calls this callback with the jQuery-wrapped control so you can wire up your own file manager/picker. |
 | `editButtonText` | `'Open FM'` | Text for that button. |
 | `defaultSelected` | `null` | A string to preset the filter input with. |
+| `defaultValue` | `null` | A string to prefill the insert row with (the plain-text-input mode; still stored even in `fm_callback` button mode). |
 
 #### Xselect
 
@@ -747,6 +783,7 @@ Drop-in replacement for `select`, plus:
 | `pseudoElement` | `null` | An extra item unshifted to the start of the filter dropdown (e.g. an "any" option). Shape must match your `items` (object for object-items, or a `{[textField]:'', [valueField]:null}`-like item for array items). |
 | `select2` | `null` | Config object passed to [select2](https://select2.org/) on the filter control (`width` is always forced to `100%`). Applied via `setTimeout(0)` so the control is attached to the DOM first. |
 | `defaultSelected` | `null` | A value to preselect in the filter, matched against `items` by `valueField` (or by array index / object key if there's no `valueField`). |
+| `defaultValue` | `null` | A value to preselect in the insert row, matched the same way. |
 
 #### Xtextarea
 
@@ -756,6 +793,7 @@ Long text is collapsed and expandable on click.
 |---|---|---|
 | `maxShowSymbols` | `50` | Values longer than this are truncated with `...`; click the cell to expand. |
 | `defaultSelected` | `null` | A string to preset the filter input with. |
+| `defaultValue` | `null` | A string to prefill the insert row with. |
 
 #### Xjsoneditor
 
@@ -769,6 +807,7 @@ the editor).
 | `editText` | `'Editor'` | Text of the button shown in view mode. |
 | `closeText` | `'Save'` | Close-button text used when opening the editor for insert/edit. |
 | `defaultSelected` | `null` | A string to preset the (text-based) filter input with — the filter matches against the raw JSON string, not parsed values. |
+| `defaultValue` | `null` | A JSON value (object, or an already-stringified string) to prefill the insert row with. |
 
 #### XRowSelectField
 
@@ -794,6 +833,7 @@ Date/datetime field backed by a native `<input type="datetime-local">` (or whate
 | `dateRange` | `false` | When `true`, the filter renders two date inputs (`from`/`to`) instead of one, and `filterValue()` returns `{from, to}`. |
 | `options` | built-in `Intl.DateTimeFormat` options | Passed to `toLocaleDateString()` when rendering the item view. Empty values render as an empty string. |
 | `defaultSelected` | `null` | A value (matching `datePickerType`'s input format) to preset the filter with. When `dateRange` is `true`, pass `{from, to}` instead. |
+| `defaultValue` | `null` | A value (matching `datePickerType`'s input format) to prefill the insert row with. Not currently supported when `dateRange` is `true` (`insertTemplate()` doesn't render a range picker). |
 
 #### Xcontrol
 

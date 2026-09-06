@@ -23,6 +23,7 @@
         align: "center",
         autosearch: true,
         defaultSelected: null,//value (0/1/true/false) to preset the filter checkbox with, applied once on first filter render then reset
+        defaultValue: null,//value (0/1/true/false) to prefill the insert row checkbox with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         filterTemplate: function () {
             if (!this.filtering)
@@ -80,7 +81,11 @@
             if (!this.inserting)
                 return "";
 
-            return this.insertControl = this._createCheckbox();
+            var $result = this.insertControl = this._createCheckbox();
+            if (this.defaultValue !== null) {
+                $result.prop("checked", !!this.defaultValue);
+            }
+            return $result;
         },
 
         insertValue: function () {

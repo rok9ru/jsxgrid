@@ -1,5 +1,5 @@
 /*
- * jsxgrid v2.3.1 (https://github.com/rok9ru/jsxgrid#readme)
+ * jsxgrid v2.4.0 (https://github.com/rok9ru/jsxgrid#readme)
  * (c) 2026 Mikhail Kremza
  * Licensed under MIT
  */
@@ -170,6 +170,7 @@
         autosearch: true,
         readOnly: false,
         defaultSelected: null,//value to preset the filter input with, applied once on first filter render then reset
+        defaultValue: null,//value to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         filterTemplate: function () {
             if (!this.filtering)
@@ -199,7 +200,11 @@
             if (!this.inserting)
                 return "";
 
-            return this.insertControl = this._createTextBox();
+            var $result = this.insertControl = this._createTextBox();
+            if (this.defaultValue !== null) {
+                $result.val(this.defaultValue);
+            }
+            return $result;
         },
 
         editTemplate: function (value) {
@@ -257,6 +262,7 @@
         autosearch: true,
         readOnly: false,
         defaultSelected: null,//value to preset the filter input with, applied once on first filter render then reset
+        defaultValue: null,//value to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         filterTemplate: function () {
             if (!this.filtering)
@@ -286,7 +292,11 @@
             if (!this.inserting)
                 return "";
 
-            return this.insertControl = this._createTextBox();
+            var $result = this.insertControl = this._createTextBox();
+            if (this.defaultValue !== null) {
+                $result.val(this.defaultValue);
+            }
+            return $result;
         },
 
         editTemplate: function (value) {
@@ -351,6 +361,7 @@
         align: "center",
         autosearch: true,
         defaultSelected: null,//value (0/1/true/false) to preset the filter checkbox with, applied once on first filter render then reset
+        defaultValue: null,//value (0/1/true/false) to prefill the insert row checkbox with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         filterTemplate: function () {
             if (!this.filtering)
@@ -408,7 +419,11 @@
             if (!this.inserting)
                 return "";
 
-            return this.insertControl = this._createCheckbox();
+            var $result = this.insertControl = this._createCheckbox();
+            if (this.defaultValue !== null) {
+                $result.prop("checked", !!this.defaultValue);
+            }
+            return $result;
         },
 
         insertValue: function () {
@@ -466,6 +481,7 @@
         fm_callback: null,
         editButtonText: 'Open FM',
         defaultSelected: null,//value to preset the filter input with, applied once on first filter render then reset
+        defaultValue: null,//value to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         filterTemplate: function () {
             if (!this.filtering)
@@ -522,7 +538,7 @@
                 return "";
             var fm = this.fm_callback;
 
-            var insertControl = this.insertControl = $('<input type="text">');
+            var insertControl = this.insertControl = $('<input type="text">').val(this.defaultValue || '');
             if (typeof fm == 'function') {
                 return $('<button class="jsgrid-imgField-button">'+this.editButtonText+'</button>').click(function () {
                     fm(insertControl);
@@ -586,7 +602,8 @@
         valueType: NUMBER_VALUE_TYPE,
         pseudoElement: null,//pseudoElement that will be unsifted to start of select data in filters
         select2: null,
-        defaultSelected: null,
+        defaultSelected: null,//value to preselect in the filter, applied once on first filter render then reset
+        defaultValue: null,//value to preselect in the insert row, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         itemTemplate: function (value) {
             var items = this.items,
@@ -615,7 +632,11 @@
             if (!this.inserting)
                 return "";
 
-            return this.insertControl = this._createSelect();
+            var $result = this.insertControl = this._createSelect();
+            if (this.defaultValue !== null) {
+                $result.val(this.defaultValue);
+            }
+            return $result;
         },
 
         editTemplate: function (value) {
@@ -756,6 +777,7 @@
         readOnly: false,
         maxShowSymbols: 50,
         defaultSelected: null,//value to preset the filter input with, applied once on first filter render then reset
+        defaultValue: null,//value to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         filterTemplate: function () {
             if (!this.filtering)
@@ -789,7 +811,11 @@
             if (!this.inserting)
                 return "";
 
-            return this.insertControl = this._createTextArea();
+            var $result = this.insertControl = this._createTextArea();
+            if (this.defaultValue !== null) {
+                $result.val(this.defaultValue);
+            }
+            return $result;
         },
 
         editTemplate: function (value) {
@@ -863,6 +889,7 @@
         closeText: 'Save',
         editText: "Editor",
         defaultSelected: null,//value to preset the filter input with, applied once on first filter render then reset
+        defaultValue: null,//JSON value (object, or already-stringified) to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         filterTemplate: function () {
             if (!this.filtering)
@@ -954,7 +981,12 @@
 
             var f = this;
 
-            return this.insertControl = $("<textarea>").click(function () {
+            var $textarea = $("<textarea>");
+            if (this.defaultValue !== null) {
+                $textarea.val(typeof this.defaultValue === 'string' ? this.defaultValue : JSON.stringify(this.defaultValue));
+            }
+
+            return this.insertControl = $textarea.click(function () {
                 var editor = f._createJsonEditor({}, 'tree');
                 var ta = $(this);
 
@@ -1100,6 +1132,7 @@
         datePickerType: "datetime-local",
         dateRange: false,
         defaultSelected: null,//value (or {from, to} when dateRange is true) to preset the filter with, applied once on first filter render then reset
+        defaultValue: null,//value (matching datePickerType's input format) to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
         sorter: function (date1, date2) {
             return new Date(date1) - new Date(date2);
         },
@@ -1189,7 +1222,7 @@
         },
 
         insertTemplate: function () {
-            return this._insertPicker = this._createPicker();
+            return this._insertPicker = this._createPicker().val(this.defaultValue || '');
         },
 
         editTemplate: function (value) {

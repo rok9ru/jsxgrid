@@ -35,7 +35,8 @@
         valueType: NUMBER_VALUE_TYPE,
         pseudoElement: null,//pseudoElement that will be unsifted to start of select data in filters
         select2: null,
-        defaultSelected: null,
+        defaultSelected: null,//value to preselect in the filter, applied once on first filter render then reset
+        defaultValue: null,//value to preselect in the insert row, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         itemTemplate: function (value) {
             var items = this.items,
@@ -64,7 +65,11 @@
             if (!this.inserting)
                 return "";
 
-            return this.insertControl = this._createSelect();
+            var $result = this.insertControl = this._createSelect();
+            if (this.defaultValue !== null) {
+                $result.val(this.defaultValue);
+            }
+            return $result;
         },
 
         editTemplate: function (value) {

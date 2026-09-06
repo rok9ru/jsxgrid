@@ -17,6 +17,7 @@
         datePickerType: "datetime-local",
         dateRange: false,
         defaultSelected: null,//value (or {from, to} when dateRange is true) to preset the filter with, applied once on first filter render then reset
+        defaultValue: null,//value (matching datePickerType's input format) to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
         sorter: function (date1, date2) {
             return new Date(date1) - new Date(date2);
         },
@@ -106,7 +107,7 @@
         },
 
         insertTemplate: function () {
-            return this._insertPicker = this._createPicker();
+            return this._insertPicker = this._createPicker().val(this.defaultValue || '');
         },
 
         editTemplate: function (value) {

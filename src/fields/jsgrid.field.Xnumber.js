@@ -22,6 +22,7 @@
         autosearch: true,
         readOnly: false,
         defaultSelected: null,//value to preset the filter input with, applied once on first filter render then reset
+        defaultValue: null,//value to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
 
         filterTemplate: function () {
             if (!this.filtering)
@@ -51,7 +52,11 @@
             if (!this.inserting)
                 return "";
 
-            return this.insertControl = this._createTextBox();
+            var $result = this.insertControl = this._createTextBox();
+            if (this.defaultValue !== null) {
+                $result.val(this.defaultValue);
+            }
+            return $result;
         },
 
         editTemplate: function (value) {
