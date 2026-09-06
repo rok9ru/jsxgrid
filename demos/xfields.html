@@ -152,6 +152,8 @@
             a bulk action, plus a computed summary footer.
         </p>
         <div class="demo-tags">
+            <span>Xtext</span>
+            <span>Xnumber</span>
             <span>Xcheckbox</span>
             <span>XimgField</span>
             <span>Xselect</span>
@@ -159,6 +161,7 @@
             <span>Xjsoneditor</span>
             <span>XRowSelectField</span>
             <span>XDateTimeField</span>
+            <span>Xcontrol</span>
             <span>jsGridSummaryPlugin</span>
         </div>
     </div>
@@ -176,16 +179,15 @@
 <script src="../src/jsgrid.sort-strategies.js"></script>
 <script src="../src/jsgrid.validation.js"></script>
 <script src="../src/jsgrid.field.js"></script>
-<script src="../src/fields/jsgrid.field.text.js"></script>
-<script src="../src/fields/jsgrid.field.number.js"></script>
-<script src="../src/fields/jsgrid.field.textarea.js"></script>
-<script src="../src/fields/jsgrid.field.select.js"></script>
-<script src="../src/fields/jsgrid.field.checkbox.js"></script>
-<script src="../src/fields/jsgrid.field.control.js"></script>
 
 <script src="../src/lib/jsgrid.popup.basic.js"></script>
 <script src="../src/lib/jsGridSummaryPlugin.js"></script>
 
+<!-- No native field scripts loaded below - every field on this grid is an
+     X-field, extending jsGrid.Field directly, to demo they're fully
+     independent of dist/jsxgrid-fields.js. -->
+<script src="../src/fields/jsgrid.field.Xtext.js"></script>
+<script src="../src/fields/jsgrid.field.Xnumber.js"></script>
 <script src="../src/fields/jsgrid.field.Xcheckbox.js"></script>
 <script src="../src/fields/jsgrid.field.Xselect.js"></script>
 <script src="../src/fields/jsgrid.field.Xtextarea.js"></script>
@@ -193,6 +195,7 @@
 <script src="../src/fields/jsgrid.field.XimgField.js"></script>
 <script src="../src/fields/jsgrid.field.XRowSelectField.js"></script>
 <script src="../src/fields/jsgrid.field.XDateTimeField.js"></script>
+<script src="../src/fields/jsgrid.field.Xcontrol.js"></script>
 <script>
     $(function () {
 
@@ -206,8 +209,8 @@
             controller: db,
             fields: [
                 {name: "img", type: "XimgField", title: "", width: 60, filtering: false, sorting: false},
-                {name: "Name", type: "text", width: 150},
-                {name: "Age", type: "number", width: 60,
+                {name: "Name", type: "Xtext", width: 150},
+                {name: "Age", type: "Xnumber", width: 60,
                     summary: function (data) {
                         if (!data.length) return "—";
                         var n = this.name;
@@ -231,7 +234,7 @@
                     buttonText: "Some action",
                 },
 
-                {type: "control", width: 90}
+                {type: "Xcontrol", width: 90}
             ]
         });
     });

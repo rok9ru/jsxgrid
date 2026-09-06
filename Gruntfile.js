@@ -75,13 +75,16 @@
                 src: [
                     "src/lib/jsgrid.popup.basic.js",
                     "src/lib/jsGridSummaryPlugin.js",
+                    "src/fields/jsgrid.field.Xtext.js",
+                    "src/fields/jsgrid.field.Xnumber.js",
                     "src/fields/jsgrid.field.Xcheckbox.js",
                     "src/fields/jsgrid.field.XimgField.js",
                     "src/fields/jsgrid.field.Xselect.js",
                     "src/fields/jsgrid.field.Xtextarea.js",
                     "src/fields/jsgrid.field.Xjsoneditor.js",
                     "src/fields/jsgrid.field.XRowSelectField.js",
-                    "src/fields/jsgrid.field.XDateTimeField.js"
+                    "src/fields/jsgrid.field.XDateTimeField.js",
+                    "src/fields/jsgrid.field.Xcontrol.js"
                 ],
                 dest: "dist/<%= pkg.name %>-xfields.js"
             },
@@ -116,13 +119,16 @@
                 files: [
                     { src: "src/lib/jsgrid.popup.basic.js", dest: "dist/fields/lib/jsgrid.popup.basic.min.js" },
                     { src: "src/lib/jsGridSummaryPlugin.js", dest: "dist/fields/lib/jsGridSummaryPlugin.min.js" },
+                    { src: "src/fields/jsgrid.field.Xtext.js", dest: "dist/fields/jsgrid.field.Xtext.min.js" },
+                    { src: "src/fields/jsgrid.field.Xnumber.js", dest: "dist/fields/jsgrid.field.Xnumber.min.js" },
                     { src: "src/fields/jsgrid.field.Xcheckbox.js", dest: "dist/fields/jsgrid.field.Xcheckbox.min.js" },
                     { src: "src/fields/jsgrid.field.XimgField.js", dest: "dist/fields/jsgrid.field.XimgField.min.js" },
                     { src: "src/fields/jsgrid.field.Xselect.js", dest: "dist/fields/jsgrid.field.Xselect.min.js" },
                     { src: "src/fields/jsgrid.field.Xtextarea.js", dest: "dist/fields/jsgrid.field.Xtextarea.min.js" },
                     { src: "src/fields/jsgrid.field.Xjsoneditor.js", dest: "dist/fields/jsgrid.field.Xjsoneditor.min.js" },
                     { src: "src/fields/jsgrid.field.XRowSelectField.js", dest: "dist/fields/jsgrid.field.XRowSelectField.min.js" },
-                    { src: "src/fields/jsgrid.field.XDateTimeField.js", dest: "dist/fields/jsgrid.field.XDateTimeField.min.js" }
+                    { src: "src/fields/jsgrid.field.XDateTimeField.js", dest: "dist/fields/jsgrid.field.XDateTimeField.min.js" },
+                    { src: "src/fields/jsgrid.field.Xcontrol.js", dest: "dist/fields/jsgrid.field.Xcontrol.min.js" }
                 ]
             }
         },

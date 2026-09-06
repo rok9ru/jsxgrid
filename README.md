@@ -680,6 +680,29 @@ never filters) supports a shared `defaultSelected` convention: a value used to p
 *first* time its filter row is rendered, then reset to `null` so it doesn't keep overriding what the user
 searches for afterwards.
 
+As of `Xtext`/`Xnumber`/`Xcontrol`, every native field type (`text`, `number`, `select`, `checkbox`,
+`textarea`, `control`) now has an X-branded equivalent — the native set (`dist/jsxgrid-fields.js`) is kept
+around as legacy/optional, with new work going into the X set going forward.
+
+#### Xtext
+
+Drop-in replacement for `text`.
+
+| Option | Default | Description |
+|---|---|---|
+| `readOnly` | `false` | Whether the input is readonly. |
+| `defaultSelected` | `null` | A string to preset the filter input with. |
+
+#### Xnumber
+
+Drop-in replacement for `number`. Standalone — does not extend `Xtext`, only `jsGrid.Field` directly, same as
+every other X-field.
+
+| Option | Default | Description |
+|---|---|---|
+| `readOnly` | `false` | Whether the input is readonly. |
+| `defaultSelected` | `null` | A number (or numeric string) to preset the filter input with. |
+
 #### Xcheckbox
 
 Drop-in replacement for `checkbox`. Returns `1`/`0` instead of `true`/`false`, which avoids a lot of backend
@@ -755,6 +778,12 @@ Date/datetime field backed by a native `<input type="datetime-local">` (or whate
 | `dateRange` | `false` | When `true`, the filter renders two date inputs (`from`/`to`) instead of one, and `filterValue()` returns `{from, to}`. |
 | `options` | built-in `Intl.DateTimeFormat` options | Passed to `toLocaleDateString()` when rendering the item view. Empty values render as an empty string. |
 | `defaultSelected` | `null` | A value (matching `datePickerType`'s input format) to preset the filter with. When `dateRange` is `true`, pass `{from, to}` instead. |
+
+#### Xcontrol
+
+Drop-in replacement for `control`. Already standalone even as a native field (extends `jsGrid.Field`
+directly), so this is a straight rename — no behavior changes, no `defaultSelected` (nothing to filter by).
+Same custom properties as [`control`](#control).
 
 #### popup.basic
 
