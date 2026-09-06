@@ -28,6 +28,24 @@
                 insertButtonTooltip: "הכנסה",
                 updateButtonTooltip: "עדכון",
                 cancelEditButtonTooltip: "ביטול עריכה"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "ביצוע חיפוש",
+                insertModeButtonTooltip: "ביצוע עריכת שורה",
+                editButtonTooltip: "עריכה",
+                deleteButtonTooltip: "מחיקה",
+                searchButtonTooltip: "חיפוש",
+                clearFilterButtonTooltip: "ניקוי מסנן",
+                insertButtonTooltip: "הכנסה",
+                updateButtonTooltip: "עדכון",
+                cancelEditButtonTooltip: "ביטול עריכה"
+            },
+            XimgField: {
+                editButtonText: "פתח מנהל קבצים"
+            },
+            Xjsoneditor: {
+                editText: "עורך",
+                closeText: "שמור"
             }
         },
 

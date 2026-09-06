@@ -83,6 +83,14 @@
         height: "auto",
         updateOnResize: true,
 
+        // Per-instance locale: a key from jsGrid.locales (e.g. "ru"), or an
+        // inline locale config object with the same {grid, fields} shape.
+        // Applied once at construction time, before the rest of `config` -
+        // any option the caller also sets explicitly still wins. Unlike
+        // jsGrid.locale(), this never touches shared prototypes, so two
+        // grids on the same page can run in different languages at once.
+        locale: null,
+
         rowClass: $.noop,
         rowRenderer: null,
 
@@ -196,6 +204,7 @@
         gridBodyClass: "jsgrid-grid-body",
 
         _init: function(config) {
+            this._initInstanceLocale(config && config.locale);
             $.extend(this, config);
             this._initLoadStrategy();
             this._initController();
@@ -203,6 +212,24 @@
             this._attachWindowLoadResize();
             this._attachWindowResizeCallback();
             this._callEventHandler(this.onInit)
+        },
+
+        _initInstanceLocale: function(locale) {
+            if(!locale) {
+                return;
+            }
+
+            var localeConfig = $.isPlainObject(locale) ? locale : jsGrid.locales[locale];
+            if(!localeConfig) {
+                return;
+            }
+
+            if(localeConfig.grid) {
+                $.extend(this, localeConfig.grid);
+            }
+
+            this._fieldsLocaleConfig = localeConfig.fields;
+            this._validatorsLocaleConfig = localeConfig.validators;
         },
 
         loadStrategy: function() {
@@ -241,9 +268,15 @@
 
         _initFields: function() {
             var self = this;
+            var fieldsLocale = self._fieldsLocaleConfig;
             self.fields = $.map(self.fields, function(field) {
                 if($.isPlainObject(field)) {
                     var fieldConstructor = (field.type && jsGrid.fields[field.type]) || jsGrid.Field;
+                    var fieldLocale = fieldsLocale && field.type && fieldsLocale[field.type];
+                    if(fieldLocale) {
+                        // locale strings are defaults; explicit keys on the field config still win
+                        field = $.extend({}, fieldLocale, field);
+                    }
                     field = new fieldConstructor(field);
                 }
                 field._grid = self;
@@ -415,7 +448,9 @@
         },
 
         _createValidation: function() {
-            return getOrApply(this.validation, this);
+            return getOrApply(this.validation, this, {
+                validatorsLocale: this._validatorsLocaleConfig
+            });
         },
 
         _clear: function() {
@@ -1629,6 +1664,13 @@
     };
 
     var setLocale = function(obj, localeConfig) {
+        if(!obj) {
+            // target not loaded on the page (e.g. a locale file's fields.control
+            // section with no native control.js loaded) - skip this branch
+            // instead of throwing and aborting the rest of the locale.
+            return;
+        }
+
         $.each(localeConfig, function(field, value) {
             if($.isPlainObject(value)) {
                 setLocale(obj[field] || obj[field[0].toUpperCase() + field.slice(1)], value);
@@ -1637,7 +1679,7 @@
 
             if(obj.hasOwnProperty(field)) {
                 obj[field] = value;
-            } else {
+            } else if(obj.prototype) {
                 obj.prototype[field] = value;
             }
         });

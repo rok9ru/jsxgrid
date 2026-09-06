@@ -28,6 +28,24 @@
                 insertButtonTooltip: "插入",
                 updateButtonTooltip: "更新",
                 cancelEditButtonTooltip: "取消编辑"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "切换为搜索",
+                insertModeButtonTooltip: "切换为新增",
+                editButtonTooltip: "编辑",
+                deleteButtonTooltip: "删除",
+                searchButtonTooltip: "搜索",
+                clearFilterButtonTooltip: "清空过滤",
+                insertButtonTooltip: "插入",
+                updateButtonTooltip: "更新",
+                cancelEditButtonTooltip: "取消编辑"
+            },
+            XimgField: {
+                editButtonText: "打开文件管理器"
+            },
+            Xjsoneditor: {
+                editText: "编辑器",
+                closeText: "保存"
             }
         },
 

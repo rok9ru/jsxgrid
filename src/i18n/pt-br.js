@@ -28,6 +28,24 @@
                 insertButtonTooltip: "Adicionar",
                 updateButtonTooltip: "Atualizar",
                 cancelEditButtonTooltip: "Cancelar Edição"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "Mudar para busca",
+                insertModeButtonTooltip: "Mudar para inserção",
+                editButtonTooltip: "Editar",
+                deleteButtonTooltip: "Remover",
+                searchButtonTooltip: "Buscar",
+                clearFilterButtonTooltip: "Remover filtro",
+                insertButtonTooltip: "Adicionar",
+                updateButtonTooltip: "Atualizar",
+                cancelEditButtonTooltip: "Cancelar Edição"
+            },
+            XimgField: {
+                editButtonText: "Abrir gerenciador de arquivos"
+            },
+            Xjsoneditor: {
+                editText: "Editor",
+                closeText: "Salvar"
             }
         },
 

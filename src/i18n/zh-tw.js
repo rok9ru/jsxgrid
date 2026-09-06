@@ -28,6 +28,24 @@
                 insertButtonTooltip: "新增",
                 updateButtonTooltip: "修改",
                 cancelEditButtonTooltip: "取消編輯"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "切換為搜尋",
+                insertModeButtonTooltip: "切換為新增",
+                editButtonTooltip: "編輯",
+                deleteButtonTooltip: "刪除",
+                searchButtonTooltip: "搜尋",
+                clearFilterButtonTooltip: "清除搜尋條件",
+                insertButtonTooltip: "新增",
+                updateButtonTooltip: "修改",
+                cancelEditButtonTooltip: "取消編輯"
+            },
+            XimgField: {
+                editButtonText: "開啟檔案總管"
+            },
+            Xjsoneditor: {
+                editText: "編輯器",
+                closeText: "儲存"
             }
         },
 

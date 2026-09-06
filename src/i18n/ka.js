@@ -28,6 +28,24 @@
                 insertButtonTooltip: "დამატება",
                 updateButtonTooltip: "შენახვა",
                 cancelEditButtonTooltip: "გაუქმება"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "ძებნა",
+                insertModeButtonTooltip: "ჩანაწერის დამატება",
+                editButtonTooltip: "შესწორება",
+                deleteButtonTooltip: "წაშლა",
+                searchButtonTooltip: "ძებნა",
+                clearFilterButtonTooltip: "ფილტრის გასუფთავება",
+                insertButtonTooltip: "დამატება",
+                updateButtonTooltip: "შენახვა",
+                cancelEditButtonTooltip: "გაუქმება"
+            },
+            XimgField: {
+                editButtonText: "ფაილების მენეჯერის გახსნა"
+            },
+            Xjsoneditor: {
+                editText: "რედაქტორი",
+                closeText: "შენახვა"
             }
         },
 

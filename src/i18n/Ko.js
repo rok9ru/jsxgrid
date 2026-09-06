@@ -28,6 +28,24 @@
                 insertButtonTooltip: "등록",
                 updateButtonTooltip: "업데이트",
                 cancelEditButtonTooltip: "변경 취소"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "검색 모드",
+                insertModeButtonTooltip: "등록 모드",
+                editButtonTooltip: "수정",
+                deleteButtonTooltip: "삭제",
+                searchButtonTooltip: "검색",
+                clearFilterButtonTooltip: "초기화",
+                insertButtonTooltip: "등록",
+                updateButtonTooltip: "업데이트",
+                cancelEditButtonTooltip: "변경 취소"
+            },
+            XimgField: {
+                editButtonText: "파일 관리자 열기"
+            },
+            Xjsoneditor: {
+                editText: "편집기",
+                closeText: "저장"
             }
         },
 

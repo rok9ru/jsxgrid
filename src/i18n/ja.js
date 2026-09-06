@@ -28,6 +28,24 @@
                 insertButtonTooltip: "登録",
                 updateButtonTooltip: "更新",
                 cancelEditButtonTooltip: "編集戻す"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "検索モードへ",
+                insertModeButtonTooltip: "登録モードへ",
+                editButtonTooltip: "編集",
+                deleteButtonTooltip: "削除",
+                searchButtonTooltip: "フィルター",
+                clearFilterButtonTooltip: "クリア",
+                insertButtonTooltip: "登録",
+                updateButtonTooltip: "更新",
+                cancelEditButtonTooltip: "編集戻す"
+            },
+            XimgField: {
+                editButtonText: "ファイルマネージャーを開く"
+            },
+            Xjsoneditor: {
+                editText: "エディター",
+                closeText: "保存"
             }
         },
 

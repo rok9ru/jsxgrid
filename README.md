@@ -104,6 +104,7 @@ The config object may contain following options (default values are specified be
 {
     fields: [],
     data: [],
+    locale: null,       // per-instance locale, see Localization section
 
     autoload: false,
     controller: {
@@ -2086,6 +2087,41 @@ jsGrid.locales.my_lang = {
 Here is how localization config looks like for Spanish [i18n/es.js](src/i18n/es.js).
 
 Find all available locales [here](src/i18n).
+
+### Per-instance locale (jsxgrid extension, not in upstream jsGrid)
+
+`jsGrid.locale()` is global — it patches the shared `Grid`/field prototypes, so it affects every grid on the
+page at once. If you need different grids on the same page in different languages simultaneously, pass a
+`locale` option directly in the grid config instead:
+
+```javascript
+
+$("#grid").jsGrid({
+    locale: "ru",   // a key from jsGrid.locales, or an inline {grid, fields} config object
+    ...
+});
+
+```
+
+This only affects that one grid instance (and its fields) — it's applied as instance-level properties, not
+prototype patches, so it never touches other grids. An explicit option in the grid/field config still wins
+over the locale (e.g. `{ type: "Xcontrol", deleteButtonTooltip: "Custom" }` keeps `"Custom"` even under a
+`ru` locale). The `grid` and `fields` sections of a locale are read this way, which already covers the load
+indicator message too - `Grid` always builds it from the grid's own `loadMessage` option (part of the
+`grid` section), never from `LoadIndicator.prototype.message` directly.
+
+`validators` messages follow the grid's own `locale` as well: each grid has its own `Validation` instance
+(`this._validation`, built once at construction), which is handed the locale's `validators` section as
+`validatorsLocale` and checks it before falling back to the shared `jsGrid.validators[name].message`
+default. Precedence, same as fields: an explicit `message` on the validation rule itself still wins over
+the locale, which still wins over the built-in English default.
+
+**Interaction with `jsGrid.locale()`**: since a grid's own `locale` option sets instance properties (which
+always shadow prototype properties) while `jsGrid.locale()` only ever patches prototypes, a grid constructed
+with an explicit `locale` is permanently pinned to it — a later `jsGrid.locale()` call (e.g. a
+single-page-app switching the UI language at runtime, no full reload) never overrides it, while grids
+without their own `locale` keep following the global switch as before. This is guaranteed behavior, not an
+implementation detail to rely on carefully.
 
 
 ## Sorting Strategies

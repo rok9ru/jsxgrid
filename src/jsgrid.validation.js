@@ -62,7 +62,12 @@
                 validator = { validator: validator };
             }
 
-            return $.extend({}, validator, rule);
+            // this grid's own locale (jsGrid's `locale` init option), if any,
+            // overrides the shared default message but still loses to a message
+            // set explicitly on the rule itself
+            var localeOverride = this.validatorsLocale && this.validatorsLocale[validatorName];
+
+            return $.extend({}, validator, localeOverride, rule);
         }
     };
 

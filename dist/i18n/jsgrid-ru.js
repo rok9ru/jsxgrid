@@ -28,6 +28,24 @@
                 insertButtonTooltip: "Добавить",
                 updateButtonTooltip: "Сохранить",
                 cancelEditButtonTooltip: "Отменить"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "Поиск",
+                insertModeButtonTooltip: "Добавить запись",
+                editButtonTooltip: "Изменить",
+                deleteButtonTooltip: "Удалить",
+                searchButtonTooltip: "Найти",
+                clearFilterButtonTooltip: "Очистить фильтр",
+                insertButtonTooltip: "Добавить",
+                updateButtonTooltip: "Сохранить",
+                cancelEditButtonTooltip: "Отменить"
+            },
+            XimgField: {
+                editButtonText: "Открыть менеджер файлов"
+            },
+            Xjsoneditor: {
+                editText: "Редактор",
+                closeText: "Сохранить"
             }
         },
 

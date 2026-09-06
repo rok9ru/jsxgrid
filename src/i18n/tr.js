@@ -28,6 +28,24 @@
                 insertButtonTooltip: "Ekle",
                 updateButtonTooltip: "Güncelle",
                 cancelEditButtonTooltip: "Güncelleme iptali"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "Arama moduna geç",
+                insertModeButtonTooltip: "Yeni kayıt moduna geç",
+                editButtonTooltip: "Değiştir",
+                deleteButtonTooltip: "Sil",
+                searchButtonTooltip: "Bul",
+                clearFilterButtonTooltip: "Filtreyi temizle",
+                insertButtonTooltip: "Ekle",
+                updateButtonTooltip: "Güncelle",
+                cancelEditButtonTooltip: "Güncelleme iptali"
+            },
+            XimgField: {
+                editButtonText: "Dosya yöneticisini aç"
+            },
+            Xjsoneditor: {
+                editText: "Düzenleyici",
+                closeText: "Kaydet"
             }
         },
 

@@ -28,6 +28,24 @@
                 insertButtonTooltip: "درج",
                 updateButtonTooltip: "به روز رسانی",
                 cancelEditButtonTooltip: "لغو ویرایش"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "تغییر به حالت جستجو",
+                insertModeButtonTooltip: "تغییر به حالت درج",
+                editButtonTooltip: "تغییر به حالت ویرایش",
+                deleteButtonTooltip: "حذف",
+                searchButtonTooltip: "جستجو",
+                clearFilterButtonTooltip: "پاک کردن فیلترها",
+                insertButtonTooltip: "درج",
+                updateButtonTooltip: "به روز رسانی",
+                cancelEditButtonTooltip: "لغو ویرایش"
+            },
+            XimgField: {
+                editButtonText: "باز کردن مدیر فایل"
+            },
+            Xjsoneditor: {
+                editText: "ویرایشگر",
+                closeText: "ذخیره"
             }
         },
 

@@ -1,6 +1,6 @@
 {
     "name": "jsxgrid",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "description": "Lightweight data grid jQuery plugin, with a built-in extra field set (avatars, JSON editor, select, collapsible textarea, datetime picker, row selection). A maintained fork of jsGrid.",
     "keywords": [
         "grid",

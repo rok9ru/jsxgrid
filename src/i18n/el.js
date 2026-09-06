@@ -28,6 +28,24 @@
                 insertButtonTooltip: "Εισαγωγή",
                 updateButtonTooltip: "Αποθήκευση",
                 cancelEditButtonTooltip: "Ακύρωση"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "Αναζήτηση",
+                insertModeButtonTooltip: "Εισάγετε φίλτρο",
+                editButtonTooltip: "Επεξεργασία",
+                deleteButtonTooltip: "Διαγραφή",
+                searchButtonTooltip: "Εύρεση",
+                clearFilterButtonTooltip: "Αφαίρεση φίλτρου",
+                insertButtonTooltip: "Εισαγωγή",
+                updateButtonTooltip: "Αποθήκευση",
+                cancelEditButtonTooltip: "Ακύρωση"
+            },
+            XimgField: {
+                editButtonText: "Άνοιγμα διαχειριστή αρχείων"
+            },
+            Xjsoneditor: {
+                editText: "Επεξεργαστής",
+                closeText: "Αποθήκευση"
             }
         },
 

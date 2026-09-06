@@ -28,6 +28,24 @@
                 insertButtonTooltip: "Vložit",
                 updateButtonTooltip: "Upravit",
                 cancelEditButtonTooltip: "Zrušit editaci"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "Přepnout na hledání",
+                insertModeButtonTooltip: "Přepnout na vlkádání",
+                editButtonTooltip: "Upravit",
+                deleteButtonTooltip: "Smazat",
+                searchButtonTooltip: "Hledat",
+                clearFilterButtonTooltip: "Smazat filtr",
+                insertButtonTooltip: "Vložit",
+                updateButtonTooltip: "Upravit",
+                cancelEditButtonTooltip: "Zrušit editaci"
+            },
+            XimgField: {
+                editButtonText: "Otevřít správce souborů"
+            },
+            Xjsoneditor: {
+                editText: "Editor",
+                closeText: "Uložit"
             }
         },
 

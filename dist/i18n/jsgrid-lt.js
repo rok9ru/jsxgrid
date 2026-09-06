@@ -28,6 +28,24 @@
                 insertButtonTooltip: "Pridėti",
                 updateButtonTooltip: "Išsaugoti",
                 cancelEditButtonTooltip: "Atšaukti"
+            },
+            Xcontrol: {
+                searchModeButtonTooltip: "Paieška",
+                insertModeButtonTooltip: "Naujas įrašas",
+                editButtonTooltip: "Pakeisti",
+                deleteButtonTooltip: "Pašalinti",
+                searchButtonTooltip: "Surasti",
+                clearFilterButtonTooltip: "Išvalyti filtrą",
+                insertButtonTooltip: "Pridėti",
+                updateButtonTooltip: "Išsaugoti",
+                cancelEditButtonTooltip: "Atšaukti"
+            },
+            XimgField: {
+                editButtonText: "Atidaryti failų tvarkyklę"
+            },
+            Xjsoneditor: {
+                editText: "Redaktorius",
+                closeText: "Išsaugoti"
             }
         },
 
