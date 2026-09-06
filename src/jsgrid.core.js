@@ -591,7 +591,6 @@
         },
 
         _resetPager: function() {
-            this._firstDisplayingPage = 1;
             this._setPage(1);
         },
 
@@ -1059,22 +1058,27 @@
         },
 
         _setPage: function(pageIndex) {
-            var firstDisplayingPage = this._firstDisplayingPage,
-                pageButtonCount = this.pageButtonCount;
-
             this.pageIndex = pageIndex;
-
-            if(pageIndex < firstDisplayingPage) {
-                this._firstDisplayingPage = pageIndex;
-            }
-
-            if(pageIndex > firstDisplayingPage + pageButtonCount - 1) {
-                this._firstDisplayingPage = pageIndex - pageButtonCount + 1;
-            }
+            this._firstDisplayingPage = this._centeredFirstDisplayingPage(pageIndex);
 
             this._callEventHandler(this.onPageChanged, {
                 pageIndex: pageIndex
             });
+        },
+
+        // Keeps the visible page-number window centered on pageIndex (e.g.
+        // pageButtonCount=5 shows pageIndex-2 .. pageIndex+2), clamped to the
+        // actual page range, instead of only shifting once pageIndex falls
+        // outside the previous window - so the next/prev page is always just
+        // one click away, without ever needing the "..." nav button first.
+        _centeredFirstDisplayingPage: function(pageIndex) {
+            var pageButtonCount = this.pageButtonCount,
+                pageCount = this._pagesCount(),
+                halfWindow = Math.floor((pageButtonCount - 1) / 2),
+                first = pageIndex - halfWindow,
+                lastPossibleFirst = Math.max(1, pageCount - pageButtonCount + 1);
+
+            return Math.min(Math.max(1, first), lastPossibleFirst);
         },
 
         _controllerCall: function(method, param, isCanceled, doneCallback) {

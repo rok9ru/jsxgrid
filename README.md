@@ -373,6 +373,14 @@ An integer value specifying the amount of items on the page. Applied only when `
 ### pageButtonCount (default `15`)
 An integer value specifying the maximum amount of page buttons to be displayed in the pager.
 
+**jsxgrid extension, not in upstream jsGrid**: the visible window of page buttons is centered on
+the current page (e.g. with `pageButtonCount: 5` on page 8, the pager shows `6 7 8 9 10`) and
+re-centers on every page change, clamped to the actual page range at either end. Upstream jsGrid
+only shifts the window once the current page falls outside it, so the last button in the window was
+never clickable through to the next page without clicking the `...` nav link first - this fixes
+that. The `...` nav links (`showPrevPages`/`showNextPages`) still work as before, jumping the
+visible window by a full `pageButtonCount` without changing the current page.
+
 ### pagerFormat
 A string specifying pager format.
 The default value is  `"Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} of {pageCount}"`
