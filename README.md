@@ -318,10 +318,11 @@ anything `sort()` does: a field name, a zero-based field index, or a field refer
 `"asc"` or `"desc"`, defaulting to `"asc"` when `sortField` is set. Requires `sorting: true`.
 
 With `pageLoading: true`, the initial `sortField`/`sortOrder` are sent to `controller.loadData` like any
-other sort (same as clicking a sortable header would). For static in-memory `data` (not loaded through a
-controller), the array is sorted immediately, before the first render. For a controller-backed grid without
-`pageLoading`, the data is left in whatever order the controller returns it - same as clicking a header
-does in that setup upstream.
+other sort (same as clicking a sortable header would) - sorting is the server's job there, jsxgrid never
+re-sorts the page client-side on top of it. For static in-memory `data` (not loaded through a controller),
+the array is sorted immediately, before the first render. For a controller-backed grid *without*
+`pageLoading`, there's nothing to sort yet at construction time (data arrives later) - it's sorted once,
+client-side, as soon as the first `loadData()` call resolves.
 
 ```javascript
 

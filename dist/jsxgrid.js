@@ -1,5 +1,5 @@
 /*
- * jsxgrid v2.4.0 (https://github.com/rok9ru/jsxgrid#readme)
+ * jsxgrid v2.4.1 (https://github.com/rok9ru/jsxgrid#readme)
  * (c) 2026 Mikhail Kremza
  * Licensed under MIT
  */
@@ -244,13 +244,29 @@
             // Static in-memory data (already present at construction time, not
             // fetched via a controller) needs an explicit sort here - normal
             // rendering never sorts on its own, only an actual sort() call does
-            // (see DirectLoadingStrategy.sort()). Controller-backed data follows
-            // the same rule sorting already does elsewhere: pageLoading sends
-            // sortField/sortOrder to the server via loadData()'s filter, while
-            // plain (non-paged) controller data is left as the controller
-            // returns it, same as clicking a sortable header would leave it.
+            // (see DirectLoadingStrategy.sort()).
             if($.isArray(this.data) && this.data.length) {
                 this._sortData();
+                return;
+            }
+
+            // Controller-backed, non-paged grid: data isn't loaded yet at this
+            // point (arrives later via finishLoad), so there's nothing to sort
+            // here. Without this flag the header would still show the sort
+            // arrow (see _createHeaderRow()) while the actual rows stay in
+            // whatever order the controller returned - and the first real
+            // click on that same header would then look like it skips
+            // straight past the "ascending" pass, since _setSortingParams()
+            // reverses the order when clicking the field _sortField already
+            // points at. Picked up once, in _handleOptionChange's "data" case,
+            // as soon as the first load actually lands.
+            // pageLoading grids are excluded - sorting for those already
+            // happens server-side, from the sortField/sortOrder this same
+            // init sends along in the very first loadData() filter (see
+            // _sortingParams()); sorting the current page again client-side on
+            // top of that would be redundant at best.
+            if(!this.pageLoading) {
+                this._pendingInitialSort = true;
             }
         },
 
@@ -422,6 +438,12 @@
                     this.render();
                     break;
                 case "data":
+                    if(this._pendingInitialSort) {
+                        this._pendingInitialSort = false;
+                        this._sortData();
+                    }
+                    this.refresh();
+                    break;
                 case "editing":
                 case "heading":
                 case "filtering":
@@ -1746,7 +1768,7 @@
         setDefaults: setDefaults,
         locales: locales,
         locale: locale,
-        version: '2.4.0'
+        version: '2.4.1'
     };
 
 }(window, jQuery));
