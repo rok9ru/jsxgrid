@@ -16,6 +16,7 @@
         align: "center",              // redefine general property 'align'
         datePickerType: "datetime-local",
         dateRange: false,
+        autosearch: true,              // triggers searching when the user changes the filter value(s)
         defaultSelected: null,//value (or {from, to} when dateRange is true) to preset the filter with, applied once on first filter render then reset
         defaultValue: null,//value (matching datePickerType's input format) to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
         sorter: function (date1, date2) {
