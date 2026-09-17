@@ -18,6 +18,7 @@
         PAGE_INDEX_PLACEHOLDER = "{pageIndex}",
         PAGE_COUNT_PLACEHOLDER = "{pageCount}",
         ITEM_COUNT_PLACEHOLDER = "{itemCount}",
+        PAGE_SIZE_PLACEHOLDER = "{pageSize}",
 
         EMPTY_HREF = "javascript:void(0);";
 
@@ -161,6 +162,13 @@
         pagerNavButtonInactiveClass: "jsgrid-pager-nav-inactive-button",
         pageClass: "jsgrid-pager-page",
         currentPageClass: "jsgrid-pager-current-page",
+
+        // jsxgrid extension, not in upstream jsGrid: a page-size <select> in
+        // the pager, opt-in by adding {pageSize} to pagerFormat (off by
+        // default, since the default pagerFormat doesn't include it - see
+        // README's "Pager page-size selector" section).
+        pageSizeSelectOptions: [10, 20, 50, 100],
+        pageSizeSelectClass: "jsgrid-page-size-select",
 
         customLoading: false,
         pageLoading: false,
@@ -912,7 +920,11 @@
                 $pagerContainer.append(this._createPager());
             }
 
-            var showPager = this.paging && this._pagesCount() > 1;
+            // A page-size selector stays useful even with a single page (e.g.
+            // to shrink it, or to pre-set it before more data arrives), unlike
+            // the navigation controls the pageCount<=1 check below exists for.
+            var usesPageSizeSelect = (this.pagerFormat || "").indexOf(PAGE_SIZE_PLACEHOLDER) !== -1;
+            var showPager = this.paging && (this._pagesCount() > 1 || usesPageSizeSelect);
             $pagerContainer.toggle(showPager);
         },
 
@@ -958,10 +970,41 @@
                     result = pageCount;
                 } else if(pagerPart === ITEM_COUNT_PLACEHOLDER) {
                     result = itemCount;
+                } else if(pagerPart === PAGE_SIZE_PLACEHOLDER) {
+                    result = this._createPageSizeSelect();
                 }
 
                 return $.isArray(result) ? result.concat([" "]) : [result, " "];
             }, this));
+        },
+
+        // jsxgrid extension: a page-size <select>, wired only when {pageSize}
+        // is actually used in pagerFormat - see PAGE_SIZE_PLACEHOLDER above.
+        // Changing it goes through the regular option() path, so it gets the
+        // same refresh/reload case "pageSize" already handles.
+        _createPageSizeSelect: function() {
+            var grid = this,
+                currentSize = this.pageSize,
+                options = (this.pageSizeSelectOptions || []).slice();
+
+            // the current size must always be selectable, even if it isn't
+            // one of the configured presets (e.g. set directly in the config)
+            if($.inArray(currentSize, options) === -1) {
+                options.push(currentSize);
+                options.sort(function(a, b) { return a - b; });
+            }
+
+            var $select = $("<select>").addClass(this.pageSizeSelectClass);
+
+            $.each(options, function(_, size) {
+                $("<option>").attr("value", size).text(size).prop("selected", size === currentSize).appendTo($select);
+            });
+
+            $select.on("change", function() {
+                grid.option("pageSize", parseInt($(this).val(), 10));
+            });
+
+            return $select;
         },
 
         _createPages: function() {

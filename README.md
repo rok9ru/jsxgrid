@@ -157,6 +157,8 @@ The config object may contain following options (default values are specified be
     pageLastText: "Last",
     pageNavigatorNextText: "...",
     pageNavigatorPrevText: "...",
+    pageSizeSelectOptions: [10, 20, 50, 100], // see "Pager page-size selector"
+    pageSizeSelectClass: "jsgrid-page-size-select",
 
     invalidNotify: function(args) { ... }
     invalidMessage: "Invalid data entered!",
@@ -425,8 +427,56 @@ There are placeholders that can be used in the format:
 {pageIndex} // current page index
 {pageCount} // total amount of pages
 {itemCount} // total amount of items
+{pageSize}  // page-size <select> - jsxgrid extension, see "Pager page-size selector" below
 
 ```
+
+### Pager page-size selector
+> jsxgrid extension, not in upstream jsGrid
+
+Off by default - the *built-in* English default `pagerFormat` doesn't include `{pageSize}`, so a plain
+`new jsGrid.Grid(...)`/`$.jsGrid(...)` with no `locale` set is unaffected. Every one of jsxgrid's 19
+shipped locales (`src/i18n/*.js`) *does* include it in their own `pagerFormat`, translated - so
+`jsGrid.locale("ru")` (or any other shipped locale) or a grid's own `locale: "ru"` option turns the
+selector on as part of picking that locale, no separate opt-in needed. To turn it back off for a
+localized grid, or to opt in without any locale at all, set `pagerFormat` yourself:
+
+```javascript
+
+$("#grid").jsGrid({
+    paging: true,
+    pagerFormat: "Показывать по {pageSize} строк &nbsp;&nbsp; Pages: {first} {prev} {pages} {next} {last}",
+    ...
+});
+
+```
+
+To disable it on a grid that's using a locale (`locale: "ru"` or `jsGrid.locale("ru")`), override
+`pagerFormat` with the same text minus `{pageSize}`:
+
+```javascript
+
+$("#grid").jsGrid({
+    locale: "ru",
+    paging: true,
+    pagerFormat: "Страницы: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} из {pageCount}",
+    ...
+});
+
+```
+
+`{pageSize}` renders a `<select>` of page-size choices; picking one calls `grid.option("pageSize", ...)`,
+which already refreshes and reloads like any other `pageSize` change. The current `pageSize` is always
+selectable even if it isn't one of the configured choices (e.g. set directly in the grid config).
+
+| Option | Default | Description |
+|---|---|---|
+| `pageSizeSelectOptions` | `[10, 20, 50, 100]` | The list of page sizes offered in the `<select>`. |
+| `pageSizeSelectClass` | `"jsgrid-page-size-select"` | CSS class on the `<select>` element. |
+
+Unlike the page-number links, the pager stays visible even when there's only one page, as long as
+`pagerFormat` uses `{pageSize}` - a page-size selector is still useful with a small dataset (e.g. to
+shrink it, or to pre-set it before more data arrives), unlike page navigation with nothing to navigate to.
 
 ### pageNextText (default `"Next"`)
 A string specifying the text of the link to the next page.

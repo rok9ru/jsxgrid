@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "No encontrado",
             deleteConfirm: "¿Está seguro?",
-            pagerFormat: "Páginas: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} de {pageCount}",
+            pagerFormat: "Filas por página: {pageSize} &nbsp;&nbsp; Páginas: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} de {pageCount}",
             pagePrevText: "Anterior",
             pageNextText: "Siguiente",
             pageFirstText: "Primero",

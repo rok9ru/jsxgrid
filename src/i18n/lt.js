@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "Nėra duomenų",
             deleteConfirm: "Ar tikrai norite pašalinti šį įrašą?",
-            pagerFormat: "Puslapiai: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} iš {pageCount}",
+            pagerFormat: "Eilučių puslapyje: {pageSize} &nbsp;&nbsp; Puslapiai: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} iš {pageCount}",
             pagePrevText: "<",
             pageNextText: ">",
             pageFirstText: "<<",

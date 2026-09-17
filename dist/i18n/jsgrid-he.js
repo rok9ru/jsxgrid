@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "לא נמצא",
             deleteConfirm: "האם אתה בטוח?",
-            pagerFormat: "עמודים: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} מתוך {pageCount}",
+            pagerFormat: "שורות בעמוד: {pageSize} &nbsp;&nbsp; עמודים: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} מתוך {pageCount}",
             pagePrevText: "הקודם",
             pageNextText: "הבא",
             pageFirstText: "ראשון",

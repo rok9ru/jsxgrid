@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "Nessun risultato",
             deleteConfirm: "Sei sicuro ?",
-            pagerFormat: "Pagine: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} di {pageCount}",
+            pagerFormat: "Righe per pagina: {pageSize} &nbsp;&nbsp; Pagine: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} di {pageCount}",
             pagePrevText: "<",
             pageNextText: ">",
             pageFirstText: "<<",

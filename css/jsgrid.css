@@ -118,3 +118,7 @@
 .jsgrid-pager-page {
     padding: .2em .6em;
 }
+
+.jsgrid-page-size-select {
+    margin: 0 .4em;
+}

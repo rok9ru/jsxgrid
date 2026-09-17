@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "Die Daten konnten nicht gefunden werden",
             deleteConfirm: "Möchten Sie die Daten unwiederruflich löschen?",
-            pagerFormat: "Seiten: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} von {pageCount}",
+            pagerFormat: "Zeilen pro Seite: {pageSize} &nbsp;&nbsp; Seiten: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} von {pageCount}",
             pagePrevText: "<",
             pageNextText: ">",
             pageFirstText: "<<",

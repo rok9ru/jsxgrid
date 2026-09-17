@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "Kayıt Bulunamadı",
             deleteConfirm: "Emin misiniz ?",
-            pagerFormat: "Sayfalar: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} / {pageCount}",
+            pagerFormat: "Sayfa başına satır: {pageSize} &nbsp;&nbsp; Sayfalar: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} / {pageCount}",
             pagePrevText: "<",
             pageNextText: ">",
             pageFirstText: "<<",

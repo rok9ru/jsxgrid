@@ -1,5 +1,5 @@
 /*
- * jsxgrid v2.4.2 (https://github.com/rok9ru/jsxgrid#readme)
+ * jsxgrid v2.5.0 (https://github.com/rok9ru/jsxgrid#readme)
  * (c) 2026 Mikhail Kremza
  * Licensed under MIT
  */
@@ -123,4 +123,8 @@
 
 .jsgrid-pager-page {
     padding: .2em .6em;
+}
+
+.jsgrid-page-size-select {
+    margin: 0 .4em;
 }
