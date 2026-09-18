@@ -21,28 +21,61 @@
         align: "right",
         autosearch: true,
         readOnly: false,
-        defaultSelected: null,//value to preset the filter input with, applied once on first filter render then reset
-        defaultValue: null,//value to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected)
+        numberRange: false,//when true, the filter renders two number inputs (from/to) instead of one, and filterValue() returns {from, to}
+        defaultSelected: null,//value (or {from, to} when numberRange is true) to preset the filter with, applied once on first filter render then reset
+        defaultValue: null,//value to prefill the insert row with, applied every time a fresh insert row is built (not reset after use, unlike defaultSelected) - always a single value, numberRange only affects filtering
 
         filterTemplate: function () {
             if (!this.filtering)
                 return "";
 
-            var grid = this._grid,
+            var grid = this._grid, $result;
+
+            if (this.numberRange) {
+                var $startInput = this._createTextBox().addClass("jsgrid-number-start");
+                var $endInput = this._createTextBox().addClass("jsgrid-number-end");
+                var $container = $("<div class='jsgrid-number-range-wrapper'>").append($startInput).append($endInput);
+
+                $container.val = function () {
+                    return {
+                        from: $startInput.val(),
+                        to: $endInput.val()
+                    };
+                };
+
+                $result = this.filterControl = $container;
+
+                if (this.defaultSelected !== null) {
+                    var range = this.defaultSelected || {};
+                    $startInput.val(range.from || '');
+                    $endInput.val(range.to || '');
+                    this.defaultSelected = null;
+                }
+
+                if (this.autosearch) {
+                    $result.on("keypress", "input", function (e) {
+                        if (e.which === 13) {
+                            grid.search();
+                            e.preventDefault();
+                        }
+                    });
+                }
+            } else {
                 $result = this.filterControl = this._createTextBox();
 
-            if (this.autosearch) {
-                $result.on("keypress", function (e) {
-                    if (e.which === 13) {
-                        grid.search();
-                        e.preventDefault();
-                    }
-                });
-            }
+                if (this.autosearch) {
+                    $result.on("keypress", function (e) {
+                        if (e.which === 13) {
+                            grid.search();
+                            e.preventDefault();
+                        }
+                    });
+                }
 
-            if (this.defaultSelected !== null) {
-                $result.val(this.defaultSelected);
-                this.defaultSelected = null;
+                if (this.defaultSelected !== null) {
+                    $result.val(this.defaultSelected);
+                    this.defaultSelected = null;
+                }
             }
 
             return $result;
@@ -69,6 +102,14 @@
         },
 
         filterValue: function () {
+            if (this.numberRange) {
+                var range = this.filterControl.val();
+                return {
+                    from: range.from ? parseInt(range.from, 10) : undefined,
+                    to: range.to ? parseInt(range.to, 10) : undefined
+                };
+            }
+
             return this.filterControl.val()
                 ? parseInt(this.filterControl.val() || 0, 10)
                 : undefined;

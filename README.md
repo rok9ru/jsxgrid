@@ -801,8 +801,9 @@ every other X-field.
 | Option | Default | Description |
 |---|---|---|
 | `readOnly` | `false` | Whether the input is readonly. |
-| `defaultSelected` | `null` | A number (or numeric string) to preset the filter input with. |
-| `defaultValue` | `null` | A number (or numeric string) to prefill the insert row with. |
+| `numberRange` | `false` | When `true`, the filter renders two number inputs (`from`/`to`) instead of one, and `filterValue()` returns `{from, to}`. |
+| `defaultSelected` | `null` | A number (or numeric string) to preset the filter input with. When `numberRange` is `true`, pass `{from, to}` instead. |
+| `defaultValue` | `null` | A number (or numeric string) to prefill the insert row with. Not supported when `numberRange` is `true` (`insertTemplate()` doesn't render a range picker). |
 
 #### Xcheckbox
 
