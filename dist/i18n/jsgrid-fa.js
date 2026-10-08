@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "پیدا نشد",
             deleteConfirm: "آیا مطمئن هستید؟",
-            pagerFormat: "ردیف در هر صفحه: {pageSize} &nbsp;&nbsp; صفحه: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} از {pageCount}",
+            pagerFormat: "ردیف در هر صفحه: {pageSize} &nbsp;&nbsp; صفحه: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} از {pageCount} &nbsp;&nbsp; رکوردهای یافت‌شده: {itemCount}",
             pagePrevText: "قبلی",
             pageNextText: "بعدی",
             pageFirstText: "ابتدا",

@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "データが見つかりません。",
             deleteConfirm: "削除しますよろしですか。",
-            pagerFormat: "1ページあたりの行数: {pageSize} &nbsp;&nbsp; 頁: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; 【{pageIndex}／{pageCount}】",
+            pagerFormat: "1ページあたりの行数: {pageSize} &nbsp;&nbsp; 頁: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; 【{pageIndex}／{pageCount}】 &nbsp;&nbsp; 該当件数: {itemCount}",
             pagePrevText: "前",
             pageNextText: "次",
             pageFirstText: "最初",

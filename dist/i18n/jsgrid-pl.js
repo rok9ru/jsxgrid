@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "Nie znaleziono",
             deleteConfirm: "Czy jesteś pewien?",
-            pagerFormat: "Wierszy na stronę: {pageSize} &nbsp;&nbsp; Strony: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} z {pageCount}",
+            pagerFormat: "Wierszy na stronę: {pageSize} &nbsp;&nbsp; Strony: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} z {pageCount} &nbsp;&nbsp; Znaleziono rekordów: {itemCount}",
             pagePrevText: "Poprzednia",
             pageNextText: "Następna",
             pageFirstText: "Pierwsza",

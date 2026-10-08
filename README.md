@@ -431,6 +431,12 @@ There are placeholders that can be used in the format:
 
 ```
 
+The built-in English default doesn't show `{itemCount}`, but every one of the 19 shipped locales
+(`src/i18n/*.js`) appends a translated "found records" label with it to the end of its own `pagerFormat`
+(same line as the page links), e.g. `... &nbsp;&nbsp; Найдено записей: {itemCount}` for `ru`. With
+`pageLoading: true` it is the total reported by the server (`itemsCount`), not the size of the current page.
+To drop it for a localized grid, override `pagerFormat` without it (see the example below).
+
 ### Pager page-size selector
 > jsxgrid extension, not in upstream jsGrid
 

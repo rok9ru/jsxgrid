@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "데이터가 없습니다.",
             deleteConfirm: "데이터를 삭제 하겠습니까?",
-            pagerFormat: "페이지당 행 수: {pageSize} &nbsp;&nbsp; 페이지 : {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} / {pageCount}",
+            pagerFormat: "페이지당 행 수: {pageSize} &nbsp;&nbsp; 페이지 : {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} / {pageCount} &nbsp;&nbsp; 검색된 레코드: {itemCount}",
             pagePrevText: "<",
             pageNextText: ">",
             pageFirstText: "<<",

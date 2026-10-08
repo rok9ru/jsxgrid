@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "Δεν βρέθηκαν δεδομένα",
             deleteConfirm: "Θέλετε σίγουρα να κάνετε οριστική διαγραφή των δεδομένων;",
-            pagerFormat: "Γραμμές ανά σελίδα: {pageSize} &nbsp;&nbsp; Σελίδες: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} από {pageCount}",
+            pagerFormat: "Γραμμές ανά σελίδα: {pageSize} &nbsp;&nbsp; Σελίδες: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} από {pageCount} &nbsp;&nbsp; Βρέθηκαν εγγραφές: {itemCount}",
             pagePrevText: "<",
             pageNextText: ">",
             pageFirstText: "<<",

@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "暫無資料",
             deleteConfirm: "確認刪除？",
-            pagerFormat: "每頁行數: {pageSize} &nbsp;&nbsp; 頁碼: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} / {pageCount}",
+            pagerFormat: "每頁行數: {pageSize} &nbsp;&nbsp; 頁碼: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} / {pageCount} &nbsp;&nbsp; 找到記錄數: {itemCount}",
             pagePrevText: "上一頁",
             pageNextText: "下一頁",
             pageFirstText: "第一頁",

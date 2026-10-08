@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "Pas de données",
             deleteConfirm: "Êtes-vous sûr ?",
-            pagerFormat: "Lignes par page : {pageSize} &nbsp;&nbsp; Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} de {pageCount}",
+            pagerFormat: "Lignes par page : {pageSize} &nbsp;&nbsp; Pages: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} de {pageCount} &nbsp;&nbsp; Enregistrements trouvés : {itemCount}",
             pagePrevText: "<",
             pageNextText: ">",
             pageFirstText: "<<",

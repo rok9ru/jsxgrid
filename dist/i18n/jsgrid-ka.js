@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "მონაცემები ცარიელია.",
             deleteConfirm: "ნამდვილად გსურთ ჩანაწერის წაშლა?",
-            pagerFormat: "სტრიქონი გვერდზე: {pageSize} &nbsp;&nbsp; გვერდები: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} - {pageCount} დან.",
+            pagerFormat: "სტრიქონი გვერდზე: {pageSize} &nbsp;&nbsp; გვერდები: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} - {pageCount} დან. &nbsp;&nbsp; ნაპოვნია ჩანაწერი: {itemCount}",
             pagePrevText: "<",
             pageNextText: ">",
             pageFirstText: "<<",

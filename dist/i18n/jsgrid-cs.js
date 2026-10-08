@@ -12,7 +12,7 @@
         grid: {
             noDataContent: "Nenalezena žádná data",
             deleteConfirm: "Opravdu chcete smazat data?",
-            pagerFormat: "Řádků na stránku: {pageSize} &nbsp;&nbsp; Stránky: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} z {pageCount}",
+            pagerFormat: "Řádků na stránku: {pageSize} &nbsp;&nbsp; Stránky: {first} {prev} {pages} {next} {last} &nbsp;&nbsp; {pageIndex} z {pageCount} &nbsp;&nbsp; Nalezeno záznamů: {itemCount}",
             pagePrevText: "<",
             pageNextText: ">",
             pageFirstText: "<<",
