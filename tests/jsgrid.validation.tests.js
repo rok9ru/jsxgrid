@@ -3,29 +3,29 @@ $(function() {
     var validators = jsGrid.validators;
 
 
-    module("validation.validate", {
-        setup: function() {
+    QUnit.module("validation.validate", {
+        beforeEach: function() {
             this.validation = new jsGrid.Validation();
         }
     });
 
-    test("as function", function() {
+    QUnit.test("as function", function(assert) {
         var validateFunction = function(value) {
             return value === "test";
         };
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "not_test",
             rules: validateFunction
         }), [undefined]);
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "test",
             rules: validateFunction
         }), []);
     });
 
-    test("as rule config", function() {
+    QUnit.test("as rule config", function(assert) {
         var validateRule = {
             validator: function(value) {
                 return value === "test";
@@ -33,18 +33,18 @@ $(function() {
             message: "Error"
         };
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "not_test",
             rules: validateRule
         }), ["Error"]);
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "test",
             rules: validateRule
         }), []);
     });
 
-    test("as rule config with param", function() {
+    QUnit.test("as rule config with param", function(assert) {
         var validateRule = {
             validator: function(value, item, param) {
                 return value === param;
@@ -53,18 +53,18 @@ $(function() {
             message: "Error"
         };
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "not_test",
             rules: validateRule
         }), ["Error"]);
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "test",
             rules: validateRule
         }), []);
     });
 
-    test("as array of rules", function() {
+    QUnit.test("as array of rules", function(assert) {
         var validateRules = [{
             message: "Error",
             validator: function(value) {
@@ -76,28 +76,28 @@ $(function() {
             }
         }];
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "",
             rules: validateRules
         }), ["Error", undefined]);
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "test",
             rules: validateRules
         }), []);
     });
 
-    test("as string", function() {
+    QUnit.test("as string", function(assert) {
         validators.test_validator = function(value) {
             return value === "test";
         };
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "not_test",
             rules: "test_validator"
         }), [undefined]);
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "test",
             rules: "test_validator"
         }), []);
@@ -105,7 +105,7 @@ $(function() {
         delete validators.test_validator;
     });
 
-    test("as rule config with validator as string", function() {
+    QUnit.test("as rule config with validator as string", function(assert) {
         validators.test_validator = function(value) {
             return value === "test";
         };
@@ -115,12 +115,12 @@ $(function() {
             message: "Error"
         };
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "not_test",
             rules: validateRule
         }), ["Error"]);
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "test",
             rules: validateRule
         }), []);
@@ -128,7 +128,7 @@ $(function() {
         delete validators.test_validator;
     });
 
-    test("as array of mixed rules", function() {
+    QUnit.test("as array of mixed rules", function(assert) {
         validators.test_validator = function(value) {
             return value === "test";
         };
@@ -145,17 +145,17 @@ $(function() {
             }
         ];
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "",
             rules: validationRules
         }), [undefined, undefined, "Error"]);
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "not_test",
             rules: validationRules
         }), [undefined, "Error"]);
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "test",
             rules: validationRules
         }), []);
@@ -163,7 +163,7 @@ $(function() {
         delete validators.test_validator;
     });
 
-    test("as string validator with default error message", function() {
+    QUnit.test("as string validator with default error message", function(assert) {
         validators.test_validator = {
             message: function(value) {
                 return "Error: " + value;
@@ -177,12 +177,12 @@ $(function() {
             validator: "test_validator"
         };
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "not_test",
             rules: validateRule
         }), ["Error: not_test"]);
 
-        deepEqual(this.validation.validate({
+        assert.deepEqual(this.validation.validate({
             value: "test",
             rules: validateRule
         }), []);
@@ -190,14 +190,14 @@ $(function() {
         delete validators.test_validator;
     });
 
-    test("throws exception for unknown validator", function() {
+    QUnit.test("throws exception for unknown validator", function(assert) {
         var validateRule = {
             validator: "unknown_validator"
         };
 
         var validation = this.validation;
 
-        throws(function() {
+        assert.throws(function() {
             validation.validate({
                 value: "test",
                 rules: validateRule
@@ -206,8 +206,8 @@ $(function() {
     });
 
 
-    module("validators", {
-        setup: function() {
+    QUnit.module("validators", {
+        beforeEach: function() {
             var validation = new jsGrid.Validation();
 
             this.testValidator = function(validator, value, param) {
@@ -221,59 +221,59 @@ $(function() {
         }
     });
 
-    test("required", function() {
-        equal(this.testValidator("required", ""), false);
-        equal(this.testValidator("required", undefined), false);
-        equal(this.testValidator("required", null), false);
-        equal(this.testValidator("required", 0), true);
-        equal(this.testValidator("required", "test"), true);
+    QUnit.test("required", function(assert) {
+        assert.equal(this.testValidator("required", ""), false);
+        assert.equal(this.testValidator("required", undefined), false);
+        assert.equal(this.testValidator("required", null), false);
+        assert.equal(this.testValidator("required", 0), true);
+        assert.equal(this.testValidator("required", "test"), true);
     });
 
-    test("rangeLength", function() {
-        equal(this.testValidator("rangeLength", "123456", [0, 5]), false);
-        equal(this.testValidator("rangeLength", "", [1, 5]), false);
-        equal(this.testValidator("rangeLength", "123", [0, 5]), true);
-        equal(this.testValidator("rangeLength", "", [0, 5]), true);
-        equal(this.testValidator("rangeLength", "12345", [0, 5]), true);
+    QUnit.test("rangeLength", function(assert) {
+        assert.equal(this.testValidator("rangeLength", "123456", [0, 5]), false);
+        assert.equal(this.testValidator("rangeLength", "", [1, 5]), false);
+        assert.equal(this.testValidator("rangeLength", "123", [0, 5]), true);
+        assert.equal(this.testValidator("rangeLength", "", [0, 5]), true);
+        assert.equal(this.testValidator("rangeLength", "12345", [0, 5]), true);
     });
 
-    test("minLength", function() {
-        equal(this.testValidator("minLength", "123", 5), false);
-        equal(this.testValidator("minLength", "12345", 5), true);
-        equal(this.testValidator("minLength", "123456", 5), true);
+    QUnit.test("minLength", function(assert) {
+        assert.equal(this.testValidator("minLength", "123", 5), false);
+        assert.equal(this.testValidator("minLength", "12345", 5), true);
+        assert.equal(this.testValidator("minLength", "123456", 5), true);
     });
 
-    test("maxLength", function() {
-        equal(this.testValidator("maxLength", "123456", 5), false);
-        equal(this.testValidator("maxLength", "12345", 5), true);
-        equal(this.testValidator("maxLength", "123", 5), true);
+    QUnit.test("maxLength", function(assert) {
+        assert.equal(this.testValidator("maxLength", "123456", 5), false);
+        assert.equal(this.testValidator("maxLength", "12345", 5), true);
+        assert.equal(this.testValidator("maxLength", "123", 5), true);
     });
 
-    test("pattern", function() {
-        equal(this.testValidator("pattern", "_13_", "1?3"), false);
-        equal(this.testValidator("pattern", "13", "1?3"), true);
-        equal(this.testValidator("pattern", "3", "1?3"), true);
-        equal(this.testValidator("pattern", "_13_", /1?3/), true);
+    QUnit.test("pattern", function(assert) {
+        assert.equal(this.testValidator("pattern", "_13_", "1?3"), false);
+        assert.equal(this.testValidator("pattern", "13", "1?3"), true);
+        assert.equal(this.testValidator("pattern", "3", "1?3"), true);
+        assert.equal(this.testValidator("pattern", "_13_", /1?3/), true);
     });
 
-    test("range", function() {
-        equal(this.testValidator("range", 6, [0, 5]), false);
-        equal(this.testValidator("range", 0, [1, 5]), false);
-        equal(this.testValidator("range", 3, [0, 5]), true);
-        equal(this.testValidator("range", 0, [0, 5]), true);
-        equal(this.testValidator("range", 5, [0, 5]), true);
+    QUnit.test("range", function(assert) {
+        assert.equal(this.testValidator("range", 6, [0, 5]), false);
+        assert.equal(this.testValidator("range", 0, [1, 5]), false);
+        assert.equal(this.testValidator("range", 3, [0, 5]), true);
+        assert.equal(this.testValidator("range", 0, [0, 5]), true);
+        assert.equal(this.testValidator("range", 5, [0, 5]), true);
     });
 
-    test("min", function() {
-        equal(this.testValidator("min", 3, 5), false);
-        equal(this.testValidator("min", 5, 5), true);
-        equal(this.testValidator("min", 6, 5), true);
+    QUnit.test("min", function(assert) {
+        assert.equal(this.testValidator("min", 3, 5), false);
+        assert.equal(this.testValidator("min", 5, 5), true);
+        assert.equal(this.testValidator("min", 6, 5), true);
     });
 
-    test("max", function() {
-        equal(this.testValidator("max", 6, 5), false);
-        equal(this.testValidator("max", 5, 5), true);
-        equal(this.testValidator("max", 3, 5), true);
+    QUnit.test("max", function(assert) {
+        assert.equal(this.testValidator("max", 6, 5), false);
+        assert.equal(this.testValidator("max", 5, 5), true);
+        assert.equal(this.testValidator("max", 3, 5), true);
     });
 
 });

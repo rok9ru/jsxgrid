@@ -7,9 +7,9 @@ $(function() {
 
     Grid.prototype.updateOnResize = false;
 
-    module("basic");
+    QUnit.module("basic");
 
-    test("default creation", function() {
+    QUnit.test("default creation", function(assert) {
         var gridOptions = {
                 simpleOption: "test",
                 complexOption: {
@@ -21,12 +21,12 @@ $(function() {
 
             grid = new Grid("#jsGrid", gridOptions);
 
-        equal(grid._container[0], $("#jsGrid")[0], "container saved");
-        equal(grid.simpleOption, "test", "primitive option extended");
-        equal(grid.complexOption, gridOptions.complexOption, "non-primitive option extended");
+        assert.equal(grid._container[0], $("#jsGrid")[0], "container saved");
+        assert.equal(grid.simpleOption, "test", "primitive option extended");
+        assert.equal(grid.complexOption, gridOptions.complexOption, "non-primitive option extended");
     });
 
-    test("jquery adapter creation", function() {
+    QUnit.test("jquery adapter creation", function(assert) {
         var gridOptions = {
                 option: "test"
             },
@@ -34,12 +34,12 @@ $(function() {
             result = $element.jsGrid(gridOptions),
             grid = $element.data(JSGRID_DATA_KEY);
 
-        equal(result, $element, "jquery fn returned source jQueryElement");
-        ok(grid instanceof Grid, "jsGrid saved to jquery data");
-        equal(grid.option, "test", "options provided");
+        assert.equal(result, $element, "jquery fn returned source jQueryElement");
+        assert.ok(grid instanceof Grid, "jsGrid saved to jquery data");
+        assert.equal(grid.option, "test", "options provided");
     });
 
-    test("destroy", function() {
+    QUnit.test("destroy", function(assert) {
         var $element = $("#jsGrid"),
             grid;
 
@@ -48,11 +48,11 @@ $(function() {
 
         grid.destroy();
 
-        strictEqual($element.html(), "", "content is removed");
-        strictEqual($element.data(JSGRID_DATA_KEY), undefined, "jquery data is removed");
+        assert.strictEqual($element.html(), "", "content is removed");
+        assert.strictEqual($element.data(JSGRID_DATA_KEY), undefined, "jquery data is removed");
     });
 
-    test("jquery adapter second call changes option value", function() {
+    QUnit.test("jquery adapter second call changes option value", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 option: "test"
@@ -65,11 +65,11 @@ $(function() {
         gridOptions.option = "new test";
         $element.jsGrid(gridOptions);
 
-        equal(grid, $element.data(JSGRID_DATA_KEY), "instance was not changed");
-        equal(grid.option, "new test", "option changed");
+        assert.equal(grid, $element.data(JSGRID_DATA_KEY), "instance was not changed");
+        assert.equal(grid.option, "new test", "option changed");
     });
 
-    test("jquery adapter invokes jsGrid method", function() {
+    QUnit.test("jquery adapter invokes jsGrid method", function(assert) {
         var methodResult = "",
             $element = $("#jsGrid"),
             gridOptions = {
@@ -81,10 +81,10 @@ $(function() {
         $element.jsGrid(gridOptions);
         $element.jsGrid("method", "invoke");
 
-        equal(methodResult, "test_invoke", "method invoked");
+        assert.equal(methodResult, "test_invoke", "method invoked");
     });
 
-    test("onInit callback", function() {
+    QUnit.test("onInit callback", function(assert) {
         var $element = $("#jsGrid"),
             onInitArguments,
             gridOptions = {
@@ -95,10 +95,10 @@ $(function() {
 
         var grid = new Grid($element, gridOptions);
 
-        equal(onInitArguments.grid, grid, "grid instance is provided in onInit callback arguments");
+        assert.equal(onInitArguments.grid, grid, "grid instance is provided in onInit callback arguments");
     });
 
-    test("controller methods are $.noop when not specified", function() {
+    QUnit.test("controller methods are $.noop when not specified", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 controller: {}
@@ -107,7 +107,7 @@ $(function() {
 
         $element.jsGrid(gridOptions);
 
-        deepEqual($element.data(JSGRID_DATA_KEY)._controller, {
+        assert.deepEqual($element.data(JSGRID_DATA_KEY)._controller, {
             loadData: $.noop,
             insertItem: $.noop,
             updateItem: $.noop,
@@ -115,7 +115,7 @@ $(function() {
         }, "controller has stub methods");
     });
 
-    test("option method", function() {
+    QUnit.test("option method", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 test: "value"
@@ -125,14 +125,14 @@ $(function() {
         $element.jsGrid(gridOptions);
 
         testOption = $element.jsGrid("option", "test");
-        equal(testOption, "value", "read option value");
+        assert.equal(testOption, "value", "read option value");
 
         $element.jsGrid("option", "test", "new_value");
         testOption = $element.jsGrid("option", "test");
-        equal(testOption, "new_value", "set option value");
+        assert.equal(testOption, "new_value", "set option value");
     });
 
-    test("fieldOption method", function() {
+    QUnit.test("fieldOption method", function(assert) {
         var dataLoadedCount = 0;
         var $element = $("#jsGrid"),
             gridOptions = {
@@ -155,17 +155,17 @@ $(function() {
         $element.jsGrid(gridOptions);
 
         var fieldOptionValue = $element.jsGrid("fieldOption", "prop1", "name");
-        equal(fieldOptionValue, "prop1", "read field option");
+        assert.equal(fieldOptionValue, "prop1", "read field option");
 
         $element.jsGrid("fieldOption", "prop1", "name", "prop2");
-        equal($element.text(), "_value2", "set field option by field name");
-        equal(dataLoadedCount, 1, "data not reloaded on field option change");
+        assert.equal($element.text(), "_value2", "set field option by field name");
+        assert.equal(dataLoadedCount, 1, "data not reloaded on field option change");
 
         $element.jsGrid("fieldOption", 0, "name", "prop3");
-        equal($element.text(), "_value3", "set field option by field index");
+        assert.equal($element.text(), "_value3", "set field option by field index");
     });
 
-    test("option changing event handlers", function() {
+    QUnit.test("option changing event handlers", function(assert) {
         var $element = $("#jsGrid"),
             optionChangingEventArgs,
             optionChangedEventArgs,
@@ -188,18 +188,18 @@ $(function() {
         $element.jsGrid(gridOptions);
 
         $element.jsGrid("option", "test", "newTestValue");
-        equal(optionChangingEventArgs.option, "test", "option name is provided in args of optionChanging");
-        equal(optionChangingEventArgs.oldValue, "testValue", "old option value is provided in args of optionChanging");
-        equal(optionChangingEventArgs.newValue, "newTestValue", "new option value is provided in args of optionChanging");
+        assert.equal(optionChangingEventArgs.option, "test", "option name is provided in args of optionChanging");
+        assert.equal(optionChangingEventArgs.oldValue, "testValue", "old option value is provided in args of optionChanging");
+        assert.equal(optionChangingEventArgs.newValue, "newTestValue", "new option value is provided in args of optionChanging");
 
         anotherOption = $element.jsGrid("option", "another");
-        equal(anotherOption, "newTestValue_anotherValue", "option changing handler changed option and value");
+        assert.equal(anotherOption, "newTestValue_anotherValue", "option changing handler changed option and value");
 
-        equal(optionChangedEventArgs.option, "another", "option name is provided in args of optionChanged");
-        equal(optionChangedEventArgs.value, "newTestValue_anotherValue", "option value is provided in args of optionChanged");
+        assert.equal(optionChangedEventArgs.option, "another", "option name is provided in args of optionChanged");
+        assert.equal(optionChangedEventArgs.value, "newTestValue_anotherValue", "option value is provided in args of optionChanged");
     });
 
-    test("common layout rendering", function() {
+    QUnit.test("common layout rendering", function(assert) {
         var $element = $("#jsGrid"),
             grid = new Grid($element, {}),
             $headerGrid,
@@ -207,43 +207,43 @@ $(function() {
             $bodyGrid,
             $bodyGridTable;
 
-        ok($element.hasClass(grid.containerClass), "container class attached");
-        ok($element.children().eq(0).hasClass(grid.gridHeaderClass), "grid header");
-        ok($element.children().eq(1).hasClass(grid.gridBodyClass), "grid body");
-        ok($element.children().eq(2).hasClass(grid.pagerContainerClass), "pager container");
+        assert.ok($element.hasClass(grid.containerClass), "container class attached");
+        assert.ok($element.children().eq(0).hasClass(grid.gridHeaderClass), "grid header");
+        assert.ok($element.children().eq(1).hasClass(grid.gridBodyClass), "grid body");
+        assert.ok($element.children().eq(2).hasClass(grid.pagerContainerClass), "pager container");
 
         $headerGrid = $element.children().eq(0);
         $headerGridTable = $headerGrid.children().first();
-        ok($headerGridTable.hasClass(grid.tableClass), "header table");
-        equal($headerGrid.find("." + grid.headerRowClass).length, 1, "header row");
-        equal($headerGrid.find("." + grid.filterRowClass).length, 1, "filter row");
-        equal($headerGrid.find("." + grid.insertRowClass).length, 1, "insert row");
-        ok(grid._headerRow.hasClass(grid.headerRowClass), "header row class");
-        ok(grid._filterRow.hasClass(grid.filterRowClass), "filter row class");
-        ok(grid._insertRow.hasClass(grid.insertRowClass), "insert row class");
+        assert.ok($headerGridTable.hasClass(grid.tableClass), "header table");
+        assert.equal($headerGrid.find("." + grid.headerRowClass).length, 1, "header row");
+        assert.equal($headerGrid.find("." + grid.filterRowClass).length, 1, "filter row");
+        assert.equal($headerGrid.find("." + grid.insertRowClass).length, 1, "insert row");
+        assert.ok(grid._headerRow.hasClass(grid.headerRowClass), "header row class");
+        assert.ok(grid._filterRow.hasClass(grid.filterRowClass), "filter row class");
+        assert.ok(grid._insertRow.hasClass(grid.insertRowClass), "insert row class");
 
         $bodyGrid = $element.children().eq(1);
         $bodyGridTable = $bodyGrid.children().first();
-        ok($bodyGridTable.hasClass(grid.tableClass), "body table");
-        equal(grid._content.parent()[0], $bodyGridTable[0], "content is tbody in body table");
-        equal($bodyGridTable.find("." + grid.noDataRowClass).length, 1, "no data row");
-        equal($bodyGridTable.text(), grid.noDataContent, "no data text");
+        assert.ok($bodyGridTable.hasClass(grid.tableClass), "body table");
+        assert.equal(grid._content.parent()[0], $bodyGridTable[0], "content is tbody in body table");
+        assert.equal($bodyGridTable.find("." + grid.noDataRowClass).length, 1, "no data row");
+        assert.equal($bodyGridTable.text(), grid.noDataContent, "no data text");
     });
 
-    test("set default options with setDefaults", function() {
+    QUnit.test("set default options with setDefaults", function(assert) {
         jsGrid.setDefaults({
             defaultOption: "test"
         });
 
         var $element = $("#jsGrid").jsGrid({});
 
-        equal($element.jsGrid("option", "defaultOption"), "test", "default option set");
+        assert.equal($element.jsGrid("option", "defaultOption"), "test", "default option set");
     });
 
 
-    module("loading");
+    QUnit.module("loading");
 
-    test("loading with controller", function() {
+    QUnit.test("loading with controller", function(assert) {
         var $element = $("#jsGrid"),
             data = [
                 { test: "test1" },
@@ -262,20 +262,21 @@ $(function() {
 
         grid.loadData();
 
-        equal(grid.option("data"), data, "loadData loads data");
+        assert.equal(grid.option("data"), data, "loadData loads data");
     });
 
-    test("loadData throws exception when controller method not found", function() {
+    QUnit.test("loadData throws exception when controller method not found", function(assert) {
         var $element = $("#jsGrid");
         var grid = new Grid($element);
         grid._controller = {};
 
-        throws(function() {
+        assert.throws(function() {
             grid.loadData();
         }, /loadData/, "loadData threw an exception");
     });
 
-    asyncTest("onError event should be fired on controller fail", function() {
+    QUnit.test("onError event should be fired on controller fail", function(assert) {
+        var done = assert.async();
         var errorArgs,
             errorFired = 0,
             $element = $("#jsGrid"),
@@ -300,26 +301,28 @@ $(function() {
         // compliance), even when already settled - so onError no longer
         // fires synchronously here. Flush the microtask queue before asserting.
         setTimeout(function() {
-            equal(errorFired, 1, "onError handler fired");
-            deepEqual(errorArgs, { grid: grid, args: [{ value: 1 }, "test"] }, "error has correct params");
-            start();
+            assert.equal(errorFired, 1, "onError handler fired");
+            assert.deepEqual(errorArgs, { grid: grid, args: [{ value: 1 }, "test"] }, "error has correct params");
+            done();
         }, 0);
     });
 
-    asyncTest("autoload should call loadData after render", 1, function() {
+    QUnit.test("autoload should call loadData after render", function(assert) {
+        assert.expect(1);
+        var done = assert.async();
         new Grid($("#jsGrid"), {
             autoload: true,
             controller: {
                 loadData: function() {
-                    ok(true, "autoload calls loadData on creation");
-                    start();
+                    assert.ok(true, "autoload calls loadData on creation");
+                    done();
                     return [];
                 }
             }
         });
     });
 
-    test("loading filtered data", function() {
+    QUnit.test("loading filtered data", function(assert) {
         var filteredData,
             loadingArgs,
             loadedArgs,
@@ -361,12 +364,13 @@ $(function() {
 
         grid.loadData();
 
-        equal(loadingArgs.filter.field, "test");
-        equal(grid.option("data").length, 2, "filtered data loaded");
-        deepEqual(loadedArgs.data, filteredData);
+        assert.equal(loadingArgs.filter.field, "test");
+        assert.equal(grid.option("data").length, 2, "filtered data loaded");
+        assert.deepEqual(loadedArgs.data, filteredData);
     });
 
-    asyncTest("loading indication", function() {
+    QUnit.test("loading indication", function(assert) {
+        var done = assert.async();
         var timeout = 10,
             stage = "initial",
             $element = $("#jsGrid"),
@@ -377,8 +381,8 @@ $(function() {
                 loadMessage: "loading...",
 
                 loadIndicator: function(config) {
-                    equal(config.message, gridOptions.loadMessage, "message provided");
-                    ok(config.container.jquery, "grid container is provided");
+                    assert.equal(config.message, gridOptions.loadMessage, "message provided");
+                    assert.ok(config.container.jquery, "grid container is provided");
 
                     return {
                         show: function() {
@@ -398,10 +402,10 @@ $(function() {
                     loadData: function() {
                         var deferred = $.Deferred();
 
-                        equal(stage, "initial", "initial stage");
+                        assert.equal(stage, "initial", "initial stage");
 
                         setTimeout(function() {
-                            equal(stage, "started", "loading started");
+                            assert.equal(stage, "started", "loading started");
 
                             deferred.resolve([]);
 
@@ -410,8 +414,8 @@ $(function() {
                             // indicator hasn't run yet at this point - flush
                             // the microtask queue before asserting.
                             setTimeout(function() {
-                                equal(stage, "finished", "loading finished");
-                                start();
+                                assert.equal(stage, "finished", "loading finished");
+                                done();
                             }, 0);
                         }, timeout);
 
@@ -425,7 +429,9 @@ $(function() {
         grid.loadData();
     });
 
-    asyncTest("loadingIndication=false should not show loading", 0, function() {
+    QUnit.test("loadingIndication=false should not show loading", function(assert) {
+        assert.expect(0);
+        var done = assert.async();
         var $element = $("#jsGrid"),
             timeout = 10,
 
@@ -436,10 +442,10 @@ $(function() {
                 loadIndicator: function() {
                     return {
                         show: function() {
-                            ok(false, "should not call show");
+                            assert.ok(false, "should not call show");
                         },
                         hide: function() {
-                            ok(false, "should not call hide");
+                            assert.ok(false, "should not call hide");
                         }
                     };
                 },
@@ -454,7 +460,7 @@ $(function() {
 
                         setTimeout(function() {
                             deferred.resolve([]);
-                            start();
+                            done();
                         }, timeout);
 
                         return deferred.promise();
@@ -467,7 +473,7 @@ $(function() {
         grid.loadData();
     });
 
-    test("search", function() {
+    QUnit.test("search", function(assert) {
         var $element = $("#jsGrid"),
             data = [
                 { field: "test" },
@@ -502,13 +508,13 @@ $(function() {
             grid = new Grid($element, gridOptions);
 
         grid.search();
-        equal(grid.option("data").length, 2, "data filtered");
-        strictEqual(grid.option("pageIndex"), 1, "pageIndex reset");
-        strictEqual(grid._sortField, null, "sortField reset");
-        strictEqual(grid._sortOrder, "asc", "sortOrder reset");
+        assert.equal(grid.option("data").length, 2, "data filtered");
+        assert.strictEqual(grid.option("pageIndex"), 1, "pageIndex reset");
+        assert.strictEqual(grid._sortField, null, "sortField reset");
+        assert.strictEqual(grid._sortOrder, "asc", "sortOrder reset");
     });
 
-    test("change loadStrategy on the fly", function() {
+    QUnit.test("change loadStrategy on the fly", function(assert) {
         var $element = $("#jsGrid");
 
         var gridOptions = {
@@ -530,6 +536,10 @@ $(function() {
                 return 1;
             },
 
+            itemsCount: function() {
+                return 1;
+            },
+
             loadParams: function() {
                 return [];
             },
@@ -541,13 +551,13 @@ $(function() {
 
         grid.loadData();
 
-        equal(grid.option("data").length, 1, "new load strategy is applied");
+        assert.equal(grid.option("data").length, 1, "new load strategy is applied");
     });
 
 
-    module("filtering");
+    QUnit.module("filtering");
 
-    test("filter rendering", function() {
+    QUnit.test("filter rendering", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 filtering: true,
@@ -565,14 +575,14 @@ $(function() {
             },
             grid = new Grid($element, gridOptions);
 
-        equal(grid._filterRow.find(".filter-class").length, 1, "filtercss class is attached");
-        equal(grid._filterRow.find(".filter-input").length, 1, "filter control rendered");
-        equal(grid._filterRow.find("." + grid.cellClass).length, 1, "cell class is attached");
-        ok(grid._filterRow.find(".filter-class").hasClass("jsgrid-align-right"), "align class is attached");
-        ok(grid.fields[0].filterControl.is("input[type=text]"), "filter control saved in field");
+        assert.equal(grid._filterRow.find(".filter-class").length, 1, "filtercss class is attached");
+        assert.equal(grid._filterRow.find(".filter-input").length, 1, "filter control rendered");
+        assert.equal(grid._filterRow.find("." + grid.cellClass).length, 1, "cell class is attached");
+        assert.ok(grid._filterRow.find(".filter-class").hasClass("jsgrid-align-right"), "align class is attached");
+        assert.ok(grid.fields[0].filterControl.is("input[type=text]"), "filter control saved in field");
     });
 
-    test("filter get/clear", function() {
+    QUnit.test("filter get/clear", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 filtering: true,
@@ -596,14 +606,14 @@ $(function() {
             grid = new Grid($element, gridOptions);
 
         grid.fields[0].filterControl.val("test");
-        deepEqual(grid.getFilter(), { field: "test" }, "get filter");
+        assert.deepEqual(grid.getFilter(), { field: "test" }, "get filter");
 
         grid.clearFilter();
-        deepEqual(grid.getFilter(), { field: "" }, "filter cleared");
-        equal(grid.fields[0].filterControl.val(), "", "grid field filterControl cleared");
+        assert.deepEqual(grid.getFilter(), { field: "" }, "filter cleared");
+        assert.equal(grid.fields[0].filterControl.val(), "", "grid field filterControl cleared");
     });
 
-    test("field without filtering", function() {
+    QUnit.test("field without filtering", function(assert) {
         var $element = $("#jsGrid"),
             jsGridFieldConfig = {
                 filterTemplate: function() {
@@ -635,10 +645,10 @@ $(function() {
 
         grid.fields[0].filterControl.val("test1");
         grid.fields[1].filterControl.val("test2");
-        deepEqual(grid.getFilter(), { field2: "test2" }, "field with filtering=false is not included in filter");
+        assert.deepEqual(grid.getFilter(), { field2: "test2" }, "field with filtering=false is not included in filter");
     });
 
-    test("search with filter", function() {
+    QUnit.test("search with filter", function(assert) {
         var $element = $("#jsGrid"),
             data = [
                 { field: "test" },
@@ -666,10 +676,10 @@ $(function() {
             grid = new Grid($element, gridOptions);
 
         grid.search({ field: "test" });
-        equal(grid.option("data").length, 2, "data filtered");
+        assert.equal(grid.option("data").length, 2, "data filtered");
     });
 
-    test("filtering with static data should not do actual filtering", function() {
+    QUnit.test("filtering with static data should not do actual filtering", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 filtering: true,
@@ -686,25 +696,25 @@ $(function() {
         grid._filterRow.find("input").val("1");
 
         grid.search();
-        equal(grid.option("data").length, 2, "data is not filtered");
+        assert.equal(grid.option("data").length, 2, "data is not filtered");
     });
 
 
-    module("nodatarow");
+    QUnit.module("nodatarow");
 
-    test("nodatarow after bind on empty array", function() {
+    QUnit.test("nodatarow after bind on empty array", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {},
             grid = new Grid($element, gridOptions);
 
         grid.option("data", []);
 
-        equal(grid._content.find("." + grid.noDataRowClass).length, 1, "no data row rendered");
-        equal(grid._content.find("." + grid.cellClass).length, 1, "grid cell class attached");
-        equal(grid._content.text(), grid.noDataContent, "no data text rendered");
+        assert.equal(grid._content.find("." + grid.noDataRowClass).length, 1, "no data row rendered");
+        assert.equal(grid._content.find("." + grid.cellClass).length, 1, "grid cell class attached");
+        assert.equal(grid._content.text(), grid.noDataContent, "no data text rendered");
     });
 
-    test("nodatarow customize content", function() {
+    QUnit.test("nodatarow customize content", function(assert) {
         var noDataMessage = "NoData Custom Content",
             $element = $("#jsGrid"),
             gridOptions = {
@@ -716,13 +726,13 @@ $(function() {
 
         grid.option("data", []);
 
-        equal(grid._content.find("." + grid.cellClass).length, 1, "grid cell class attached");
-        equal(grid._content.text(), noDataMessage, "custom noDataContent");
+        assert.equal(grid._content.find("." + grid.cellClass).length, 1, "grid cell class attached");
+        assert.equal(grid._content.text(), noDataMessage, "custom noDataContent");
     });
 
 
-    module("row rendering", {
-        setup: function() {
+    QUnit.module("row rendering", {
+        beforeEach: function() {
             this.testData = [
                 { id: 1, text: "test1" },
                 { id: 2, text: "test2" },
@@ -731,19 +741,19 @@ $(function() {
         }
     });
 
-    test("rows rendered correctly", function() {
+    QUnit.test("rows rendered correctly", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 data: this.testData
             },
             grid = new Grid($element, gridOptions);
 
-        equal(grid._content.children().length, 3, "rows rendered");
-        equal(grid._content.find("." + grid.oddRowClass).length, 2, "two odd rows for 3 items");
-        equal(grid._content.find("." + grid.evenRowClass).length, 1, "one even row for 3 items");
+        assert.equal(grid._content.children().length, 3, "rows rendered");
+        assert.equal(grid._content.find("." + grid.oddRowClass).length, 2, "two odd rows for 3 items");
+        assert.equal(grid._content.find("." + grid.evenRowClass).length, 1, "one even row for 3 items");
     });
 
-    test("custom rowClass", function() {
+    QUnit.test("custom rowClass", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 data: this.testData,
@@ -751,12 +761,12 @@ $(function() {
             },
             grid = new Grid($element, gridOptions);
 
-        equal(grid._content.find("." + grid.oddRowClass).length, 2);
-        equal(grid._content.find("." + grid.evenRowClass).length, 1);
-        equal(grid._content.find(".custom-row-cls").length, 3, "custom row class");
+        assert.equal(grid._content.find("." + grid.oddRowClass).length, 2);
+        assert.equal(grid._content.find("." + grid.evenRowClass).length, 1);
+        assert.equal(grid._content.find(".custom-row-cls").length, 3, "custom row class");
     });
 
-    test("custom rowClass callback", function() {
+    QUnit.test("custom rowClass callback", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 data: this.testData,
@@ -766,14 +776,14 @@ $(function() {
             },
             grid = new Grid($element, gridOptions);
 
-        equal(grid._content.find("." + grid.oddRowClass).length, 2);
-        equal(grid._content.find("." + grid.evenRowClass).length, 1);
-        equal(grid._content.find(".test1").length, 1, "custom row class");
-        equal(grid._content.find(".test2").length, 1, "custom row class");
-        equal(grid._content.find(".test3").length, 1, "custom row class");
+        assert.equal(grid._content.find("." + grid.oddRowClass).length, 2);
+        assert.equal(grid._content.find("." + grid.evenRowClass).length, 1);
+        assert.equal(grid._content.find(".test1").length, 1, "custom row class");
+        assert.equal(grid._content.find(".test2").length, 1, "custom row class");
+        assert.equal(grid._content.find(".test3").length, 1, "custom row class");
     });
 
-    test("rowClick standard handler", function() {
+    QUnit.test("rowClick standard handler", function(assert) {
         var $element = $("#jsGrid"),
             $secondRow,
             grid = new Grid($element, { editing: true });
@@ -783,10 +793,10 @@ $(function() {
         $secondRow = grid._content.find("." + grid.evenRowClass);
         $secondRow.trigger("click", $.Event($secondRow));
 
-        equal(grid._editingRow.get(0), $secondRow.get(0), "clicked row is editingRow");
+        assert.equal(grid._editingRow.get(0), $secondRow.get(0), "clicked row is editingRow");
     });
 
-    test("rowClick handler", function() {
+    QUnit.test("rowClick handler", function(assert) {
         var rowClickArgs,
             $element = $("#jsGrid"),
             $secondRow,
@@ -802,12 +812,12 @@ $(function() {
         $secondRow = grid._content.find("." + grid.evenRowClass);
         $secondRow.trigger("click", $.Event($secondRow));
 
-        ok(rowClickArgs.event instanceof jQuery.Event, "jquery event arg");
-        equal(rowClickArgs.item, this.testData[1], "item arg");
-        equal(rowClickArgs.itemIndex, 1, "itemIndex arg");
+        assert.ok(rowClickArgs.event instanceof jQuery.Event, "jquery event arg");
+        assert.equal(rowClickArgs.item, this.testData[1], "item arg");
+        assert.equal(rowClickArgs.itemIndex, 1, "itemIndex arg");
     });
 
-    test("row selecting with selectedRowClass", function() {
+    QUnit.test("row selecting with selectedRowClass", function(assert) {
         var $element = $("#jsGrid"),
             $secondRow,
             gridOptions = {
@@ -820,13 +830,13 @@ $(function() {
         $secondRow = grid._content.find("." + grid.evenRowClass);
 
         $secondRow.trigger("mouseenter", $.Event($secondRow));
-        ok($secondRow.hasClass(grid.selectedRowClass), "mouseenter adds selectedRowClass");
+        assert.ok($secondRow.hasClass(grid.selectedRowClass), "mouseenter adds selectedRowClass");
 
         $secondRow.trigger("mouseleave", $.Event($secondRow));
-        ok(!$secondRow.hasClass(grid.selectedRowClass), "mouseleave removes selectedRowClass");
+        assert.ok(!$secondRow.hasClass(grid.selectedRowClass), "mouseleave removes selectedRowClass");
     });
 
-    test("no row selecting while selection is disabled", function() {
+    QUnit.test("no row selecting while selection is disabled", function(assert) {
         var $element = $("#jsGrid"),
             $secondRow,
             gridOptions = {
@@ -838,10 +848,10 @@ $(function() {
 
         $secondRow = grid._content.find("." + grid.evenRowClass);
         $secondRow.trigger("mouseenter", $.Event($secondRow));
-        ok(!$secondRow.hasClass(grid.selectedRowClass), "mouseenter doesn't add selectedRowClass");
+        assert.ok(!$secondRow.hasClass(grid.selectedRowClass), "mouseenter doesn't add selectedRowClass");
     });
 
-    test("refreshing and refreshed callbacks", function() {
+    QUnit.test("refreshing and refreshed callbacks", function(assert) {
         var refreshingEventArgs,
             refreshedEventArgs,
             $element = $("#jsGrid"),
@@ -849,22 +859,22 @@ $(function() {
 
         grid.onRefreshing = function(e) {
             refreshingEventArgs = e;
-            equal(grid._content.find("." + grid.oddRowClass).length, 0, "no items before refresh");
+            assert.equal(grid._content.find("." + grid.oddRowClass).length, 0, "no items before refresh");
         };
 
         grid.onRefreshed = function(e) {
             refreshedEventArgs = e;
-            equal(grid._content.find("." + grid.oddRowClass).length, 2, "items rendered after refresh");
+            assert.equal(grid._content.find("." + grid.oddRowClass).length, 2, "items rendered after refresh");
         };
 
         grid.option("data", this.testData);
 
-        equal(refreshingEventArgs.grid, grid, "grid provided in args for refreshing event");
-        equal(refreshedEventArgs.grid, grid, "grid provided in args for refreshed event");
-        equal(grid._content.find("." + grid.oddRowClass).length, 2, "items rendered");
+        assert.equal(refreshingEventArgs.grid, grid, "grid provided in args for refreshing event");
+        assert.equal(refreshedEventArgs.grid, grid, "grid provided in args for refreshed event");
+        assert.equal(grid._content.find("." + grid.oddRowClass).length, 2, "items rendered");
     });
 
-    test("grid fields normalization", function() {
+    QUnit.test("grid fields normalization", function(assert) {
         var CustomField = function(config) {
             $.extend(true, this, config);
         };
@@ -892,24 +902,24 @@ $(function() {
                 grid = new Grid($element, gridOptions);
 
             var field1 = grid.fields[0];
-            ok(field1 instanceof jsGrid.Field);
-            equal(field1.name, "text1", "name is set for field");
-            equal(field1.title, "title1", "title field");
+            assert.ok(field1 instanceof jsGrid.Field);
+            assert.equal(field1.name, "text1", "name is set for field");
+            assert.equal(field1.title, "title1", "title field");
 
             var field2 = grid.fields[1];
-            ok(field2 instanceof jsGrid.Field);
-            equal(field2.name, "text2", "name is set for field");
-            equal(field2.title, "title2", "title field");
+            assert.ok(field2 instanceof jsGrid.Field);
+            assert.equal(field2.name, "text2", "name is set for field");
+            assert.equal(field2.title, "title2", "title field");
 
             var field3 = grid.fields[2];
-            ok(field3 instanceof CustomField);
-            equal(field3.name, "text3", "name is set for field");
+            assert.ok(field3 instanceof CustomField);
+            assert.equal(field3.name, "text3", "name is set for field");
         } finally {
             delete jsGrid.fields.custom;
         }
     });
 
-    test("'0' itemTemplate should be rendered", function() {
+    QUnit.test("'0' itemTemplate should be rendered", function(assert) {
         var $element = $("#jsGrid"),
             grid = new Grid($element, {
                 data: [{}],
@@ -918,10 +928,10 @@ $(function() {
                 ]
             });
 
-        equal(grid._bodyGrid.text(), "0", "item template is rendered");
+        assert.equal(grid._bodyGrid.text(), "0", "item template is rendered");
     });
 
-    test("grid field name used for header if title is not specified", function() {
+    QUnit.test("grid field name used for header if title is not specified", function(assert) {
         var $element = $("#jsGrid"),
             grid = new Grid($element, {
                 fields: [
@@ -929,10 +939,10 @@ $(function() {
                 ]
             });
 
-        equal(grid._headerRow.text(), "id", "name is rendered in header");
+        assert.equal(grid._headerRow.text(), "id", "name is rendered in header");
     });
 
-    test("grid fields header and item rendering", function() {
+    QUnit.test("grid fields header and item rendering", function(assert) {
         var $element = $("#jsGrid"),
             $secondRow,
             gridOptions = {
@@ -950,19 +960,19 @@ $(function() {
 
         grid.option("data", this.testData);
 
-        equal(grid._headerRow.text(), "title", "header rendered");
-        equal(grid._headerRow.find("." + grid.headerCellClass).length, 1, "header cell class is attached");
-        equal(grid._headerRow.find(".header-class").length, 1, "headercss class is attached");
-        ok(grid._headerRow.find(".header-class").hasClass("jsgrid-align-right"), "align class is attached");
+        assert.equal(grid._headerRow.text(), "title", "header rendered");
+        assert.equal(grid._headerRow.find("." + grid.headerCellClass).length, 1, "header cell class is attached");
+        assert.equal(grid._headerRow.find(".header-class").length, 1, "headercss class is attached");
+        assert.ok(grid._headerRow.find(".header-class").hasClass("jsgrid-align-right"), "align class is attached");
 
         $secondRow = grid._content.find("." + grid.evenRowClass);
-        equal($secondRow.text(), "test2", "item rendered");
-        equal($secondRow.find(".cell-class").length, 1, "css class added to cell");
-        equal($secondRow.find("." + grid.cellClass).length, 1, "cell class is attached");
-        ok($secondRow.find(".cell-class").hasClass("jsgrid-align-right"), "align class added to cell");
+        assert.equal($secondRow.text(), "test2", "item rendered");
+        assert.equal($secondRow.find(".cell-class").length, 1, "css class added to cell");
+        assert.equal($secondRow.find("." + grid.cellClass).length, 1, "cell class is attached");
+        assert.ok($secondRow.find(".cell-class").hasClass("jsgrid-align-right"), "align class added to cell");
     });
 
-    test("grid field cellRenderer", function() {
+    QUnit.test("grid field cellRenderer", function(assert) {
         var testItem = { text: "test" },
             args;
 
@@ -987,12 +997,12 @@ $(function() {
         var grid = new Grid($grid, gridOptions);
         var $customCell = $grid.find(".custom-class");
 
-        equal($customCell.length, 1, "custom cell rendered");
-        equal($customCell.text(), "test");
-        deepEqual(args, { value: "test", item: testItem }, "cellRenderer args provided");
+        assert.equal($customCell.length, 1, "custom cell rendered");
+        assert.equal($customCell.text(), "test");
+        assert.deepEqual(args, { value: "test", item: testItem }, "cellRenderer args provided");
     });
 
-    test("grid field 'visible' option", function() {
+    QUnit.test("grid field 'visible' option", function(assert) {
         var $grid = $("#jsGrid");
 
         var gridOptions = {
@@ -1005,23 +1015,23 @@ $(function() {
 
         var grid = new Grid($grid, gridOptions);
 
-        equal($grid.find("." + grid.noDataRowClass).children().eq(0).prop("colspan"), 1, "no data row colspan only for visible cells");
+        assert.equal($grid.find("." + grid.noDataRowClass).children().eq(0).prop("colspan"), 1, "no data row colspan only for visible cells");
 
         grid.option("data", this.testData);
         grid.editItem(this.testData[2]);
 
-        equal($grid.find("." + grid.headerRowClass).children().length, 1, "header single cell");
-        equal($grid.find("." + grid.filterRowClass).children().length, 1, "filter single cell");
-        equal($grid.find("." + grid.insertRowClass).children().length, 1, "insert single cell");
-        equal($grid.find("." + grid.editRowClass).children().length, 1, "edit single cell");
-        equal($grid.find("." + grid.oddRowClass).eq(0).children().length, 1, "odd data row single cell");
-        equal($grid.find("." + grid.evenRowClass).eq(0).children().length, 1, "even data row single cell");
+        assert.equal($grid.find("." + grid.headerRowClass).children().length, 1, "header single cell");
+        assert.equal($grid.find("." + grid.filterRowClass).children().length, 1, "filter single cell");
+        assert.equal($grid.find("." + grid.insertRowClass).children().length, 1, "insert single cell");
+        assert.equal($grid.find("." + grid.editRowClass).children().length, 1, "edit single cell");
+        assert.equal($grid.find("." + grid.oddRowClass).eq(0).children().length, 1, "odd data row single cell");
+        assert.equal($grid.find("." + grid.evenRowClass).eq(0).children().length, 1, "even data row single cell");
     });
 
 
-    module("inserting");
+    QUnit.module("inserting");
 
-    test("inserting rendering", function() {
+    QUnit.test("inserting rendering", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 inserting: true,
@@ -1039,14 +1049,14 @@ $(function() {
             },
             grid = new Grid($element, gridOptions);
 
-        equal(grid._insertRow.find(".insert-class").length, 1, "insertcss class is attached");
-        equal(grid._insertRow.find(".insert-input").length, 1, "insert control rendered");
-        equal(grid._insertRow.find("." + grid.cellClass).length, 1, "cell class is attached");
-        ok(grid._insertRow.find(".insert-class").hasClass("jsgrid-align-right"), "align class is attached");
-        ok(grid.fields[0].insertControl.is("input[type=text]"), "insert control saved in field");
+        assert.equal(grid._insertRow.find(".insert-class").length, 1, "insertcss class is attached");
+        assert.equal(grid._insertRow.find(".insert-input").length, 1, "insert control rendered");
+        assert.equal(grid._insertRow.find("." + grid.cellClass).length, 1, "cell class is attached");
+        assert.ok(grid._insertRow.find(".insert-class").hasClass("jsgrid-align-right"), "align class is attached");
+        assert.ok(grid.fields[0].insertControl.is("input[type=text]"), "insert control saved in field");
     });
 
-    test("field without inserting", function() {
+    QUnit.test("field without inserting", function(assert) {
         var $element = $("#jsGrid"),
             jsGridFieldConfig = {
                 insertTemplate: function() {
@@ -1075,10 +1085,10 @@ $(function() {
 
         grid.fields[0].insertControl.val("test1");
         grid.fields[1].insertControl.val("test2");
-        deepEqual(grid._getInsertItem(), { field2: "test2" }, "field with inserting=false is not included in inserting item");
+        assert.deepEqual(grid._getInsertItem(), { field2: "test2" }, "field with inserting=false is not included in inserting item");
     });
 
-    test("insert data with default location", function() {
+    QUnit.test("insert data with default location", function(assert) {
         var $element = $("#jsGrid"),
 
             inserted = false,
@@ -1118,14 +1128,14 @@ $(function() {
         grid.fields[0].insertControl.val("test");
         grid.insertItem();
 
-        equal(insertingArgs.item.field, "test", "field is provided in inserting args");
-        equal(grid.option("data").length, 2, "data is inserted");
-        ok(inserted, "controller insertItem was called");
-        deepEqual(grid.option("data")[1], { field: "test" }, "correct data is inserted");
-        equal(insertedArgs.item.field, "test", "field is provided in inserted args");
+        assert.equal(insertingArgs.item.field, "test", "field is provided in inserting args");
+        assert.equal(grid.option("data").length, 2, "data is inserted");
+        assert.ok(inserted, "controller insertItem was called");
+        assert.deepEqual(grid.option("data")[1], { field: "test" }, "correct data is inserted");
+        assert.equal(insertedArgs.item.field, "test", "field is provided in inserted args");
     });
     
-    test("insert data with specified insert location", function() {
+    QUnit.test("insert data with specified insert location", function(assert) {
         var $element = $("#jsGrid"),
 
             inserted = false,
@@ -1166,14 +1176,14 @@ $(function() {
         grid.fields[0].insertControl.val("test");
         grid.insertItem();
 
-        equal(insertingArgs.item.field, "test", "field is provided in inserting args");
-        equal(grid.option("data").length, 2, "data is inserted");
-        ok(inserted, "controller insertItem was called");
-        deepEqual(grid.option("data")[0], { field: "test" }, "correct data is inserted at the beginning");
-        equal(insertedArgs.item.field, "test", "field is provided in inserted args");
+        assert.equal(insertingArgs.item.field, "test", "field is provided in inserting args");
+        assert.equal(grid.option("data").length, 2, "data is inserted");
+        assert.ok(inserted, "controller insertItem was called");
+        assert.deepEqual(grid.option("data")[0], { field: "test" }, "correct data is inserted at the beginning");
+        assert.equal(insertedArgs.item.field, "test", "field is provided in inserted args");
     });
 
-    test("insertItem accepts item to insert", function() {
+    QUnit.test("insertItem accepts item to insert", function(assert) {
         var $element = $("#jsGrid"),
             itemToInsert = { field: "test" },
             insertedItem,
@@ -1195,14 +1205,14 @@ $(function() {
             grid = new Grid($element, gridOptions);
 
         grid.insertItem(itemToInsert);
-        deepEqual(grid.option("data")[0], itemToInsert, "data is inserted");
-        deepEqual(insertedItem, itemToInsert, "controller insertItem was called with correct item");
+        assert.deepEqual(grid.option("data")[0], itemToInsert, "data is inserted");
+        assert.deepEqual(insertedItem, itemToInsert, "controller insertItem was called with correct item");
     });
 
 
-    module("editing");
+    QUnit.module("editing");
 
-    test("editing rendering", function() {
+    QUnit.test("editing rendering", function(assert) {
         var $element = $("#jsGrid"),
             $editRow,
             data = [{
@@ -1228,22 +1238,22 @@ $(function() {
 
         grid.option("data", data);
 
-        equal(grid._content.find("." + grid.editRowClass).length, 0, "no edit row after initial rendering");
+        assert.equal(grid._content.find("." + grid.editRowClass).length, 0, "no edit row after initial rendering");
 
         grid.editItem(data[0]);
 
         $editRow = grid._content.find("." + grid.editRowClass);
-        equal($editRow.length, 1, "edit row rendered");
-        equal($editRow.find(".edit-class").length, 1, "editcss class is attached");
-        equal($editRow.find(".edit-input").length, 1, "edit control rendered");
-        equal($editRow.find("." + grid.cellClass).length, 1, "cell class is attached");
-        ok($editRow.find(".edit-class").hasClass("jsgrid-align-right"), "align class is attached");
+        assert.equal($editRow.length, 1, "edit row rendered");
+        assert.equal($editRow.find(".edit-class").length, 1, "editcss class is attached");
+        assert.equal($editRow.find(".edit-input").length, 1, "edit control rendered");
+        assert.equal($editRow.find("." + grid.cellClass).length, 1, "cell class is attached");
+        assert.ok($editRow.find(".edit-class").hasClass("jsgrid-align-right"), "align class is attached");
 
-        ok(grid.fields[0].editControl.is("input[type=text]"), "edit control saved in field");
-        equal(grid.fields[0].editControl.val(), "value", "edit control value");
+        assert.ok(grid.fields[0].editControl.is("input[type=text]"), "edit control saved in field");
+        assert.equal(grid.fields[0].editControl.val(), "value", "edit control value");
     });
 
-    test("editItem accepts row to edit", function() {
+    QUnit.test("editItem accepts row to edit", function(assert) {
         var $element = $("#jsGrid"),
             $editRow,
             data = [
@@ -1265,16 +1275,16 @@ $(function() {
 
         grid.editItem($row);
         $editRow = grid._content.find("." + grid.editRowClass);
-        equal($editRow.length, 1, "edit row rendered");
+        assert.equal($editRow.length, 1, "edit row rendered");
 
         grid.cancelEdit();
 
         grid.editItem($row.get(0));
         $editRow = grid._content.find("." + grid.editRowClass);
-        equal($editRow.length, 1, "edit row rendered");
+        assert.equal($editRow.length, 1, "edit row rendered");
     });
 
-    test("edit item", function() {
+    QUnit.test("edit item", function(assert) {
         var $element = $("#jsGrid"),
             editingArgs,
             editingRow,
@@ -1326,28 +1336,28 @@ $(function() {
 
         grid.editItem(data[0]);
 
-        deepEqual(editingArgs.item, { field: "value" }, "item before editing is provided in editing event args");
-        equal(editingArgs.itemIndex, 0, "itemIndex is provided in editing event args");
-        equal(editingArgs.row[0], editingRow, "row element is provided in editing event args");
+        assert.deepEqual(editingArgs.item, { field: "value" }, "item before editing is provided in editing event args");
+        assert.equal(editingArgs.itemIndex, 0, "itemIndex is provided in editing event args");
+        assert.equal(editingArgs.row[0], editingRow, "row element is provided in editing event args");
 
         grid.fields[0].editControl.val("new value");
         grid.updateItem();
 
-        deepEqual(updatingArgs.previousItem, { field: "value" }, "item before editing is provided in updating event args");
-        deepEqual(updatingArgs.item, { field: "new value" }, "updating item is provided in updating event args");
-        equal(updatingArgs.itemIndex, 0, "itemIndex is provided in updating event args");
-        equal(updatingArgs.row[0], updatingRow, "row element is provided in updating event args");
-        ok(updated, "controller updateItem called");
-        deepEqual(grid.option("data")[0], { field: "new value" }, "correct data updated");
-        equal(grid._content.find("." + grid.editRowClass).length, 0, "edit row removed");
-        equal(grid._content.find("." + grid.oddRowClass).length, 1, "data row rendered");
-        deepEqual(updatedArgs.previousItem, { field: "value" }, "item before editing is provided in updated event args");
-        deepEqual(updatedArgs.item, { field: "new value" }, "updated item is provided in updated event args");
-        equal(updatedArgs.itemIndex, 0, "itemIndex is provided in updated event args");
-        equal(updatedArgs.row[0], updatedRow, "row element is provided in updated event args");
+        assert.deepEqual(updatingArgs.previousItem, { field: "value" }, "item before editing is provided in updating event args");
+        assert.deepEqual(updatingArgs.item, { field: "new value" }, "updating item is provided in updating event args");
+        assert.equal(updatingArgs.itemIndex, 0, "itemIndex is provided in updating event args");
+        assert.equal(updatingArgs.row[0], updatingRow, "row element is provided in updating event args");
+        assert.ok(updated, "controller updateItem called");
+        assert.deepEqual(grid.option("data")[0], { field: "new value" }, "correct data updated");
+        assert.equal(grid._content.find("." + grid.editRowClass).length, 0, "edit row removed");
+        assert.equal(grid._content.find("." + grid.oddRowClass).length, 1, "data row rendered");
+        assert.deepEqual(updatedArgs.previousItem, { field: "value" }, "item before editing is provided in updated event args");
+        assert.deepEqual(updatedArgs.item, { field: "new value" }, "updated item is provided in updated event args");
+        assert.equal(updatedArgs.itemIndex, 0, "itemIndex is provided in updated event args");
+        assert.equal(updatedArgs.row[0], updatedRow, "row element is provided in updated event args");
     });
 
-    test("failed update should not change original item", function() {
+    QUnit.test("failed update should not change original item", function(assert) {
         var $element = $("#jsGrid"),
             data = [{
                 field: "value"
@@ -1383,10 +1393,10 @@ $(function() {
         grid.fields[0].editControl.val("new value");
         grid.updateItem();
 
-        deepEqual(grid.option("data")[0], { field: "value" }, "value is not updated");
+        assert.deepEqual(grid.option("data")[0], { field: "value" }, "value is not updated");
     });
 
-    test("cancel edit", function() {
+    QUnit.test("cancel edit", function(assert) {
         var $element = $("#jsGrid"),
             updated = false,
             cancellingArgs,
@@ -1428,17 +1438,17 @@ $(function() {
         grid.fields[0].editControl.val("new value");
         grid.cancelEdit();
 
-        deepEqual(cancellingArgs.item, { field: "value" }, "item before cancel is provided in cancelling event args");
-        equal(cancellingArgs.itemIndex, 0, "itemIndex is provided in cancelling event args");
-        equal(cancellingArgs.row[0], cancellingRow, "row element is provided in cancelling event args");
+        assert.deepEqual(cancellingArgs.item, { field: "value" }, "item before cancel is provided in cancelling event args");
+        assert.equal(cancellingArgs.itemIndex, 0, "itemIndex is provided in cancelling event args");
+        assert.equal(cancellingArgs.row[0], cancellingRow, "row element is provided in cancelling event args");
 
-        ok(!updated, "controller updateItem was not called");
-        deepEqual(grid.option("data")[0], { field: "value" }, "data were not updated");
-        equal(grid._content.find("." + grid.editRowClass).length, 0, "edit row removed");
-        equal(grid._content.find("." + grid.oddRowClass).length, 1, "data row restored");
+        assert.ok(!updated, "controller updateItem was not called");
+        assert.deepEqual(grid.option("data")[0], { field: "value" }, "data were not updated");
+        assert.equal(grid._content.find("." + grid.editRowClass).length, 0, "edit row removed");
+        assert.equal(grid._content.find("." + grid.oddRowClass).length, 1, "data row restored");
     });
 
-    test("updateItem accepts item to update and new item", function() {
+    QUnit.test("updateItem accepts item to update and new item", function(assert) {
         var $element = $("#jsGrid"),
             updatingItem,
             data = [{
@@ -1462,11 +1472,11 @@ $(function() {
 
         grid.updateItem(data[0], { field: "new value" });
 
-        deepEqual(updatingItem, { field: "new value" }, "controller updateItem called correctly");
-        deepEqual(grid.option("data")[0], { field: "new value" }, "correct data updated");
+        assert.deepEqual(updatingItem, { field: "new value" }, "controller updateItem called correctly");
+        assert.deepEqual(grid.option("data")[0], { field: "new value" }, "correct data updated");
     });
 
-    test("updateItem accepts single argument - item to update", function() {
+    QUnit.test("updateItem accepts single argument - item to update", function(assert) {
         var $element = $("#jsGrid"),
             updatingItem,
             data = [{
@@ -1492,11 +1502,11 @@ $(function() {
 
         grid.updateItem(data[0]);
 
-        deepEqual(updatingItem, { field: "new value" }, "controller updateItem called correctly");
-        deepEqual(grid.option("data")[0], { field: "new value" }, "correct data updated");
+        assert.deepEqual(updatingItem, { field: "new value" }, "controller updateItem called correctly");
+        assert.deepEqual(grid.option("data")[0], { field: "new value" }, "correct data updated");
     });
 
-    test("editRowRenderer", function() {
+    QUnit.test("editRowRenderer", function(assert) {
         var $element = $("#jsGrid"),
 
             data = [
@@ -1521,14 +1531,14 @@ $(function() {
         grid.editItem(data[0]);
 
         var $editRow = grid._content.find(".custom-edit-row");
-        equal($editRow.length, 1, "edit row rendered");
-        equal($editRow.text(), "0:test", "custom edit row renderer rendered");
+        assert.equal($editRow.length, 1, "edit row rendered");
+        assert.equal($editRow.text(), "0:test", "custom edit row renderer rendered");
     });
 
 
-    module("deleting");
+    QUnit.module("deleting");
 
-    test("delete item", function() {
+    QUnit.test("delete item", function(assert) {
         var $element = $("#jsGrid"),
             deleted = false,
             deletingArgs,
@@ -1561,17 +1571,17 @@ $(function() {
 
         grid.deleteItem(data[0]);
 
-        deepEqual(deletingArgs.item, { field: "value" }, "field and value is provided in deleting event args");
-        equal(deletingArgs.itemIndex, 0, "itemIndex is provided in updating event args");
-        equal(deletingArgs.row.length, 1, "row element is provided in updating event args");
-        ok(deleted, "controller deleteItem called");
-        equal(grid.option("data").length, 0, "data row deleted");
-        deepEqual(deletedArgs.item, { field: "value" }, "item is provided in updating event args");
-        equal(deletedArgs.itemIndex, 0, "itemIndex is provided in updating event args");
-        equal(deletedArgs.row.length, 1, "row element is provided in updating event args");
+        assert.deepEqual(deletingArgs.item, { field: "value" }, "field and value is provided in deleting event args");
+        assert.equal(deletingArgs.itemIndex, 0, "itemIndex is provided in updating event args");
+        assert.equal(deletingArgs.row.length, 1, "row element is provided in updating event args");
+        assert.ok(deleted, "controller deleteItem called");
+        assert.equal(grid.option("data").length, 0, "data row deleted");
+        assert.deepEqual(deletedArgs.item, { field: "value" }, "item is provided in updating event args");
+        assert.equal(deletedArgs.itemIndex, 0, "itemIndex is provided in updating event args");
+        assert.equal(deletedArgs.row.length, 1, "row element is provided in updating event args");
     });
 
-    test("deleteItem accepts row", function() {
+    QUnit.test("deleteItem accepts row", function(assert) {
         var $element = $("#jsGrid"),
             deletedItem,
             itemToDelete = {
@@ -1599,14 +1609,14 @@ $(function() {
 
         grid.deleteItem($row);
 
-        deepEqual(deletedItem, itemToDelete, "controller deleteItem called correctly");
-        equal(grid.option("data").length, 0, "data row deleted");
+        assert.deepEqual(deletedItem, itemToDelete, "controller deleteItem called correctly");
+        assert.equal(grid.option("data").length, 0, "data row deleted");
     });
 
 
-    module("paging");
+    QUnit.module("paging");
 
-    test("pager is rendered if necessary", function() {
+    QUnit.test("pager is rendered if necessary", function(assert) {
         var $element = $("#jsGrid"),
 
             grid = new Grid($element, {
@@ -1615,20 +1625,20 @@ $(function() {
                 pageSize: 2
             });
 
-        ok(grid._pagerContainer.is(":hidden"), "pager is hidden when paging=false");
-        equal(grid._pagerContainer.html(), "", "pager is not rendered when paging=false");
+        assert.ok(grid._pagerContainer.is(":hidden"), "pager is hidden when paging=false");
+        assert.equal(grid._pagerContainer.html(), "", "pager is not rendered when paging=false");
 
         grid.option("paging", true);
 
-        ok(grid._pagerContainer.is(":visible"), "pager is visible when paging=true");
-        ok(grid._pagerContainer.html(), "pager is rendered when paging=true");
+        assert.ok(grid._pagerContainer.is(":visible"), "pager is visible when paging=true");
+        assert.ok(grid._pagerContainer.html(), "pager is rendered when paging=true");
 
         grid.option("data", [{}, {}]);
-        ok(grid._pagerContainer.is(":hidden"), "pager is hidden for single page");
-        ok(grid._pagerContainer.html(), "pager is rendered for single page when paging=true");
+        assert.ok(grid._pagerContainer.is(":hidden"), "pager is hidden for single page");
+        assert.ok(grid._pagerContainer.html(), "pager is rendered for single page when paging=true");
     });
 
-    test("external pagerContainer", function() {
+    QUnit.test("external pagerContainer", function(assert) {
         var $pagerContainer = $("<div>").appendTo("#qunit-fixture").hide(),
             $element = $("#jsGrid");
 
@@ -1639,11 +1649,11 @@ $(function() {
             pageSize: 2
         });
 
-        ok($pagerContainer.is(":visible"), "external pager shown");
-        ok($pagerContainer.html(), "external pager rendered");
+        assert.ok($pagerContainer.is(":visible"), "external pager shown");
+        assert.ok($pagerContainer.html(), "external pager rendered");
     });
 
-    test("pager functionality", function() {
+    QUnit.test("pager functionality", function(assert) {
         var $element = $("#jsGrid"),
             pager,
             pageChangedArgs,
@@ -1657,38 +1667,38 @@ $(function() {
                 pageButtonCount: 3
             });
 
-        equal(grid._pagesCount(), 5, "correct page count");
-        equal(grid.option("pageIndex"), 1, "pageIndex is initialized");
-        equal(grid._firstDisplayingPage, 1, "_firstDisplayingPage is initialized");
+        assert.equal(grid._pagesCount(), 5, "correct page count");
+        assert.equal(grid.option("pageIndex"), 1, "pageIndex is initialized");
+        assert.equal(grid._firstDisplayingPage, 1, "_firstDisplayingPage is initialized");
 
         pager = grid._pagerContainer;
-        equal(pager.find("." + grid.currentPageClass).length, 1, "there is one current page");
-        ok(pager.find("." + grid.pageClass).eq(0).hasClass(grid.currentPageClass), "first page is current");
-        equal(pager.find("." + grid.pageClass).length, 3, "three pages displayed");
-        equal(pager.find("." + grid.pagerNavButtonClass).length, 5, "five nav buttons displayed: Fisrt Prev Next Last ...");
-        equal(pager.find("." + grid.pagerNavButtonInactiveClass).length, 2, "two nav buttons inactive: Fisrt Prev");
+        assert.equal(pager.find("." + grid.currentPageClass).length, 1, "there is one current page");
+        assert.ok(pager.find("." + grid.pageClass).eq(0).hasClass(grid.currentPageClass), "first page is current");
+        assert.equal(pager.find("." + grid.pageClass).length, 3, "three pages displayed");
+        assert.equal(pager.find("." + grid.pagerNavButtonClass).length, 5, "five nav buttons displayed: Fisrt Prev Next Last ...");
+        assert.equal(pager.find("." + grid.pagerNavButtonInactiveClass).length, 2, "two nav buttons inactive: Fisrt Prev");
 
         grid.openPage(2);
-        equal(pager.find("." + grid.currentPageClass).length, 1, "there is one current page");
-        ok(pager.find("." + grid.pageClass).eq(1).hasClass(grid.currentPageClass), "second page is current");
-        equal(pager.find("." + grid.pageClass).length, 3, "three pages displayed");
-        equal(pager.find("." + grid.pagerNavButtonClass).length, 5, "five nav buttons displayed: First Prev Next Last and ...");
-        equal(pageChangedArgs.pageIndex, 2, "onPageChanged callback provides pageIndex in arguments");
+        assert.equal(pager.find("." + grid.currentPageClass).length, 1, "there is one current page");
+        assert.ok(pager.find("." + grid.pageClass).eq(1).hasClass(grid.currentPageClass), "second page is current");
+        assert.equal(pager.find("." + grid.pageClass).length, 3, "three pages displayed");
+        assert.equal(pager.find("." + grid.pagerNavButtonClass).length, 5, "five nav buttons displayed: First Prev Next Last and ...");
+        assert.equal(pageChangedArgs.pageIndex, 2, "onPageChanged callback provides pageIndex in arguments");
 
         grid.showNextPages();
-        equal(grid._firstDisplayingPage, 3, "navigate by pages forward");
+        assert.equal(grid._firstDisplayingPage, 3, "navigate by pages forward");
 
         grid.showPrevPages();
-        equal(grid._firstDisplayingPage, 1, "navigate by pages backward");
+        assert.equal(grid._firstDisplayingPage, 1, "navigate by pages backward");
 
         grid.openPage(5);
-        equal(grid._firstDisplayingPage, 3, "opening next non-visible page moves first displaying page forward");
+        assert.equal(grid._firstDisplayingPage, 3, "opening next non-visible page moves first displaying page forward");
 
         grid.openPage(2);
-        equal(grid._firstDisplayingPage, 2, "opening prev non-visible page moves first displaying page backward");
+        assert.equal(grid._firstDisplayingPage, 1, "opening prev non-visible page re-centers the window on it (clamped to the first page)");
     });
 
-    test("pager format", function() {
+    QUnit.test("pager format", function(assert) {
         var $element = $("#jsGrid"),
             grid = new Grid($element, {
                 data: [{}, {}, {}, {}, {}, {}],
@@ -1708,10 +1718,10 @@ $(function() {
         grid._firstDisplayingPage = 2;
         grid._refreshPager();
 
-        equal($.trim(grid._pagerContainer.text()), "a 2 << < pp2np > >> 3 6 z", "pager text follows the format specified");
+        assert.equal($.trim(grid._pagerContainer.text()), "a 2 << < pp2np > >> 3 6 z", "pager text follows the format specified");
     });
 
-    test("pagerRenderer", function() {
+    QUnit.test("pagerRenderer", function(assert) {
         var $element = $("#jsGrid");
         var pagerRendererConfig;
         var pageSize = 2;
@@ -1727,13 +1737,13 @@ $(function() {
             }
         });
 
-        deepEqual(pagerRendererConfig, { pageIndex: 1, pageCount: pageCount });
+        assert.deepEqual(pagerRendererConfig, { pageIndex: 1, pageCount: pageCount });
 
         grid.openPage(2);
-        deepEqual(pagerRendererConfig, { pageIndex: 2, pageCount: pageCount });
+        assert.deepEqual(pagerRendererConfig, { pageIndex: 2, pageCount: pageCount });
     });
 
-    test("loading by page", function() {
+    QUnit.test("loading by page", function(assert) {
         var $element = $("#jsGrid"),
             data = [],
             itemCount = 20;
@@ -1770,23 +1780,23 @@ $(function() {
         var pager = grid._pagerContainer;
         var gridData = grid.option("data");
 
-        equal(gridData.length, 7, "loaded one page of data");
-        equal(gridData[0].value, 1, "loaded right data start value");
-        equal(gridData[gridData.length - 1].value, 7, "loaded correct data end value");
-        ok(pager.find("." + grid.pageClass).eq(0).hasClass(grid.currentPageClass), "first page is current");
-        equal(pager.find("." + grid.pageClass).length, 3, "three pages displayed");
+        assert.equal(gridData.length, 7, "loaded one page of data");
+        assert.equal(gridData[0].value, 1, "loaded right data start value");
+        assert.equal(gridData[gridData.length - 1].value, 7, "loaded correct data end value");
+        assert.ok(pager.find("." + grid.pageClass).eq(0).hasClass(grid.currentPageClass), "first page is current");
+        assert.equal(pager.find("." + grid.pageClass).length, 3, "three pages displayed");
 
         grid.openPage(3);
         gridData = grid.option("data");
 
-        equal(gridData.length, 6, "loaded last page of data");
-        equal(gridData[0].value, 15, "loaded right data start value");
-        equal(gridData[gridData.length - 1].value, 20, "loaded right data end value");
-        ok(pager.find("." + grid.pageClass).eq(2).hasClass(grid.currentPageClass), "third page is current");
-        equal(pager.find("." + grid.pageClass).length, 3, "three pages displayed");
+        assert.equal(gridData.length, 6, "loaded last page of data");
+        assert.equal(gridData[0].value, 15, "loaded right data start value");
+        assert.equal(gridData[gridData.length - 1].value, 20, "loaded right data end value");
+        assert.ok(pager.find("." + grid.pageClass).eq(2).hasClass(grid.currentPageClass), "third page is current");
+        assert.equal(pager.find("." + grid.pageClass).length, 3, "three pages displayed");
     });
 
-    test("'openPage' method ignores indexes out of range", function() {
+    QUnit.test("'openPage' method ignores indexes out of range", function(assert) {
         var $element = $("#jsGrid"),
             grid = new Grid($element, {
                 data: [{}, {}],
@@ -1795,16 +1805,16 @@ $(function() {
             });
 
         grid.openPage(0);
-        equal(grid.option("pageIndex"), 1, "too small index is ignored");
+        assert.equal(grid.option("pageIndex"), 1, "too small index is ignored");
 
         grid.openPage(3);
-        equal(grid.option("pageIndex"), 1, "too big index is ignored");
+        assert.equal(grid.option("pageIndex"), 1, "too big index is ignored");
     });
 
 
-    module("sorting");
+    QUnit.module("sorting");
 
-    test("sorting", function() {
+    QUnit.test("sorting", function(assert) {
         var $element = $("#jsGrid"),
 
             gridOptions = {
@@ -1825,26 +1835,26 @@ $(function() {
         var $th = grid._headerRow.find("th").eq(0);
         $th.trigger("click");
 
-        equal(grid._sortOrder, "asc", "asc sorting order for first click");
-        equal(grid._sortField, grid.fields[0], "sort field is set");
-        equal(gridData[0].value, 1);
-        equal(gridData[1].value, 2);
-        equal(gridData[2].value, 3);
-        ok($th.hasClass(grid.sortableClass));
-        ok($th.hasClass(grid.sortAscClass));
+        assert.equal(grid._sortOrder, "asc", "asc sorting order for first click");
+        assert.equal(grid._sortField, grid.fields[0], "sort field is set");
+        assert.equal(gridData[0].value, 1);
+        assert.equal(gridData[1].value, 2);
+        assert.equal(gridData[2].value, 3);
+        assert.ok($th.hasClass(grid.sortableClass));
+        assert.ok($th.hasClass(grid.sortAscClass));
 
         $th.trigger("click");
 
-        equal(grid._sortOrder, "desc", "desc sorting order for second click");
-        equal(grid._sortField, grid.fields[0], "sort field is set");
-        equal(gridData[0].value, 3);
-        equal(gridData[1].value, 2);
-        equal(gridData[2].value, 1);
-        ok(!$th.hasClass(grid.sortAscClass));
-        ok($th.hasClass(grid.sortDescClass));
+        assert.equal(grid._sortOrder, "desc", "desc sorting order for second click");
+        assert.equal(grid._sortField, grid.fields[0], "sort field is set");
+        assert.equal(gridData[0].value, 3);
+        assert.equal(gridData[1].value, 2);
+        assert.equal(gridData[2].value, 1);
+        assert.ok(!$th.hasClass(grid.sortAscClass));
+        assert.ok($th.hasClass(grid.sortDescClass));
     });
 
-    test("sorting with pageLoading", function() {
+    QUnit.test("sorting with pageLoading", function(assert) {
         var $element = $("#jsGrid"),
             loadFilter,
 
@@ -1875,20 +1885,20 @@ $(function() {
         var $th = grid._headerRow.find("th").eq(0);
         $th.trigger("click");
 
-        equal(grid._sortOrder, "asc", "asc sorting order for first click");
-        equal(grid._sortField, grid.fields[0], "sort field is set");
-        equal(loadFilter.sortOrder, "asc", "sort direction is provided in loadFilter");
-        equal(loadFilter.sortField, "value", "sort field is provided in loadFilter");
+        assert.equal(grid._sortOrder, "asc", "asc sorting order for first click");
+        assert.equal(grid._sortField, grid.fields[0], "sort field is set");
+        assert.equal(loadFilter.sortOrder, "asc", "sort direction is provided in loadFilter");
+        assert.equal(loadFilter.sortField, "value", "sort field is provided in loadFilter");
 
         $th.trigger("click");
 
-        equal(grid._sortOrder, "desc", "desc sorting order for second click");
-        equal(grid._sortField, grid.fields[0], "sort field is set");
-        equal(loadFilter.sortOrder, "desc", "sort direction is provided in loadFilter");
-        equal(loadFilter.sortField, "value", "sort field is provided in loadFilter");
+        assert.equal(grid._sortOrder, "desc", "desc sorting order for second click");
+        assert.equal(grid._sortField, grid.fields[0], "sort field is set");
+        assert.equal(loadFilter.sortOrder, "desc", "sort direction is provided in loadFilter");
+        assert.equal(loadFilter.sortField, "value", "sort field is provided in loadFilter");
     });
 
-    test("no sorting for column with sorting = false", function() {
+    QUnit.test("no sorting for column with sorting = false", function(assert) {
         var $element = $("#jsGrid");
 
         var gridOptions = {
@@ -1910,15 +1920,15 @@ $(function() {
         var $th = grid._headerRow.find("th").eq(0);
         $th.trigger("click");
 
-        equal(grid._sortField, null, "sort field is not set for the field with sorting=false");
-        equal(gridData[0].value, 3);
-        equal(gridData[1].value, 2);
-        equal(gridData[2].value, 1);
-        equal($th.hasClass(grid.sortableClass), false, "no sorting css for field with sorting=false");
-        equal($th.hasClass(grid.sortAscClass), false, "no sorting css for field with sorting=false");
+        assert.equal(grid._sortField, null, "sort field is not set for the field with sorting=false");
+        assert.equal(gridData[0].value, 3);
+        assert.equal(gridData[1].value, 2);
+        assert.equal(gridData[2].value, 1);
+        assert.equal($th.hasClass(grid.sortableClass), false, "no sorting css for field with sorting=false");
+        assert.equal($th.hasClass(grid.sortAscClass), false, "no sorting css for field with sorting=false");
     });
 
-    test("sort accepts sorting config", function() {
+    QUnit.test("sort accepts sorting config", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 sorting: true,
@@ -1936,29 +1946,29 @@ $(function() {
         var gridData = grid.option("data");
 
         grid.sort({ field: "value", order: "asc" });
-        equal(grid._sortOrder, "asc", "asc sorting order is set");
-        equal(grid._sortField, grid.fields[0], "sort field is set");
-        equal(gridData[0].value, 1);
-        equal(gridData[1].value, 2);
-        equal(gridData[2].value, 3);
+        assert.equal(grid._sortOrder, "asc", "asc sorting order is set");
+        assert.equal(grid._sortField, grid.fields[0], "sort field is set");
+        assert.equal(gridData[0].value, 1);
+        assert.equal(gridData[1].value, 2);
+        assert.equal(gridData[2].value, 3);
 
         grid.sort({ field: 0 });
-        equal(grid._sortOrder, "desc", "desc sorting order for already set asc sorting");
-        equal(grid._sortField, grid.fields[0], "sort field is set");
-        equal(gridData[0].value, 3);
-        equal(gridData[1].value, 2);
-        equal(gridData[2].value, 1);
+        assert.equal(grid._sortOrder, "desc", "desc sorting order for already set asc sorting");
+        assert.equal(grid._sortField, grid.fields[0], "sort field is set");
+        assert.equal(gridData[0].value, 3);
+        assert.equal(gridData[1].value, 2);
+        assert.equal(gridData[2].value, 1);
 
         grid.sort("value", "asc");
-        equal(grid._sortOrder, "asc", "asc sorting order is set");
-        equal(grid._sortField, grid.fields[0], "sort field is set");
+        assert.equal(grid._sortOrder, "asc", "asc sorting order is set");
+        assert.equal(grid._sortField, grid.fields[0], "sort field is set");
 
         grid.sort(0);
-        equal(grid._sortOrder, "desc", "desc sorting order for already set asc sorting");
-        equal(grid._sortField, grid.fields[0], "sort field is set");
+        assert.equal(grid._sortOrder, "desc", "desc sorting order for already set asc sorting");
+        assert.equal(grid._sortField, grid.fields[0], "sort field is set");
     });
 
-    test("getSorting returns current sorting", function() {
+    QUnit.test("getSorting returns current sorting", function(assert) {
         var $element = $("#jsGrid"),
             gridOptions = {
                 sorting: true,
@@ -1973,13 +1983,13 @@ $(function() {
             },
             grid = new Grid($element, gridOptions);
 
-        deepEqual(grid.getSorting(), { field: undefined, order: undefined }, "undefined field and order before sorting");
+        assert.deepEqual(grid.getSorting(), { field: undefined, order: undefined }, "undefined field and order before sorting");
 
         grid.sort("value");
-        deepEqual(grid.getSorting(), { field: "value", order: "asc" }, "current sorting returned");
+        assert.deepEqual(grid.getSorting(), { field: "value", order: "asc" }, "current sorting returned");
     });
 
-    test("sorting css attached correctly when a field is hidden", function() {
+    QUnit.test("sorting css attached correctly when a field is hidden", function(assert) {
         var $element = $("#jsGrid");
 
         var gridOptions = {
@@ -1998,12 +2008,12 @@ $(function() {
         var $th = grid._headerRow.find("th").eq(0);
         $th.trigger("click");
 
-        equal($th.hasClass(grid.sortAscClass), true, "sorting css is attached to first field");
+        assert.equal($th.hasClass(grid.sortAscClass), true, "sorting css is attached to first field");
     });
 
-    module("canceling events");
+    QUnit.module("canceling events");
 
-    test("cancel item edit", function() {
+    QUnit.test("cancel item edit", function(assert) {
         var $element = $("#jsGrid");
         var data = [{}];
 
@@ -2029,10 +2039,10 @@ $(function() {
 
         grid.loadData();
         grid.editItem(data[0]);
-        strictEqual(grid._editingRow, null, "no editing row");
+        assert.strictEqual(grid._editingRow, null, "no editing row");
     });
 
-    test("cancel controller.loadData", function() {
+    QUnit.test("cancel controller.loadData", function(assert) {
         var $element = $("#jsGrid");
 
         var gridOptions = {
@@ -2056,10 +2066,10 @@ $(function() {
 
         grid.loadData();
 
-        equal(grid.option("data").length, 0, "no data loaded");
+        assert.equal(grid.option("data").length, 0, "no data loaded");
     });
 
-    test("cancel controller.insertItem", function() {
+    QUnit.test("cancel controller.insertItem", function(assert) {
         var $element = $("#jsGrid");
         var insertedItem = null;
 
@@ -2084,10 +2094,10 @@ $(function() {
 
         grid.insertItem({ test: "value" });
 
-        strictEqual(insertedItem, null, "item was not inserted");
+        assert.strictEqual(insertedItem, null, "item was not inserted");
     });
 
-    test("cancel controller.updateItem", function() {
+    QUnit.test("cancel controller.updateItem", function(assert) {
         var $element = $("#jsGrid");
         var updatedItem = null;
         var existingItem = { test: "value" };
@@ -2117,10 +2127,10 @@ $(function() {
 
         grid.updateItem(existingItem, { test: "new_value" });
 
-        strictEqual(updatedItem, null, "item was not updated");
+        assert.strictEqual(updatedItem, null, "item was not updated");
     });
 
-    test("cancel controller.deleteItem", function() {
+    QUnit.test("cancel controller.deleteItem", function(assert) {
         var $element = $("#jsGrid");
         var deletingItem = { test: "value" };
         var deletedItem = null;
@@ -2152,13 +2162,13 @@ $(function() {
 
         grid.deleteItem(deletingItem);
 
-        strictEqual(deletedItem, null, "item was not deleted");
+        assert.strictEqual(deletedItem, null, "item was not deleted");
     });
 
 
-    module("complex properties binding");
+    QUnit.module("complex properties binding");
 
-    test("rendering", function() {
+    QUnit.test("rendering", function(assert) {
         var $element = $("#jsGrid");
 
         var gridOptions = {
@@ -2176,10 +2186,10 @@ $(function() {
 
         new Grid($element, gridOptions);
 
-        equal($element.text(), "test", "complex property value rendered");
+        assert.equal($element.text(), "test", "complex property value rendered");
     });
 
-    test("editing", function() {
+    QUnit.test("editing", function(assert) {
         var $element = $("#jsGrid");
 
         var gridOptions = {
@@ -2198,10 +2208,10 @@ $(function() {
         var grid = new Grid($element, gridOptions);
 
         grid.editItem(gridOptions.data[0]);
-        equal(grid.fields[0].editControl.val(), "test", "complex property value set in editor");
+        assert.equal(grid.fields[0].editControl.val(), "test", "complex property value set in editor");
     });
 
-    test("should not fail if property is absent", function() {
+    QUnit.test("should not fail if property is absent", function(assert) {
         var $element = $("#jsGrid");
 
         var gridOptions = {
@@ -2219,10 +2229,10 @@ $(function() {
 
         new Grid($element, gridOptions);
 
-        equal($element.text(), "", "rendered empty value");
+        assert.equal($element.text(), "", "rendered empty value");
     });
 
-    test("inserting", function() {
+    QUnit.test("inserting", function(assert) {
         var $element = $("#jsGrid");
         var insertingItem;
 
@@ -2243,10 +2253,10 @@ $(function() {
         grid.fields[0].insertControl.val("test");
         grid.insertItem();
 
-        deepEqual(insertingItem, { complexProp: { prop: "test" } }, "inserting item has complex properties");
+        assert.deepEqual(insertingItem, { complexProp: { prop: "test" } }, "inserting item has complex properties");
     });
 
-    test("filtering", function() {
+    QUnit.test("filtering", function(assert) {
         var $element = $("#jsGrid");
         var loadFilter;
 
@@ -2269,10 +2279,10 @@ $(function() {
         grid.fields[0].filterControl.val("test");
         grid.search();
 
-        deepEqual(loadFilter, { complexProp: { prop: "test" } }, "filter has complex properties");
+        assert.deepEqual(loadFilter, { complexProp: { prop: "test" } }, "filter has complex properties");
     });
 
-    test("updating", function() {
+    QUnit.test("updating", function(assert) {
         var $element = $("#jsGrid");
         var updatingItem;
 
@@ -2298,10 +2308,10 @@ $(function() {
         grid.fields[0].editControl.val("test");
         grid.updateItem();
 
-        deepEqual(updatingItem, { complexProp: { prop: "test" } }, "updating item has complex properties");
+        assert.deepEqual(updatingItem, { complexProp: { prop: "test" } }, "updating item has complex properties");
     });
 
-    test("update nested prop", function() {
+    QUnit.test("update nested prop", function(assert) {
         var $element = $("#jsGrid");
         var updatingItem;
         var previousItem;
@@ -2336,10 +2346,10 @@ $(function() {
             }
         };
 
-        deepEqual(updatingItem, expectedUpdatingItem, "updating item has nested properties");
+        assert.deepEqual(updatingItem, expectedUpdatingItem, "updating item has nested properties");
     });
 
-    test("updating deeply nested prop", function() {
+    QUnit.test("updating deeply nested prop", function(assert) {
         var $element = $("#jsGrid");
         var updatingItem;
         var previousItem;
@@ -2387,14 +2397,14 @@ $(function() {
             }
         };
 
-        deepEqual(updatingItem, expectedUpdatingItem, "updating item has deeply nested properties");
-        deepEqual(previousItem, expectedPreviousItem, "previous item preserved correctly");
+        assert.deepEqual(updatingItem, expectedUpdatingItem, "updating item has deeply nested properties");
+        assert.deepEqual(previousItem, expectedPreviousItem, "previous item preserved correctly");
     });
 
 
-    module("validation");
+    QUnit.module("validation");
 
-    test("insertItem should call validation.validate", function() {
+    QUnit.test("insertItem should call validation.validate", function(assert) {
         var $element = $("#jsGrid");
         var fieldValidationRules = { test: "value" };
         var validatingArgs;
@@ -2419,11 +2429,11 @@ $(function() {
         grid.fields[0].insertControl.val("test");
         grid.insertItem();
 
-        deepEqual(validatingArgs, { value: "test", item: { Name: "test" }, itemIndex: -1,
+        assert.deepEqual(validatingArgs, { value: "test", item: { Name: "test" }, itemIndex: -1,
             row: grid._insertRow, rules: fieldValidationRules }, "validating args is provided");
     });
 
-    test("insertItem rejected when data is not valid", function() {
+    QUnit.test("insertItem rejected when data is not valid", function(assert) {
         var $element = $("#jsGrid");
 
         var gridOptions = {
@@ -2444,13 +2454,13 @@ $(function() {
 
         grid.fields[0].insertControl.val("test");
         grid.insertItem().done(function() {
-            ok(false, "insertItem should not be completed");
+            assert.ok(false, "insertItem should not be completed");
         }).fail(function() {
-            ok(true, "insertItem should fail");
+            assert.ok(true, "insertItem should fail");
         });
     });
 
-    test("invalidClass is attached on invalid cell on inserting", function() {
+    QUnit.test("invalidClass is attached on invalid cell on inserting", function(assert) {
         var $element = $("#jsGrid");
 
         var gridOptions = {
@@ -2473,11 +2483,11 @@ $(function() {
 
         grid.insertItem();
 
-        ok($insertCell.hasClass(grid.invalidClass), "invalid class is attached");
-        equal($insertCell.attr("title"), "Error", "cell tooltip contains error message");
+        assert.ok($insertCell.hasClass(grid.invalidClass), "invalid class is attached");
+        assert.equal($insertCell.attr("title"), "Error", "cell tooltip contains error message");
     });
 
-    test("onItemInvalid callback", function() {
+    QUnit.test("onItemInvalid callback", function(assert) {
         var $element = $("#jsGrid");
         var errors = ["Error"];
         var onItemInvalidCalled = 0;
@@ -2506,17 +2516,17 @@ $(function() {
 
         grid.insertItem();
 
-        equal(onItemInvalidCalled, 1, "onItemInvalid is called, when item data is invalid");
-        deepEqual(onItemInvalidArgs, { grid: grid, errors: [{ field: grid.fields[0], message: "Error" }],
+        assert.equal(onItemInvalidCalled, 1, "onItemInvalid is called, when item data is invalid");
+        assert.deepEqual(onItemInvalidArgs, { grid: grid, errors: [{ field: grid.fields[0], message: "Error" }],
             item: { Name: "" }, itemIndex: -1, row: grid._insertRow }, "arguments provided");
 
         grid.fields[0].insertControl.val("test");
         grid.insertItem();
 
-        equal(onItemInvalidCalled, 1, "onItemInvalid was not called, when data is valid");
+        assert.equal(onItemInvalidCalled, 1, "onItemInvalid was not called, when data is valid");
     });
 
-    test("invalidNotify", function() {
+    QUnit.test("invalidNotify", function(assert) {
         var $element = $("#jsGrid");
         var errors = ["Error"];
         var invalidNotifyCalled = 0;
@@ -2545,17 +2555,17 @@ $(function() {
 
         grid.insertItem();
 
-        equal(invalidNotifyCalled, 1, "invalidNotify is called, when item data is invalid");
-        deepEqual(invalidNotifyArgs, { grid: grid, errors: [{ field: grid.fields[0], message: "Error" }],
+        assert.equal(invalidNotifyCalled, 1, "invalidNotify is called, when item data is invalid");
+        assert.deepEqual(invalidNotifyArgs, { grid: grid, errors: [{ field: grid.fields[0], message: "Error" }],
             row: grid._insertRow, item: { Name: "" }, itemIndex: -1 }, "arguments provided");
 
         grid.fields[0].insertControl.val("test");
         grid.insertItem();
 
-        equal(invalidNotifyCalled, 1, "invalidNotify was not called, when data is valid");
+        assert.equal(invalidNotifyCalled, 1, "invalidNotify was not called, when data is valid");
     });
 
-    test("invalidMessage", function() {
+    QUnit.test("invalidMessage", function(assert) {
         var $element = $("#jsGrid");
         var invalidMessage;
         var originalAlert = window.alert;
@@ -2569,13 +2579,13 @@ $(function() {
             Grid.prototype.invalidNotify({ errors: [{ message: "Message1" }, { message: "Message2" }] });
 
             var expectedInvalidMessage = ["InvalidTest", "Message1", "Message2"].join("\n");
-            equal(invalidMessage, expectedInvalidMessage, "message contains invalidMessage and field error messages");
+            assert.equal(invalidMessage, expectedInvalidMessage, "message contains invalidMessage and field error messages");
         } finally {
             window.alert = originalAlert;
         }
     });
 
-    test("updateItem should call validation.validate", function() {
+    QUnit.test("updateItem should call validation.validate", function(assert) {
         var $element = $("#jsGrid");
         var validatingArgs;
 
@@ -2603,11 +2613,11 @@ $(function() {
         grid.fields[0].editControl.val("test");
         grid.updateItem();
 
-        deepEqual(validatingArgs, { value: "test", item: { Name: "test" }, itemIndex: 0,
+        assert.deepEqual(validatingArgs, { value: "test", item: { Name: "test" }, itemIndex: 0,
             row: grid._getEditRow(), rules: "required" }, "validating args is provided");
     });
 
-    test("invalidClass is attached on invalid cell on updating", function() {
+    QUnit.test("invalidClass is attached on invalid cell on updating", function(assert) {
         var $element = $("#jsGrid");
 
         var gridOptions = {
@@ -2631,11 +2641,11 @@ $(function() {
 
         grid.updateItem();
 
-        ok($editCell.hasClass(grid.invalidClass), "invalid class is attached");
-        equal($editCell.attr("title"), "Error", "cell tooltip contains error message");
+        assert.ok($editCell.hasClass(grid.invalidClass), "invalid class is attached");
+        assert.equal($editCell.attr("title"), "Error", "cell tooltip contains error message");
     });
 
-    test("validation should ignore not editable fields", function() {
+    QUnit.test("validation should ignore not editable fields", function(assert) {
         var invalidNotifyCalled = 0;
         var $element = $("#jsGrid");
         var validatingArgs;
@@ -2662,12 +2672,12 @@ $(function() {
 
         grid.editItem(gridOptions.data[0]);
         grid.updateItem();
-        equal(invalidNotifyCalled, 0, "data is valid");
+        assert.equal(invalidNotifyCalled, 0, "data is valid");
     });
 
-    module("api");
+    QUnit.module("api");
 
-    test("reset method should go the first page when pageLoading is truned on", function() {
+    QUnit.test("reset method should go the first page when pageLoading is truned on", function(assert) {
         var items = [{ Name: "1" }, { Name: "2" }];
         var $element = $("#jsGrid");
 
@@ -2694,13 +2704,13 @@ $(function() {
 
         grid.openPage(2);
         grid.reset();
-        equal(grid._bodyGrid.text(), "1", "grid content reset");
+        assert.equal(grid._bodyGrid.text(), "1", "grid content reset");
     });
 
 
-    module("i18n");
+    QUnit.module("i18n");
 
-    test("set locale by name", function() {
+    QUnit.test("set locale by name", function(assert) {
         jsGrid.locales.my_lang = {
             grid: {
                 test: "test_text"
@@ -2711,10 +2721,10 @@ $(function() {
 
         var $element = $("#jsGrid").jsGrid({});
 
-        equal($element.jsGrid("option", "test"), "test_text", "option localized");
+        assert.equal($element.jsGrid("option", "test"), "test_text", "option localized");
     });
 
-    test("set locale by config", function() {
+    QUnit.test("set locale by config", function(assert) {
         jsGrid.locale( {
             grid: {
                 test: "test_text"
@@ -2723,19 +2733,21 @@ $(function() {
 
         var $element = $("#jsGrid").jsGrid({});
 
-        equal($element.jsGrid("option", "test"), "test_text", "option localized");
+        assert.equal($element.jsGrid("option", "test"), "test_text", "option localized");
     });
 
-    test("locale throws exception for unknown locale", function() {
-        throws(function() {
+    QUnit.test("locale throws exception for unknown locale", function(assert) {
+        assert.throws(function() {
             jsGrid.locale("unknown_lang");
         }, /unknown_lang/, "locale threw an exception");
     });
 
 
-    module("controller promise");
+    QUnit.module("controller promise");
 
-    asyncTest("should support jQuery promise success callback", 1, function() {
+    QUnit.test("should support jQuery promise success callback", function(assert) {
+        assert.expect(1);
+        var done = assert.async();
         var data = [];
         var gridOptions = {
             autoload: false,
@@ -2745,7 +2757,7 @@ $(function() {
 
                     setTimeout(function() {
                         d.resolve(data);
-                        start();
+                        done();
                     });
 
                     return d.promise();
@@ -2757,11 +2769,13 @@ $(function() {
 
         var promise = grid._controllerCall("loadData", {}, false, $.noop);
         promise.done(function(result) {
-            equal(result, data, "data provided to done callback");
+            assert.equal(result, data, "data provided to done callback");
         });
     });
 
-    asyncTest("should support jQuery promise fail callback", 1, function() {
+    QUnit.test("should support jQuery promise fail callback", function(assert) {
+        assert.expect(1);
+        var done = assert.async();
         var failArgs = {};
         var gridOptions = {
             autoload: false,
@@ -2771,7 +2785,7 @@ $(function() {
 
                     setTimeout(function() {
                         d.reject(failArgs);
-                        start();
+                        done();
                     });
 
                     return d.promise();
@@ -2783,14 +2797,16 @@ $(function() {
 
         var promise = grid._controllerCall("loadData", {}, false, $.noop);
         promise.fail(function(result) {
-            equal(result, failArgs, "fail args provided to fail callback");
+            assert.equal(result, failArgs, "fail args provided to fail callback");
         });
     });
 
-    asyncTest("should support JS promise success callback", 1, function() {
+    QUnit.test("should support JS promise success callback", function(assert) {
+        assert.expect(1);
+        var done = assert.async();
         if(typeof Promise === "undefined") {
-            ok(true, "Promise not supported");
-            start();
+            assert.ok(true, "Promise not supported");
+            done();
             return;
         }
 
@@ -2802,7 +2818,7 @@ $(function() {
                     return new Promise(function(resolve, reject) {
                         setTimeout(function() {
                             resolve(data);
-                            start();
+                            done();
                         });
                     });
                 }
@@ -2813,14 +2829,16 @@ $(function() {
 
         var promise = grid._controllerCall("loadData", {}, false, $.noop);
         promise.done(function(result) {
-            equal(result, data, "data provided to done callback");
+            assert.equal(result, data, "data provided to done callback");
         });
     });
 
-    asyncTest("should support JS promise fail callback", 1, function() {
+    QUnit.test("should support JS promise fail callback", function(assert) {
+        assert.expect(1);
+        var done = assert.async();
         if(typeof Promise === "undefined") {
-            ok(true, "Promise not supported");
-            start();
+            assert.ok(true, "Promise not supported");
+            done();
             return;
         }
 
@@ -2832,7 +2850,7 @@ $(function() {
                     return new Promise(function(resolve, reject) {
                         setTimeout(function() {
                             reject(failArgs);
-                            start();
+                            done();
                         });
                     });
                 }
@@ -2843,11 +2861,12 @@ $(function() {
 
         var promise = grid._controllerCall("loadData", {}, false, $.noop);
         promise.fail(function(result) {
-            equal(result, failArgs, "fail args provided to fail callback");
+            assert.equal(result, failArgs, "fail args provided to fail callback");
         });
     });
 
-    test("should support non-promise result", 1, function() {
+    QUnit.test("should support non-promise result", function(assert) {
+        assert.expect(1);
         var data = [];
         var gridOptions = {
             autoload: false,
@@ -2862,14 +2881,14 @@ $(function() {
 
         var promise = grid._controllerCall("loadData", {}, false, $.noop);
         promise.done(function(result) {
-            equal(result, data, "data provided to done callback");
+            assert.equal(result, data, "data provided to done callback");
         });
     });
 
 
-    module("renderTemplate");
+    QUnit.module("renderTemplate");
 
-    test("should pass undefined and null arguments to the renderer", function() {
+    QUnit.test("should pass undefined and null arguments to the renderer", function(assert) {
         var rendererArgs;
         var rendererContext;
         var context = {};
@@ -2881,15 +2900,15 @@ $(function() {
 
         Grid.prototype.renderTemplate(renderer, context, { arg1: undefined, arg2: null, arg3: "test" });
 
-        equal(rendererArgs.length, 3);
-        strictEqual(rendererArgs[0], undefined, "undefined passed");
-        strictEqual(rendererArgs[1], null, "null passed");
-        strictEqual(rendererArgs[2], "test", "null passed");
-        strictEqual(rendererContext, context, "context is preserved");
+        assert.equal(rendererArgs.length, 3);
+        assert.strictEqual(rendererArgs[0], undefined, "undefined passed");
+        assert.strictEqual(rendererArgs[1], null, "null passed");
+        assert.strictEqual(rendererArgs[2], "test", "null passed");
+        assert.strictEqual(rendererContext, context, "context is preserved");
     });
     
-    module("Data Export", {
-        setup: function() {
+    QUnit.module("Data Export", {
+        beforeEach: function() {
             
             this.exportConfig = {};
             this.exportConfig.type = "csv";
@@ -2936,7 +2955,7 @@ $(function() {
         includeHeaders: true
         encapsulate: true
     */
-    test("Should export data: Base Choice",function(){
+    QUnit.test("Should export data: Base Choice", function(assert) {
         var grid = new Grid($(this.element), this.gridOptions);
         var data = grid.exportData(this.exportConfig);
         
@@ -2947,10 +2966,10 @@ $(function() {
             expected += '"Lacey Hess"|"Canada"|"false"\r\n';
             expected += '"Timothy Henson"|"United States"|"true"\r\n';
             
-        equal(data, expected, "Output CSV configured to Base Choice Criteria -- Check Source");
+        assert.equal(data, expected, "Output CSV configured to Base Choice Criteria -- Check Source");
     });
     
-    test("Should export data: defaults = BCC",function(){
+    QUnit.test("Should export data: defaults = BCC", function(assert) {
         var grid = new Grid($(this.element), this.gridOptions);
         var data = grid.exportData();
         
@@ -2961,10 +2980,10 @@ $(function() {
             expected += '"Lacey Hess"|"Canada"|"false"\r\n';
             expected += '"Timothy Henson"|"United States"|"true"\r\n';
             
-        equal(data, expected, "Output CSV with all defaults -- Should be equal to Base Choice");
+        assert.equal(data, expected, "Output CSV with all defaults -- Should be equal to Base Choice");
     });
     
-    test("Should export data: subset=visible", function(){
+    QUnit.test("Should export data: subset=visible", function(assert) {
         var grid = new Grid($(this.element), this.gridOptions);
         this.exportConfig.subset = "visible";
         var data = grid.exportData(this.exportConfig);
@@ -2976,10 +2995,10 @@ $(function() {
             //expected += '"Lacey Hess"|"Canada"|"false"\r\n';
             //expected += '"Timothy Henson"|"United States"|"true"\r\n';
             
-        equal(data, expected, "Output CSV of visible records");
+        assert.equal(data, expected, "Output CSV of visible records");
     });
     
-    test("Should export data: delimiter=;", function(){
+    QUnit.test("Should export data: delimiter=;", function(assert) {
         var grid = new Grid($(this.element), this.gridOptions);
         this.exportConfig.delimiter = ";";
         var data = grid.exportData(this.exportConfig);
@@ -2991,10 +3010,10 @@ $(function() {
             expected += '"Lacey Hess";"Canada";"false"\r\n';
             expected += '"Timothy Henson";"United States";"true"\r\n';
             
-        equal(data, expected, "Output CSV with non-default delimiter");
+        assert.equal(data, expected, "Output CSV with non-default delimiter");
     });
     
-    test("Should export data: headers=false", function(){
+    QUnit.test("Should export data: headers=false", function(assert) {
         var grid = new Grid($(this.element), this.gridOptions);
         this.exportConfig.includeHeaders = false;
         var data = grid.exportData(this.exportConfig);
@@ -3006,10 +3025,10 @@ $(function() {
             expected += '"Lacey Hess"|"Canada"|"false"\r\n';
             expected += '"Timothy Henson"|"United States"|"true"\r\n';
             
-        equal(data, expected, "Output CSV without Headers");
+        assert.equal(data, expected, "Output CSV without Headers");
     });
     
-    test("Should export data: encapsulate=false", function(){
+    QUnit.test("Should export data: encapsulate=false", function(assert) {
         var grid = new Grid($(this.element), this.gridOptions);
         this.exportConfig.encapsulate = false;
         var data = grid.exportData(this.exportConfig);
@@ -3021,10 +3040,10 @@ $(function() {
             expected += 'Lacey Hess|Canada|false\r\n';
             expected += 'Timothy Henson|United States|true\r\n';
             
-        equal(data, expected, "Output CSV without encapsulation");
+        assert.equal(data, expected, "Output CSV without encapsulation");
     });
     
-    test("Should export filtered data", function(){
+    QUnit.test("Should export filtered data", function(assert) {
         var grid = new Grid($(this.element), this.gridOptions);
         this.exportConfig['filter'] = function(item){
                 if (item["Name"].indexOf("O") === 0)
@@ -3039,10 +3058,10 @@ $(function() {
             //expected += '"Lacey Hess"|"Canada"|"false"\r\n';
             //expected += '"Timothy Henson"|"United States"|"true"\r\n';
             
-        equal(data, expected, "Output CSV filtered to show names starting with O");
+        assert.equal(data, expected, "Output CSV filtered to show names starting with O");
     });
     
-    test("Should export data: transformed value", function(){
+    QUnit.test("Should export data: transformed value", function(assert) {
         var grid = new Grid($(this.element), this.gridOptions);
         this.exportConfig['transforms'] = {};
         this.exportConfig.transforms['Married'] = function(value){
@@ -3058,7 +3077,264 @@ $(function() {
             expected += '"Lacey Hess"|"Canada"|"No"\r\n';
             expected += '"Timothy Henson"|"United States"|"Yes"\r\n';
             
-        equal(data, expected, "Output CSV column value transformed properly");
+        assert.equal(data, expected, "Output CSV column value transformed properly");
+    });
+
+
+    QUnit.module("Export rows", {
+        beforeEach: function() {
+            this.element = $("#jsGrid");
+
+            this.people = [
+                { Name: "Otto Clay", Country: 1, Married: false },
+                { Name: "Connor Johnston", Country: 2, Married: true },
+                { Name: "Lacey Hess", Country: 2, Married: false },
+                { Name: "Timothy Henson", Country: 1, Married: true },
+                { Name: "Ann \"Q\" Lee", Country: 1, Married: false }
+            ];
+
+            this.fields = [
+                { name: "Name", type: "text", title: "Full name" },
+                { name: "Country", type: "select", items: [{ Name: "United States", Id: 1 }, { Name: "Canada", Id: 2 }], valueField: "Id", textField: "Name" },
+                { name: "Married", type: "checkbox", sorting: false },
+                { type: "control" }
+            ];
+
+            // a server-paged controller; remembers every call it got
+            var that = this;
+            this.calls = [];
+            this.controller = {
+                loadData: function(filter) {
+                    that.calls.push($.extend(true, {}, filter));
+                    var start = (filter.pageIndex - 1) * filter.pageSize;
+                    return {
+                        data: that.people.slice(start, start + filter.pageSize),
+                        itemsCount: that.people.length
+                    };
+                }
+            };
+        },
+
+        names: function(rows) {
+            return $.map(rows, function(row) { return row.Name; });
+        }
+    });
+
+    QUnit.test("direct loading: page is the visible slice, all is everything", function(assert) {
+        var grid = new Grid(this.element, {
+            paging: true,
+            pageSize: 2,
+            pageIndex: 2,
+            data: this.people,
+            fields: this.fields
+        });
+
+        var page, all;
+        grid.exportRows().done(function(rows) { page = rows; });
+        grid.exportRows({ scope: "all" }).done(function(rows) { all = rows; });
+
+        assert.deepEqual(this.names(page), ["Lacey Hess", "Timothy Henson"], "default scope is the current page");
+        assert.equal(all.length, 5, "all rows");
+        assert.notStrictEqual(all, this.people, "a copy, not the grid's own array");
+    });
+
+    QUnit.test("direct loading without paging: page is everything", function(assert) {
+        var grid = new Grid(this.element, { data: this.people, fields: this.fields });
+
+        var page;
+        grid.exportRows({ scope: "page" }).done(function(rows) { page = rows; });
+
+        assert.equal(page.length, 5);
+    });
+
+    QUnit.test("page loading: page is the loaded page, controller is not called again", function(assert) {
+        var grid = new Grid(this.element, {
+            paging: true,
+            pageLoading: true,
+            pageSize: 2,
+            autoload: true,
+            controller: this.controller,
+            fields: this.fields
+        });
+
+        var calls = this.calls.length, page;
+        grid.exportRows({ scope: "page" }).done(function(rows) { page = rows; });
+
+        assert.deepEqual(this.names(page), ["Otto Clay", "Connor Johnston"]);
+        assert.equal(this.calls.length, calls, "no extra request");
+    });
+
+    QUnit.test("page loading: all is fetched chunk by chunk and leaves the grid alone", function(assert) {
+        var grid = new Grid(this.element, {
+            paging: true,
+            pageLoading: true,
+            pageSize: 2,
+            exportChunkSize: 2,
+            autoload: true,
+            controller: this.controller,
+            fields: this.fields
+        });
+
+        this.calls.length = 0;
+
+        var all;
+        grid.exportRows({ scope: "all" }).done(function(rows) { all = rows; });
+
+        assert.equal(all.length, 5, "all rows collected");
+        assert.deepEqual(this.names(all), $.map(this.people, function(p) { return p.Name; }), "in order");
+        assert.deepEqual($.map(this.calls, function(c) { return c.pageIndex; }), [1, 2, 3], "three requests, one per chunk");
+        assert.equal(this.calls[0].pageSize, 2, "chunk size sent as pageSize");
+
+        assert.equal(grid.option("data").length, 2, "displayed page untouched");
+        assert.equal(grid.pageIndex, 1, "pager untouched");
+    });
+
+    QUnit.test("page loading: chunkSize option overrides exportChunkSize, a chunk bigger than the data is one request", function(assert) {
+        var grid = new Grid(this.element, {
+            paging: true,
+            pageLoading: true,
+            pageSize: 2,
+            exportChunkSize: 2,
+            autoload: true,
+            controller: this.controller,
+            fields: this.fields
+        });
+
+        this.calls.length = 0;
+
+        var all;
+        grid.exportRows({ scope: "all", chunkSize: 100 }).done(function(rows) { all = rows; });
+
+        assert.equal(all.length, 5);
+        assert.equal(this.calls.length, 1);
+    });
+
+    QUnit.test("page loading: all replays the filter of the last load, not the filter row", function(assert) {
+        var grid = new Grid(this.element, {
+            paging: true,
+            pageLoading: true,
+            pageSize: 2,
+            exportChunkSize: 3,
+            controller: this.controller,
+            fields: this.fields
+        });
+
+        grid.loadData({ q: "abc", range: { from: "1", to: "9" } });
+        this.calls.length = 0;
+
+        grid.exportRows({ scope: "all" });
+
+        assert.equal(this.calls.length, 2, "two chunks of 3 for 5 rows");
+        assert.equal(this.calls[0].q, "abc", "filter replayed");
+        assert.deepEqual(this.calls[0].range, { from: "1", to: "9" }, "nested filter values replayed");
+        assert.equal(this.calls[1].pageIndex, 2);
+    });
+
+    QUnit.test("page loading: a failing request rejects and fires onError", function(assert) {
+        var done = assert.async();
+        var errors = 0, calls = 0, that = this;
+        var grid = new Grid(this.element, {
+            paging: true,
+            pageLoading: true,
+            pageSize: 2,
+            controller: {
+                loadData: function(filter) {
+                    calls++;
+                    return filter.pageIndex === 1
+                        ? { data: that.people.slice(0, 2), itemsCount: 5 }
+                        : $.Deferred().reject().promise();
+                }
+            },
+            onError: function() { errors++; },
+            fields: this.fields
+        });
+
+        // a controller promise is adopted through jQuery 3 then(), i.e. asynchronously
+        grid.exportRows({ scope: "all", chunkSize: 2 }).fail(function() {
+            assert.equal(calls, 2, "stopped at the failing chunk");
+            assert.equal(errors, 1, "onError fired");
+
+            done();
+        });
+    });
+
+    QUnit.test("exportFields: visible named fields, no buttons, no includeInDataExport: false", function(assert) {
+        var grid = new Grid(this.element, {
+            data: this.people,
+            fields: [
+                { name: "Name", type: "text" },
+                { name: "Hidden", type: "text", visible: false },
+                { name: "Skipped", type: "text", includeInDataExport: false },
+                { name: "Country", type: "select", items: [{ Name: "United States", Id: 1 }], valueField: "Id", textField: "Name" },
+                { type: "control" }
+            ]
+        });
+
+        assert.deepEqual($.map(grid.exportFields(), function(field) { return field.name; }), ["Name", "Country"]);
+    });
+
+    QUnit.test("exportCellValue: raw value, select text, empty for missing", function(assert) {
+        var grid = new Grid(this.element, {
+            data: [],
+            fields: [
+                { name: "Price", type: "number" },
+                { name: "Country", type: "select", items: [{ Name: "United States", Id: 1 }, { Name: "Canada", Id: 2 }], valueField: "Id", textField: "Name" },
+                { name: "Kind", type: "select", items: { a: "Alpha", b: "Beta" } },
+                { name: "Nested.Value", type: "text" }
+            ]
+        });
+
+        var fields = grid.fields;
+        var item = { Price: 1500, Country: "2", Kind: "b", Nested: { Value: "deep" }, Missing: null };
+
+        assert.strictEqual(grid.exportCellValue(item, fields[0]), 1500, "a number stays a number");
+        assert.strictEqual(grid.exportCellValue(item, fields[1]), "Canada", "array items: text by valueField (loose match, as the code is a string here)");
+        assert.strictEqual(grid.exportCellValue(item, fields[2]), "Beta", "object items: text by key");
+        assert.strictEqual(grid.exportCellValue(item, fields[3]), "deep", "nested field name");
+        assert.strictEqual(grid.exportCellValue({ Price: null }, fields[0]), "", "null gives an empty string");
+        assert.strictEqual(grid.exportCellValue({}, fields[0]), "", "missing gives an empty string");
+        assert.strictEqual(grid.exportCellValue({ Kind: "zzz" }, fields[2]), "zzz", "unknown code is kept as it is");
+    });
+
+    QUnit.test("onDataExporting gets the scope", function(assert) {
+        var scope;
+        var grid = new Grid(this.element, {
+            data: this.people,
+            fields: this.fields,
+            onDataExporting: function(args) { scope = args.scope; }
+        });
+
+        grid.exportRows({ scope: "all" });
+
+        assert.equal(scope, "all");
+    });
+
+    QUnit.test("exportCsv: headers, select text, quoting, no control column", function(assert) {
+        var done = assert.async();
+        var grid = new Grid(this.element, { data: this.people, fields: this.fields });
+
+        grid.exportCsv({ scope: "all" }).done(function(csv) {
+            var lines = csv.split("\r\n");
+
+            assert.equal(lines[0], '"Full name";"Country";"Married"', "titles, control column left out");
+            assert.equal(lines[1], '"Otto Clay";"United States";"false"');
+            assert.equal(lines[2], '"Connor Johnston";"Canada";"true"');
+            assert.equal(lines[5], '"Ann ""Q"" Lee";"United States";"false"', "quotes doubled");
+            assert.equal(lines[6], "", "trailing newline");
+
+            done();
+        });
+    });
+
+    QUnit.test("exportCsv: custom delimiter, no headers, no encapsulation", function(assert) {
+        var done = assert.async();
+        var grid = new Grid(this.element, { data: this.people.slice(0, 2), fields: this.fields });
+
+        grid.exportCsv({ delimiter: "|", includeHeaders: false, encapsulate: false, newline: "\n" }).done(function(csv) {
+            assert.equal(csv, "Otto Clay|United States|false\nConnor Johnston|Canada|true\n");
+
+            done();
+        });
     });
 
 });

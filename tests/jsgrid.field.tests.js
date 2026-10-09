@@ -2,15 +2,15 @@ $(function() {
 
     var Grid = jsGrid.Grid;
 
-    module("common field config", {
-        setup: function() {
+    QUnit.module("common field config", {
+        beforeEach: function() {
             this.isFieldExcluded = function(FieldClass) {
                 return FieldClass === jsGrid.ControlField;
             };
         }
     });
 
-    test("filtering=false prevents rendering filter template", function() {
+    QUnit.test("filtering=false prevents rendering filter template", function(assert) {
         var isFieldExcluded = this.isFieldExcluded;
 
         $.each(jsGrid.fields, function(name, FieldClass) {
@@ -19,11 +19,11 @@ $(function() {
 
             var field = new FieldClass({ filtering: false });
 
-            equal(field.filterTemplate(), "", "empty filter template for field " + name);
+            assert.equal(field.filterTemplate(), "", "empty filter template for field " + name);
         });
     });
 
-    test("inserting=false prevents rendering insert template", function() {
+    QUnit.test("inserting=false prevents rendering insert template", function(assert) {
         var isFieldExcluded = this.isFieldExcluded;
 
         $.each(jsGrid.fields, function(name, FieldClass) {
@@ -32,11 +32,11 @@ $(function() {
 
             var field = new FieldClass({ inserting: false });
 
-            equal(field.insertTemplate(), "", "empty insert template for field " + name);
+            assert.equal(field.insertTemplate(), "", "empty insert template for field " + name);
         });
     });
 
-    test("editing=false renders itemTemplate", function() {
+    QUnit.test("editing=false renders itemTemplate", function(assert) {
         var isFieldExcluded = this.isFieldExcluded;
 
         $.each(jsGrid.fields, function(name, FieldClass) {
@@ -62,16 +62,16 @@ $(function() {
             var editTemplateContent = editTemplate instanceof jQuery ? editTemplate[0].outerHTML : editTemplate;
             var itemTemplateContent = itemTemplate instanceof jQuery ? itemTemplate[0].outerHTML : itemTemplate;
 
-            equal(editTemplateContent, itemTemplateContent, "item template is rendered instead of edit template for " + name);
-            equal(args.length, 2, "passed both arguments for " + name);
-            equal(args[0], "test", "field value passed as a first argument for " + name);
-            equal(args[1], item, "item passed as a second argument for " + name);
+            assert.equal(editTemplateContent, itemTemplateContent, "item template is rendered instead of edit template for " + name);
+            assert.equal(args.length, 2, "passed both arguments for " + name);
+            assert.equal(args[0], "test", "field value passed as a first argument for " + name);
+            assert.equal(args[1], item, "item passed as a second argument for " + name);
         });
     });
 
-    module("jsGrid.field");
+    QUnit.module("jsGrid.field");
 
-    test("basic", function() {
+    QUnit.test("basic", function(assert) {
         var customSortingFunc = function() {
                 return 1;
             },
@@ -81,33 +81,33 @@ $(function() {
                 sorter: customSortingFunc
             });
 
-        equal(field.headerTemplate(), "testTitle");
-        equal(field.itemTemplate("testValue"), "testValue");
-        equal(field.filterTemplate(), "");
-        equal(field.insertTemplate(), "");
-        equal(field.editTemplate("testValue"), "testValue");
-        strictEqual(field.filterValue(), "");
-        strictEqual(field.insertValue(), "");
-        strictEqual(field.editValue(), "testValue");
-        strictEqual(field.sortingFunc, customSortingFunc);
+        assert.equal(field.headerTemplate(), "testTitle");
+        assert.equal(field.itemTemplate("testValue"), "testValue");
+        assert.equal(field.filterTemplate(), "");
+        assert.equal(field.insertTemplate(), "");
+        assert.equal(field.editTemplate("testValue"), "testValue");
+        assert.strictEqual(field.filterValue(), "");
+        assert.strictEqual(field.insertValue(), "");
+        assert.strictEqual(field.editValue(), "testValue");
+        assert.strictEqual(field.sortingFunc, customSortingFunc);
     });
 
 
-    module("jsGrid.field.text");
+    QUnit.module("jsGrid.field.text");
 
-    test("basic", function() {
+    QUnit.test("basic", function(assert) {
         var field = new jsGrid.TextField({ name: "testField" });
 
-        equal(field.itemTemplate("testValue"), "testValue");
-        equal(field.filterTemplate()[0].tagName.toLowerCase(), "input");
-        equal(field.insertTemplate()[0].tagName.toLowerCase(), "input");
-        equal(field.editTemplate("testEditValue")[0].tagName.toLowerCase(), "input");
-        strictEqual(field.filterValue(), "");
-        strictEqual(field.insertValue(), "");
-        strictEqual(field.editValue(), "testEditValue");
+        assert.equal(field.itemTemplate("testValue"), "testValue");
+        assert.equal(field.filterTemplate()[0].tagName.toLowerCase(), "input");
+        assert.equal(field.insertTemplate()[0].tagName.toLowerCase(), "input");
+        assert.equal(field.editTemplate("testEditValue")[0].tagName.toLowerCase(), "input");
+        assert.strictEqual(field.filterValue(), "");
+        assert.strictEqual(field.insertValue(), "");
+        assert.strictEqual(field.editValue(), "testEditValue");
     });
 
-    test("set default field options with setDefaults", function() {
+    QUnit.test("set default field options with setDefaults", function(assert) {
         jsGrid.setDefaults("text", {
             defaultOption: "test"
         });
@@ -116,42 +116,42 @@ $(function() {
             fields: [{ type: "text" }]
         });
 
-        equal($element.jsGrid("option", "fields")[0].defaultOption, "test", "default field option set");
+        assert.equal($element.jsGrid("option", "fields")[0].defaultOption, "test", "default field option set");
     });
 
 
-    module("jsGrid.field.number");
+    QUnit.module("jsGrid.field.number");
 
-    test("basic", function() {
+    QUnit.test("basic", function(assert) {
         var field = new jsGrid.NumberField({ name: "testField" });
 
-        equal(field.itemTemplate(5), "5");
-        equal(field.filterTemplate()[0].tagName.toLowerCase(), "input");
-        equal(field.insertTemplate()[0].tagName.toLowerCase(), "input");
-        equal(field.editTemplate(6)[0].tagName.toLowerCase(), "input");
-        strictEqual(field.filterValue(), undefined);
-        strictEqual(field.insertValue(), undefined);
-        strictEqual(field.editValue(), 6);
+        assert.equal(field.itemTemplate(5), "5");
+        assert.equal(field.filterTemplate()[0].tagName.toLowerCase(), "input");
+        assert.equal(field.insertTemplate()[0].tagName.toLowerCase(), "input");
+        assert.equal(field.editTemplate(6)[0].tagName.toLowerCase(), "input");
+        assert.strictEqual(field.filterValue(), undefined);
+        assert.strictEqual(field.insertValue(), undefined);
+        assert.strictEqual(field.editValue(), 6);
     });
 
 
-    module("jsGrid.field.textArea");
+    QUnit.module("jsGrid.field.textArea");
 
-    test("basic", function() {
+    QUnit.test("basic", function(assert) {
         var field = new jsGrid.TextAreaField({ name: "testField" });
 
-        equal(field.itemTemplate("testValue"), "testValue");
-        equal(field.filterTemplate()[0].tagName.toLowerCase(), "input");
-        equal(field.insertTemplate()[0].tagName.toLowerCase(), "textarea");
-        equal(field.editTemplate("testEditValue")[0].tagName.toLowerCase(), "textarea");
-        strictEqual(field.insertValue(), "");
-        strictEqual(field.editValue(), "testEditValue");
+        assert.equal(field.itemTemplate("testValue"), "testValue");
+        assert.equal(field.filterTemplate()[0].tagName.toLowerCase(), "input");
+        assert.equal(field.insertTemplate()[0].tagName.toLowerCase(), "textarea");
+        assert.equal(field.editTemplate("testEditValue")[0].tagName.toLowerCase(), "textarea");
+        assert.strictEqual(field.insertValue(), "");
+        assert.strictEqual(field.editValue(), "testEditValue");
     });
 
 
-    module("jsGrid.field.checkbox");
+    QUnit.module("jsGrid.field.checkbox");
 
-    test("basic", function() {
+    QUnit.test("basic", function(assert) {
         var field = new jsGrid.CheckboxField({ name: "testField" }),
             itemTemplate,
             filterTemplate,
@@ -159,33 +159,33 @@ $(function() {
             editTemplate;
 
         itemTemplate = field.itemTemplate("testValue");
-        equal(itemTemplate[0].tagName.toLowerCase(), "input");
-        equal(itemTemplate.attr("type"), "checkbox");
-        equal(itemTemplate.attr("disabled"), "disabled");
+        assert.equal(itemTemplate[0].tagName.toLowerCase(), "input");
+        assert.equal(itemTemplate.attr("type"), "checkbox");
+        assert.equal(itemTemplate.attr("disabled"), "disabled");
 
         filterTemplate = field.filterTemplate();
-        equal(filterTemplate[0].tagName.toLowerCase(), "input");
-        equal(filterTemplate.attr("type"), "checkbox");
-        equal(filterTemplate.prop("indeterminate"), true);
+        assert.equal(filterTemplate[0].tagName.toLowerCase(), "input");
+        assert.equal(filterTemplate.attr("type"), "checkbox");
+        assert.equal(filterTemplate.prop("indeterminate"), true);
 
         insertTemplate = field.insertTemplate();
-        equal(insertTemplate[0].tagName.toLowerCase(), "input");
-        equal(insertTemplate.attr("type"), "checkbox");
+        assert.equal(insertTemplate[0].tagName.toLowerCase(), "input");
+        assert.equal(insertTemplate.attr("type"), "checkbox");
 
         editTemplate = field.editTemplate(true);
-        equal(editTemplate[0].tagName.toLowerCase(), "input");
-        equal(editTemplate.attr("type"), "checkbox");
-        equal(editTemplate.is(":checked"), true);
+        assert.equal(editTemplate[0].tagName.toLowerCase(), "input");
+        assert.equal(editTemplate.attr("type"), "checkbox");
+        assert.equal(editTemplate.is(":checked"), true);
 
-        strictEqual(field.filterValue(), undefined);
-        strictEqual(field.insertValue(), false);
-        strictEqual(field.editValue(), true);
+        assert.strictEqual(field.filterValue(), undefined);
+        assert.strictEqual(field.insertValue(), false);
+        assert.strictEqual(field.editValue(), true);
     });
 
 
-    module("jsGrid.field.select");
+    QUnit.module("jsGrid.field.select");
 
-    test("basic", function() {
+    QUnit.test("basic", function(assert) {
         var field,
             filterTemplate,
             insertTemplate,
@@ -197,27 +197,27 @@ $(function() {
             selectedIndex: 1
         });
 
-        equal(field.itemTemplate(1), "test2");
+        assert.equal(field.itemTemplate(1), "test2");
 
         filterTemplate = field.filterTemplate();
-        equal(filterTemplate[0].tagName.toLowerCase(), "select");
-        equal(filterTemplate.children().length, 3);
+        assert.equal(filterTemplate[0].tagName.toLowerCase(), "select");
+        assert.equal(filterTemplate.children().length, 3);
 
         insertTemplate = field.insertTemplate();
-        equal(insertTemplate[0].tagName.toLowerCase(), "select");
-        equal(insertTemplate.children().length, 3);
+        assert.equal(insertTemplate[0].tagName.toLowerCase(), "select");
+        assert.equal(insertTemplate.children().length, 3);
 
         editTemplate = field.editTemplate(2);
-        equal(editTemplate[0].tagName.toLowerCase(), "select");
-        equal(editTemplate.find("option:selected").length, 1);
-        ok(editTemplate.children().eq(2).is(":selected"));
+        assert.equal(editTemplate[0].tagName.toLowerCase(), "select");
+        assert.equal(editTemplate.find("option:selected").length, 1);
+        assert.ok(editTemplate.children().eq(2).is(":selected"));
 
-        strictEqual(field.filterValue(), 1);
-        strictEqual(field.insertValue(), 1);
-        strictEqual(field.editValue(), 2);
+        assert.strictEqual(field.filterValue(), 1);
+        assert.strictEqual(field.insertValue(), 1);
+        assert.strictEqual(field.editValue(), 2);
     });
 
-    test("items as array of integers", function() {
+    QUnit.test("items as array of integers", function(assert) {
         var field,
             filterTemplate,
             insertTemplate,
@@ -229,27 +229,27 @@ $(function() {
             selectedIndex: 0
         });
 
-        strictEqual(field.itemTemplate(0), 0);
+        assert.strictEqual(field.itemTemplate(0), 0);
 
         filterTemplate = field.filterTemplate();
-        equal(filterTemplate[0].tagName.toLowerCase(), "select");
-        equal(filterTemplate.children().length, 3);
+        assert.equal(filterTemplate[0].tagName.toLowerCase(), "select");
+        assert.equal(filterTemplate.children().length, 3);
 
         insertTemplate = field.insertTemplate();
-        equal(insertTemplate[0].tagName.toLowerCase(), "select");
-        equal(insertTemplate.children().length, 3);
+        assert.equal(insertTemplate[0].tagName.toLowerCase(), "select");
+        assert.equal(insertTemplate.children().length, 3);
 
         editTemplate = field.editTemplate(1);
-        equal(editTemplate[0].tagName.toLowerCase(), "select");
-        equal(editTemplate.find("option:selected").length, 1);
-        ok(editTemplate.children().eq(1).is(":selected"));
+        assert.equal(editTemplate[0].tagName.toLowerCase(), "select");
+        assert.equal(editTemplate.find("option:selected").length, 1);
+        assert.ok(editTemplate.children().eq(1).is(":selected"));
 
-        strictEqual(field.filterValue(), 0);
-        strictEqual(field.insertValue(), 0);
-        strictEqual(field.editValue(), 1);
+        assert.strictEqual(field.filterValue(), 0);
+        assert.strictEqual(field.insertValue(), 0);
+        assert.strictEqual(field.editValue(), 1);
     });
 
-    test("string value type", function() {
+    QUnit.test("string value type", function(assert) {
         var field = new jsGrid.SelectField({
             name: "testField",
             items: [
@@ -264,16 +264,16 @@ $(function() {
         });
 
         field.filterTemplate();
-        strictEqual(field.filterValue(), "2");
+        assert.strictEqual(field.filterValue(), "2");
 
         field.editTemplate("2");
-        strictEqual(field.editValue(), "2");
+        assert.strictEqual(field.editValue(), "2");
 
         field.insertTemplate();
-        strictEqual(field.insertValue(), "2");
+        assert.strictEqual(field.insertValue(), "2");
     });
 
-    test("value type auto-defined", function() {
+    QUnit.test("value type auto-defined", function(assert) {
         var field = new jsGrid.SelectField({
             name: "testField",
             items: [
@@ -286,19 +286,19 @@ $(function() {
             selectedIndex: 1
         });
 
-        strictEqual(field.sorter, "string", "sorter set according to value type");
+        assert.strictEqual(field.sorter, "string", "sorter set according to value type");
 
         field.filterTemplate();
-        strictEqual(field.filterValue(), "2");
+        assert.strictEqual(field.filterValue(), "2");
 
         field.editTemplate("2");
-        strictEqual(field.editValue(), "2");
+        assert.strictEqual(field.editValue(), "2");
 
         field.insertTemplate();
-        strictEqual(field.insertValue(), "2");
+        assert.strictEqual(field.insertValue(), "2");
     });
 
-    test("value type defaulted to string", function() {
+    QUnit.test("value type defaulted to string", function(assert) {
         var field = new jsGrid.SelectField({
             name: "testField",
             items: [
@@ -309,10 +309,10 @@ $(function() {
             valueField: "value"
         });
 
-        strictEqual(field.sorter, "string", "sorter set to string if first item has no value field");
+        assert.strictEqual(field.sorter, "string", "sorter set to string if first item has no value field");
     });
 
-    test("object items", function() {
+    QUnit.test("object items", function(assert) {
         var field = new jsGrid.SelectField({
             name: "testField",
             items: [
@@ -322,22 +322,22 @@ $(function() {
             ]
         });
 
-        strictEqual(field.itemTemplate(1), field.items[1]);
+        assert.strictEqual(field.itemTemplate(1), field.items[1]);
 
         field.textField = "text";
-        strictEqual(field.itemTemplate(1), "test2");
+        assert.strictEqual(field.itemTemplate(1), "test2");
 
         field.textField = "";
         field.valueField = "value";
-        strictEqual(field.itemTemplate(1), field.items[0]);
-        ok(field.editTemplate(2));
-        strictEqual(field.editValue(), 2);
+        assert.strictEqual(field.itemTemplate(1), field.items[0]);
+        assert.ok(field.editTemplate(2));
+        assert.strictEqual(field.editValue(), 2);
 
         field.textField = "text";
-        strictEqual(field.itemTemplate(1), "test1");
+        assert.strictEqual(field.itemTemplate(1), "test1");
     });
 
-    test("object as input", function() {
+    QUnit.test("object as input", function(assert) {
         var field = new jsGrid.SelectField({
             name: "testField",
             items: [
@@ -351,20 +351,20 @@ $(function() {
 
         
 
-        strictEqual(field.itemTemplate({ text: "test1", value: 1 }), "test1");
-        strictEqual(field.itemTemplate({ text: "test2", value: 2 }), "test2");
-        strictEqual(field.itemTemplate({ text: "test3", value: 3 }), "test3");
+        assert.strictEqual(field.itemTemplate({ text: "test1", value: 1 }), "test1");
+        assert.strictEqual(field.itemTemplate({ text: "test2", value: 2 }), "test2");
+        assert.strictEqual(field.itemTemplate({ text: "test3", value: 3 }), "test3");
 
 
 
         field.editTemplate({ text: "test1", value: 1 });
-        strictEqual(field.editValue(), 1);
+        assert.strictEqual(field.editValue(), 1);
         
         field.editTemplate({ text: "test2", value: 2 });
-        strictEqual(field.editValue(), 2);
+        assert.strictEqual(field.editValue(), 2);
         
         field.editTemplate({ text: "test3", value: 3 });
-        strictEqual(field.editValue(), 3);
+        assert.strictEqual(field.editValue(), 3);
 
 
 
@@ -372,9 +372,9 @@ $(function() {
     });
 
 
-    module("jsGrid.field.control");
+    QUnit.module("jsGrid.field.control");
 
-    test("basic", function() {
+    QUnit.test("basic", function(assert) {
         var field,
             itemTemplate,
             headerTemplate,
@@ -390,34 +390,34 @@ $(function() {
         };
 
         itemTemplate = field.itemTemplate("any_value");
-        equal(itemTemplate.filter("." + field.editButtonClass).length, 1);
-        equal(itemTemplate.filter("." + field.deleteButtonClass).length, 1);
+        assert.equal(itemTemplate.filter("." + field.editButtonClass).length, 1);
+        assert.equal(itemTemplate.filter("." + field.deleteButtonClass).length, 1);
 
         headerTemplate = field.headerTemplate();
-        equal(headerTemplate.filter("." + field.insertModeButtonClass).length, 1);
+        assert.equal(headerTemplate.filter("." + field.insertModeButtonClass).length, 1);
 
         var $modeSwitchButton = headerTemplate.filter("." + field.modeButtonClass);
         $modeSwitchButton.trigger("click");
 
-        equal(headerTemplate.filter("." + field.searchModeButtonClass).length, 1);
+        assert.equal(headerTemplate.filter("." + field.searchModeButtonClass).length, 1);
 
         filterTemplate = field.filterTemplate();
-        equal(filterTemplate.filter("." + field.searchButtonClass).length, 1);
-        equal(filterTemplate.filter("." + field.clearFilterButtonClass).length, 1);
+        assert.equal(filterTemplate.filter("." + field.searchButtonClass).length, 1);
+        assert.equal(filterTemplate.filter("." + field.clearFilterButtonClass).length, 1);
 
         insertTemplate = field.insertTemplate();
-        equal(insertTemplate.filter("." + field.insertButtonClass).length, 1);
+        assert.equal(insertTemplate.filter("." + field.insertButtonClass).length, 1);
 
         editTemplate = field.editTemplate("any_value");
-        equal(editTemplate.filter("." + field.updateButtonClass).length, 1);
-        equal(editTemplate.filter("." + field.cancelEditButtonClass).length, 1);
+        assert.equal(editTemplate.filter("." + field.updateButtonClass).length, 1);
+        assert.equal(editTemplate.filter("." + field.cancelEditButtonClass).length, 1);
 
-        strictEqual(field.filterValue(), "");
-        strictEqual(field.insertValue(), "");
-        strictEqual(field.editValue(), "");
+        assert.strictEqual(field.filterValue(), "");
+        assert.strictEqual(field.insertValue(), "");
+        assert.strictEqual(field.editValue(), "");
     });
 
-    test("switchMode button should consider filtering=false", function() {
+    QUnit.test("switchMode button should consider filtering=false", function(assert) {
         var optionArgs = {};
 
         var field = new jsGrid.ControlField();
@@ -433,22 +433,22 @@ $(function() {
         };
 
         var headerTemplate = field.headerTemplate();
-        equal(headerTemplate.filter("." + field.insertModeButtonClass).length, 1, "inserting switch button rendered");
+        assert.equal(headerTemplate.filter("." + field.insertModeButtonClass).length, 1, "inserting switch button rendered");
 
         var $modeSwitchButton = headerTemplate.filter("." + field.modeButtonClass);
 
         $modeSwitchButton.trigger("click");
-        ok($modeSwitchButton.hasClass(field.modeOnButtonClass), "on class is attached");
-        equal(headerTemplate.filter("." + field.insertModeButtonClass).length, 1, "insert button rendered");
-        equal(headerTemplate.filter("." + field.searchModeButtonClass).length, 0, "search button not rendered");
-        deepEqual(optionArgs, { name: "inserting", value: true }, "turn on grid inserting mode");
+        assert.ok($modeSwitchButton.hasClass(field.modeOnButtonClass), "on class is attached");
+        assert.equal(headerTemplate.filter("." + field.insertModeButtonClass).length, 1, "insert button rendered");
+        assert.equal(headerTemplate.filter("." + field.searchModeButtonClass).length, 0, "search button not rendered");
+        assert.deepEqual(optionArgs, { name: "inserting", value: true }, "turn on grid inserting mode");
 
         $modeSwitchButton.trigger("click");
-        ok(!$modeSwitchButton.hasClass(field.modeOnButtonClass), "on class is detached");
-        deepEqual(optionArgs, { name: "inserting", value: false }, "turn off grid inserting mode");
+        assert.ok(!$modeSwitchButton.hasClass(field.modeOnButtonClass), "on class is detached");
+        assert.deepEqual(optionArgs, { name: "inserting", value: false }, "turn off grid inserting mode");
     });
 
-    test("switchMode button should consider inserting=false", function() {
+    QUnit.test("switchMode button should consider inserting=false", function(assert) {
         var optionArgs = {};
 
         var field = new jsGrid.ControlField();
@@ -464,22 +464,22 @@ $(function() {
         };
 
         var headerTemplate = field.headerTemplate();
-        equal(headerTemplate.filter("." + field.searchModeButtonClass).length, 1, "filtering switch button rendered");
+        assert.equal(headerTemplate.filter("." + field.searchModeButtonClass).length, 1, "filtering switch button rendered");
 
         var $modeSwitchButton = headerTemplate.filter("." + field.modeButtonClass);
 
         $modeSwitchButton.trigger("click");
-        ok(!$modeSwitchButton.hasClass(field.modeOnButtonClass), "on class is detached");
-        equal(headerTemplate.filter("." + field.searchModeButtonClass).length, 1, "search button rendered");
-        equal(headerTemplate.filter("." + field.insertModeButtonClass).length, 0, "insert button not rendered");
-        deepEqual(optionArgs, { name: "filtering", value: false }, "turn off grid filtering mode");
+        assert.ok(!$modeSwitchButton.hasClass(field.modeOnButtonClass), "on class is detached");
+        assert.equal(headerTemplate.filter("." + field.searchModeButtonClass).length, 1, "search button rendered");
+        assert.equal(headerTemplate.filter("." + field.insertModeButtonClass).length, 0, "insert button not rendered");
+        assert.deepEqual(optionArgs, { name: "filtering", value: false }, "turn off grid filtering mode");
 
         $modeSwitchButton.trigger("click");
-        ok($modeSwitchButton.hasClass(field.modeOnButtonClass), "on class is attached");
-        deepEqual(optionArgs, { name: "filtering", value: true }, "turn on grid filtering mode");
+        assert.ok($modeSwitchButton.hasClass(field.modeOnButtonClass), "on class is attached");
+        assert.deepEqual(optionArgs, { name: "filtering", value: true }, "turn on grid filtering mode");
     });
 
-    test("switchMode is not rendered if inserting=false and filtering=false", function() {
+    QUnit.test("switchMode is not rendered if inserting=false and filtering=false", function(assert) {
         var optionArgs = {};
 
         var field = new jsGrid.ControlField();
@@ -489,7 +489,7 @@ $(function() {
         };
 
         var headerTemplate = field.headerTemplate();
-        strictEqual(headerTemplate, "", "empty header");
+        assert.strictEqual(headerTemplate, "", "empty header");
     });
 
 });
