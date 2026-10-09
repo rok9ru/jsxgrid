@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "ფილტრის გასუფთავება",
                 insertButtonTooltip: "დამატება",
                 updateButtonTooltip: "შენახვა",
-                cancelEditButtonTooltip: "გაუქმება"
+                cancelEditButtonTooltip: "გაუქმება",
+                exportButtonTooltip: "ექსპორტი",
+                exportPageText: "მიმდინარე გვერდი",
+                exportAllText: "ყველა ჩანაწერი"
             },
             XimgField: {
                 editButtonText: "ფაილების მენეჯერის გახსნა"

@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "ניקוי מסנן",
                 insertButtonTooltip: "הכנסה",
                 updateButtonTooltip: "עדכון",
-                cancelEditButtonTooltip: "ביטול עריכה"
+                cancelEditButtonTooltip: "ביטול עריכה",
+                exportButtonTooltip: "ייצוא",
+                exportPageText: "העמוד הנוכחי",
+                exportAllText: "כל הרשומות"
             },
             XimgField: {
                 editButtonText: "פתח מנהל קבצים"

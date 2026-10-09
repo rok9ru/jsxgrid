@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "クリア",
                 insertButtonTooltip: "登録",
                 updateButtonTooltip: "更新",
-                cancelEditButtonTooltip: "編集戻す"
+                cancelEditButtonTooltip: "編集戻す",
+                exportButtonTooltip: "エクスポート",
+                exportPageText: "現在のページ",
+                exportAllText: "すべてのレコード"
             },
             XimgField: {
                 editButtonText: "ファイルマネージャーを開く"

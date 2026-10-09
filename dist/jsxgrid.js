@@ -176,6 +176,10 @@
         pageSizeSelectOptions: [10, 20, 50, 100],
         pageSizeSelectClass: "jsgrid-page-size-select",
 
+        // jsxgrid extension, not in upstream jsGrid: how many rows exportRows({scope: "all"})
+        // asks the controller for per request when the grid pages on the server (pageLoading).
+        exportChunkSize: 500,
+
         customLoading: false,
         pageLoading: false,
 
@@ -1247,10 +1251,15 @@
                 filter: filter
             });
 
+            // Copied before the controller gets it (controllers tend to add their own params to
+            // the object they receive) - exportRows({scope: "all"}) replays it page by page.
+            var loadedFilter = $.extend(true, {}, filter);
+
             return this._controllerCall("loadData", filter, args.cancel, function(loadedData) {
                 if(!loadedData)
                     return;
 
+                this._lastLoadFilter = loadedFilter;
                 this._loadStrategy.finishLoad(loadedData);
 
                 this._callEventHandler(this.onDataLoaded, {
@@ -1276,7 +1285,142 @@
             }
             return result;
         },
-        
+
+        // jsxgrid extension, not in upstream jsGrid. Unlike exportData() (synchronous, whatever is
+        // already in memory), this returns a promise of the rows themselves:
+        //   scope "page" (default) - what the grid is showing right now;
+        //   scope "all"            - everything under the current filter and sorting. With server
+        //                            paging (pageLoading) it replays the last load page by page
+        //                            through controller.loadData, exportChunkSize rows at a time;
+        //                            otherwise all rows are in memory already.
+        // The grid's own data, pager and loaded page are left alone.
+        exportRows: function(exportOptions) {
+            var options = exportOptions || {},
+                scope = options.scope === "all" ? "all" : "page";
+
+            this._callEventHandler(this.onDataExporting, { scope: scope });
+
+            return this._loadStrategy.exportRows(scope, options.chunkSize || this.exportChunkSize);
+        },
+
+        // exportRows() rendered as CSV text (promise of a string). Columns are the visible fields
+        // with a name, select-like fields are written as their text. Options: scope, delimiter
+        // (";", what Excel expects in most European locales), newline, includeHeaders, encapsulate.
+        exportCsv: function(exportOptions) {
+            var options = exportOptions || {},
+                grid = this;
+
+            return this.exportRows(options).then(function(rows) {
+                return grid._rowsToCsv(rows, options);
+            });
+        },
+
+        _loadAllRows: function(chunkSize) {
+            var grid = this,
+                controller = this._controller,
+                result = $.Deferred(),
+                rows = [],
+                baseFilter = this._lastLoadFilter
+                    || $.extend(this.filtering ? this.getFilter() : {}, this._sortingParams());
+
+            if(!controller || !controller.loadData) {
+                throw Error("controller has no method 'loadData'");
+            }
+
+            chunkSize = Math.max(parseInt(chunkSize, 10) || 1, 1);
+
+            var loadPage = function(pageIndex) {
+                var filter = $.extend(true, {}, baseFilter, { pageIndex: pageIndex, pageSize: chunkSize });
+
+                normalizePromise(controller.loadData(filter)).done(function(loaded) {
+                    var pageRows = (loaded && loaded.data) || [],
+                        total = loaded ? parseInt(loaded.itemsCount, 10) : NaN;
+
+                    rows.push.apply(rows, pageRows);
+
+                    // Without a reliable total a short page is the only sign of the end.
+                    var hasMore = pageRows.length > 0
+                        && (isNaN(total) ? pageRows.length >= chunkSize : rows.length < total);
+
+                    if(hasMore) {
+                        loadPage(pageIndex + 1);
+                    } else {
+                        result.resolve(rows);
+                    }
+                }).fail(function() {
+                    result.reject.apply(result, arguments);
+                });
+            };
+
+            this._showLoading();
+            loadPage(1);
+
+            return result.promise()
+                .fail($.proxy(this._errorHandler, this))
+                .always($.proxy(this._hideLoading, this));
+        },
+
+        // jsxgrid extension, not in upstream jsGrid. The fields that make up an export: visible ones
+        // with a name (so not buttons), minus those with includeInDataExport: false.
+        exportFields: function() {
+            return $.grep(this.fields, function(field) {
+                return field.name && field.visible !== false && field.includeInDataExport !== false;
+            });
+        },
+
+        // jsxgrid extension, not in upstream jsGrid. The value of one cell for an export: the item's
+        // value as it is (a number stays a number, which is what a spreadsheet wants), except that a
+        // select-like field (items with valueField/textField, or an object map) gives its text instead
+        // of the code, and a missing value gives "".
+        exportCellValue: function(item, field) {
+            var value = this._getItemFieldValue(item, field),
+                items = field.items;
+
+            if(value === null || value === undefined)
+                return "";
+
+            if($.isArray(items) && field.valueField) {
+                for(var i = 0; i < items.length; i++) {
+                    if(items[i][field.valueField] == value) {
+                        return items[i][field.textField || field.valueField];
+                    }
+                }
+            } else if($.isPlainObject(items) && items.hasOwnProperty(value)) {
+                return items[value];
+            }
+
+            return value;
+        },
+
+        _rowsToCsv: function(rows, exportOptions) {
+            var options = exportOptions || {},
+                delimiter = options.delimiter || ";",
+                newline = options.newline || "\r\n",
+                encapsulate = options.hasOwnProperty("encapsulate") ? options.encapsulate : true,
+                includeHeaders = options.hasOwnProperty("includeHeaders") ? options.includeHeaders : true,
+                fields = this.exportFields(),
+                grid = this,
+                lines = [];
+
+            var cell = function(text) {
+                return encapsulate ? '"' + String(text).replace(/"/g, '""') + '"' : String(text);
+            };
+
+            if(includeHeaders) {
+                lines.push($.map(fields, function(field) {
+                    return cell(field.title || field.name);
+                }).join(delimiter));
+            }
+
+            $.each(rows, function(_, row) {
+                lines.push($.map(fields, function(field) {
+                    return cell(grid.exportCellValue(row, field));
+                }).join(delimiter));
+            });
+
+            return lines.join(newline) + newline;
+        },
+
         _dataToCsv: function(options){
             var options = options || {};
             var includeHeaders = options.hasOwnProperty("includeHeaders") ? options.includeHeaders : true;
@@ -1929,6 +2073,16 @@
             this._grid.refresh();
         },
 
+        // jsxgrid extension: all rows are in memory already, "page" is just the slice on screen
+        exportRows: function(scope) {
+            var data = this._grid.option("data");
+            var rows = scope === "page"
+                ? data.slice(this.firstDisplayIndex(), this.lastDisplayIndex())
+                : data.slice();
+
+            return $.Deferred().resolve(rows).promise();
+        },
+
         loadParams: function() {
             return {};
         },
@@ -1992,6 +2146,15 @@
 
         openPage: function(index) {
             this._grid.loadData();
+        },
+
+        // jsxgrid extension: only the current page is in memory; "all" has to ask the controller
+        exportRows: function(scope, chunkSize) {
+            if(scope === "page") {
+                return $.Deferred().resolve(this._grid.option("data").slice()).promise();
+            }
+
+            return this._grid._loadAllRows(chunkSize);
         },
 
         loadParams: function() {

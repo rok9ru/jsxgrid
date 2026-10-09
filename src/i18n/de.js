@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "Filter zurücksetzen",
                 insertButtonTooltip: "Hinzufügen",
                 updateButtonTooltip: "Speichern",
-                cancelEditButtonTooltip: "Abbrechen"
+                cancelEditButtonTooltip: "Abbrechen",
+                exportButtonTooltip: "Exportieren",
+                exportPageText: "Aktuelle Seite",
+                exportAllText: "Alle Einträge"
             },
             XimgField: {
                 editButtonText: "Dateimanager öffnen"

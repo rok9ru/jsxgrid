@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "清除搜尋條件",
                 insertButtonTooltip: "新增",
                 updateButtonTooltip: "修改",
-                cancelEditButtonTooltip: "取消編輯"
+                cancelEditButtonTooltip: "取消編輯",
+                exportButtonTooltip: "匯出",
+                exportPageText: "目前頁面",
+                exportAllText: "所有記錄"
             },
             XimgField: {
                 editButtonText: "開啟檔案總管"

@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "Išvalyti filtrą",
                 insertButtonTooltip: "Pridėti",
                 updateButtonTooltip: "Išsaugoti",
-                cancelEditButtonTooltip: "Atšaukti"
+                cancelEditButtonTooltip: "Atšaukti",
+                exportButtonTooltip: "Eksportuoti",
+                exportPageText: "Dabartinis puslapis",
+                exportAllText: "Visi įrašai"
             },
             XimgField: {
                 editButtonText: "Atidaryti failų tvarkyklę"

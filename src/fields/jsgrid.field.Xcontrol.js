@@ -59,6 +59,21 @@
         clearFilterButton: true,
         modeSwitchButton: true,
 
+        // jsxgrid extension, not in upstream jsGrid: an export button in the header. When the grid
+        // pages (and has more than one page) it opens a small menu to pick the volume - the current
+        // page or all records (see grid.exportRows); otherwise it exports everything right away.
+        // The rows go to exportHandler(rows, {scope, grid, field}); without one a CSV file is
+        // downloaded. Off by default.
+        exportButton: false,
+        exportHandler: null,
+        exportFileName: "export.csv",
+        exportButtonClass: "jsgrid-export-button",
+        exportMenuClass: "jsgrid-export-menu",
+        exportMenuItemClass: "jsgrid-export-menu-item",
+        exportButtonTooltip: "Export",
+        exportPageText: "Current page",
+        exportAllText: "All records",
+
         _initConfig: function() {
             this._hasFiltering = this._grid.filtering;
             this._hasInserting = this._grid.inserting;
@@ -71,6 +86,15 @@
         },
 
         headerTemplate: function() {
+            var $modeButton = this._createHeaderModeButton();
+
+            if(!this.exportButton)
+                return $modeButton;
+
+            return $($modeButton).add(this._createExportButton());
+        },
+
+        _createHeaderModeButton: function() {
             if(!this._configInitialized) {
                 this._initConfig();
             }
@@ -115,6 +139,109 @@
 
         editTemplate: function() {
             return this._createUpdateButton().add(this._createCancelEditButton());
+        },
+
+        _createExportButton: function() {
+            var field = this,
+                grid = this._grid;
+
+            var $button = $("<input>").addClass(this.buttonClass + " " + this.exportButtonClass)
+                .attr({
+                    type: "button",
+                    title: this.exportButtonTooltip
+                })
+                .on("click", function(e) {
+                    // the document-level "click outside closes the menu" handler must not see the
+                    // click that opens it
+                    e.stopPropagation();
+
+                    if(field._closeExportMenu())
+                        return;
+
+                    // one page worth of data (or no paging at all): nothing to choose between
+                    if(!grid.paging || grid._itemsCount() <= grid.pageSize) {
+                        field._runExport("all", $button);
+                    } else {
+                        field._openExportMenu($button);
+                    }
+                });
+
+            return $button;
+        },
+
+        _openExportMenu: function($button) {
+            var field = this;
+
+            var $menu = $("<div>").addClass(this.exportMenuClass).appendTo(document.body);
+
+            $.each([["page", this.exportPageText], ["all", this.exportAllText]], function(_, item) {
+                $("<div>").addClass(field.exportMenuItemClass)
+                    .text(item[1])
+                    .on("click", function(e) {
+                        e.stopPropagation();
+                        field._closeExportMenu();
+                        field._runExport(item[0], $button);
+                    })
+                    .appendTo($menu);
+            });
+
+            // body-level (not inside the header cell): the grid's header container clips overflow
+            var rect = $button[0].getBoundingClientRect();
+            $menu.css({
+                position: "absolute",
+                top: rect.bottom + window.pageYOffset + 2,
+                left: rect.left + window.pageXOffset
+            });
+
+            this._exportMenu = $menu;
+
+            $(document).on("click.jsgridExportMenu", $.proxy(this._closeExportMenu, this))
+                .on("keydown.jsgridExportMenu", $.proxy(function(e) {
+                    if(e.which === 27) {
+                        this._closeExportMenu();
+                    }
+                }, this));
+        },
+
+        // true if a menu was open (and is closed now)
+        _closeExportMenu: function() {
+            if(!this._exportMenu)
+                return false;
+
+            this._exportMenu.remove();
+            this._exportMenu = null;
+            $(document).off(".jsgridExportMenu");
+
+            return true;
+        },
+
+        _runExport: function(scope, $button) {
+            var field = this,
+                grid = this._grid;
+
+            $button.prop("disabled", true);
+
+            grid.exportRows({ scope: scope }).done(function(rows) {
+                var handler = field.exportHandler || field._downloadCsv;
+                handler.call(field, rows, { scope: scope, grid: grid, field: field });
+            }).always(function() {
+                $button.prop("disabled", false);
+            });
+        },
+
+        // default exportHandler: a UTF-8 CSV with BOM (Excel needs it to read Cyrillic properly)
+        _downloadCsv: function(rows, info) {
+            var csv = info.grid._rowsToCsv(rows, {});
+            var blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8" });
+            var url = URL.createObjectURL(blob);
+
+            var $link = $("<a>").attr({ href: url, download: this.exportFileName }).appendTo(document.body);
+            $link[0].click();
+            $link.remove();
+
+            setTimeout(function() {
+                URL.revokeObjectURL(url);
+            }, 1000);
         },
 
         _createFilterSwitchButton: function() {

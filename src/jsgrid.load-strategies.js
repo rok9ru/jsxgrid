@@ -28,6 +28,16 @@
             this._grid.refresh();
         },
 
+        // jsxgrid extension: all rows are in memory already, "page" is just the slice on screen
+        exportRows: function(scope) {
+            var data = this._grid.option("data");
+            var rows = scope === "page"
+                ? data.slice(this.firstDisplayIndex(), this.lastDisplayIndex())
+                : data.slice();
+
+            return $.Deferred().resolve(rows).promise();
+        },
+
         loadParams: function() {
             return {};
         },
@@ -91,6 +101,15 @@
 
         openPage: function(index) {
             this._grid.loadData();
+        },
+
+        // jsxgrid extension: only the current page is in memory; "all" has to ask the controller
+        exportRows: function(scope, chunkSize) {
+            if(scope === "page") {
+                return $.Deferred().resolve(this._grid.option("data").slice()).promise();
+            }
+
+            return this._grid._loadAllRows(chunkSize);
         },
 
         loadParams: function() {

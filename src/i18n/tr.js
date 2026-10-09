@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "Filtreyi temizle",
                 insertButtonTooltip: "Ekle",
                 updateButtonTooltip: "Güncelle",
-                cancelEditButtonTooltip: "Güncelleme iptali"
+                cancelEditButtonTooltip: "Güncelleme iptali",
+                exportButtonTooltip: "Dışa aktar",
+                exportPageText: "Geçerli sayfa",
+                exportAllText: "Tüm kayıtlar"
             },
             XimgField: {
                 editButtonText: "Dosya yöneticisini aç"

@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "Очистить фильтр",
                 insertButtonTooltip: "Добавить",
                 updateButtonTooltip: "Сохранить",
-                cancelEditButtonTooltip: "Отменить"
+                cancelEditButtonTooltip: "Отменить",
+                exportButtonTooltip: "Экспорт",
+                exportPageText: "Текущая страница",
+                exportAllText: "Все записи"
             },
             XimgField: {
                 editButtonText: "Открыть менеджер файлов"

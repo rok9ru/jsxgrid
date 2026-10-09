@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "پاک کردن فیلترها",
                 insertButtonTooltip: "درج",
                 updateButtonTooltip: "به روز رسانی",
-                cancelEditButtonTooltip: "لغو ویرایش"
+                cancelEditButtonTooltip: "لغو ویرایش",
+                exportButtonTooltip: "خروجی",
+                exportPageText: "صفحه فعلی",
+                exportAllText: "همه رکوردها"
             },
             XimgField: {
                 editButtonText: "باز کردن مدیر فایل"

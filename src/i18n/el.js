@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "Αφαίρεση φίλτρου",
                 insertButtonTooltip: "Εισαγωγή",
                 updateButtonTooltip: "Αποθήκευση",
-                cancelEditButtonTooltip: "Ακύρωση"
+                cancelEditButtonTooltip: "Ακύρωση",
+                exportButtonTooltip: "Εξαγωγή",
+                exportPageText: "Τρέχουσα σελίδα",
+                exportAllText: "Όλες οι εγγραφές"
             },
             XimgField: {
                 editButtonText: "Άνοιγμα διαχειριστή αρχείων"

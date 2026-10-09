@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "초기화",
                 insertButtonTooltip: "등록",
                 updateButtonTooltip: "업데이트",
-                cancelEditButtonTooltip: "변경 취소"
+                cancelEditButtonTooltip: "변경 취소",
+                exportButtonTooltip: "내보내기",
+                exportPageText: "현재 페이지",
+                exportAllText: "모든 레코드"
             },
             XimgField: {
                 editButtonText: "파일 관리자 열기"

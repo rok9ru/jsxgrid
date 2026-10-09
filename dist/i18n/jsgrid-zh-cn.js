@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "清空过滤",
                 insertButtonTooltip: "插入",
                 updateButtonTooltip: "更新",
-                cancelEditButtonTooltip: "取消编辑"
+                cancelEditButtonTooltip: "取消编辑",
+                exportButtonTooltip: "导出",
+                exportPageText: "当前页",
+                exportAllText: "所有记录"
             },
             XimgField: {
                 editButtonText: "打开文件管理器"

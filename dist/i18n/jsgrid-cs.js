@@ -46,7 +46,10 @@
                 clearFilterButtonTooltip: "Smazat filtr",
                 insertButtonTooltip: "Vložit",
                 updateButtonTooltip: "Upravit",
-                cancelEditButtonTooltip: "Zrušit editaci"
+                cancelEditButtonTooltip: "Zrušit editaci",
+                exportButtonTooltip: "Exportovat",
+                exportPageText: "Aktuální stránka",
+                exportAllText: "Všechny záznamy"
             },
             XimgField: {
                 editButtonText: "Otevřít správce souborů"

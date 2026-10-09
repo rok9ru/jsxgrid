@@ -160,6 +160,8 @@ The config object may contain following options (default values are specified be
     pageSizeSelectOptions: [10, 20, 50, 100], // see "Pager page-size selector"
     pageSizeSelectClass: "jsgrid-page-size-select",
 
+    exportChunkSize: 500,                     // rows per controller request when exporting all (see exportRows)
+
     invalidNotify: function(args) { ... }
     invalidMessage: "Invalid data entered!",
     
@@ -897,7 +899,28 @@ Date/datetime field backed by a native `<input type="datetime-local">` (or whate
 
 Drop-in replacement for `control`. Already standalone even as a native field (extends `jsGrid.Field`
 directly), so this is a straight rename — no behavior changes, no `defaultSelected` (nothing to filter by).
-Same custom properties as [`control`](#control).
+Same custom properties as [`control`](#control), plus an opt-in export button:
+
+| Option | Default | Description |
+|---|---|---|
+| `exportButton` | `false` | Adds an export button to the header cell. If the grid pages and has more than one page, it opens a small menu to choose the volume — the current page or all records ([`exportRows`](#exportrowsoptions)); otherwise it exports everything right away. |
+| `exportHandler` | `null` | `function(rows, {scope, grid, field})` — receives the rows to export (`scope` is `"page"` or `"all"`). Build your own file here (e.g. an `.xlsx` via SheetJS). Without it a UTF-8 CSV (with BOM, `;`-delimited) is downloaded. |
+| `exportFileName` | `"export.csv"` | File name of the default CSV download. |
+| `exportButtonTooltip`, `exportPageText`, `exportAllText` | `"Export"`, `"Current page"`, `"All records"` | Texts; translated in every shipped locale. |
+| `exportButtonClass`, `exportMenuClass`, `exportMenuItemClass` | `"jsgrid-export-button"`, `"jsgrid-export-menu"`, `"jsgrid-export-menu-item"` | CSS classes (the icon and menu styles live in `jsxgrid-theme.css`). |
+
+```javascript
+
+{
+    type: "Xcontrol",
+    exportButton: true,
+    exportHandler: function (rows, info) {
+        // info.scope === "page" | "all"; info.grid is the grid instance
+        buildAndSaveWorkbook(rows);
+    }
+}
+
+```
 
 #### popup.basic
 
@@ -1237,6 +1260,70 @@ var csv = $("#grid").jsGrid("exportData", {
         }
     }
 });
+
+```
+
+### exportRows([options])
+> jsxgrid extension, not in upstream jsGrid
+
+Returns a promise of the rows to export. Unlike `exportData` (synchronous, only what is already in memory)
+it can also fetch the rows that aren't loaded: with server paging (`pageLoading: true`) the grid replays its
+last load through `controller.loadData`, page by page, `exportChunkSize` rows per request, until
+`itemsCount` rows are collected. No separate "export" endpoint is needed: the controller is called exactly
+as for a normal load (same filter and sorting as the last load, only `pageIndex`/`pageSize` differ).
+
+```javascript
+
+$("#grid").jsGrid("exportRows", {
+    scope: "page" | "all",   // "page" (default): what is on screen; "all": everything under the current filter/sorting
+    chunkSize: 500           // optional, overrides the grid's exportChunkSize for this call
+}).done(function (rows) {
+    // rows are the items as the controller returned them
+});
+
+```
+
+The grid's own data, pager and loading state are left alone (only the load indicator is shown while
+fetching), and `onDataLoading`/`onDataLoaded` are not fired. `onDataExporting` receives `{scope}`.
+For a grid that doesn't page on the server `"all"` is simply all of `data`, and no controller call happens.
+
+### exportCsv([options])
+> jsxgrid extension, not in upstream jsGrid
+
+`exportRows` rendered as CSV: a promise of a string. Options: `scope`, `chunkSize` (as above), `delimiter`
+(default `";"`), `newline`, `includeHeaders`, `encapsulate`. Columns are the visible fields that have a name
+(`includeInDataExport: false` leaves one out); select-like fields (`items` with `valueField`/`textField`, or an
+object map) are written as their text. Unlike `exportData` the values are taken by field name, so the item's
+key order doesn't matter.
+
+### exportFields()
+> jsxgrid extension, not in upstream jsGrid
+
+The fields that make up an export, in column order: visible ones that have a name (so no buttons), minus
+those with `includeInDataExport: false`. Use it, together with `exportCellValue`, to build your own file
+(e.g. an `.xlsx`) in an `exportHandler`.
+
+### exportCellValue(item, field)
+> jsxgrid extension, not in upstream jsGrid
+
+The value of one cell for an export: the item's value as it is (a number stays a number, which is what a
+spreadsheet wants), except that a select-like field (`items` with `valueField`/`textField`, or an object map)
+gives its text instead of the code, and a missing value gives `""`. `exportCsv` uses it too (turning the
+result into a string).
+
+```javascript
+
+exportHandler: function (rows, info) {
+    var fields = info.grid.exportFields();
+
+    var aoa = [fields.map(function (f) { return f.title || f.name; })].concat(rows.map(function (row) {
+        return fields.map(function (f) { return info.grid.exportCellValue(row, f); });
+    }));
+
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(aoa), "Export");
+    XLSX.writeFile(wb, "export.xlsx");
+}
 
 ```
 
