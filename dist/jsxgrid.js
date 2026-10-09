@@ -1,5 +1,5 @@
 /*
- * jsxgrid v2.7.0 (https://github.com/rok9ru/jsxgrid#readme)
+ * jsxgrid v2.8.0 (https://github.com/rok9ru/jsxgrid#readme)
  * (c) 2026 Mikhail Kremza
  * Licensed under MIT
  */
@@ -1955,7 +1955,7 @@
         setDefaults: setDefaults,
         locales: locales,
         locale: locale,
-        version: '2.7.0'
+        version: '2.8.0'
     };
 
 }(window, jQuery));
